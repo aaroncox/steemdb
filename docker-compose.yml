@@ -1,0 +1,43 @@
+version: '2'
+services:
+  # history:
+  #   build: ./docker/history
+  #   environment:
+  #     # steemnode: "node.steem.ws"
+  #     steemnode: "10.0.1.20:8090"
+  #   links:
+  #     - mongo
+  # sync:
+  #   build: ./docker/sync
+  #   environment:
+  #     # steemnode: "node.steem.ws"
+  #     steemnode: "10.0.1.20:8090"
+  #   links:
+  #     - mongo
+  # witnesses:
+  #   build: ./docker/witnesses
+  #   environment:
+  #     # steemnode: "node.steem.ws"
+  #     steemnode: "10.0.1.20:8090"
+  #   links:
+  #     - mongo
+  development:
+    build: ./docker/development
+    links:
+      - mongo
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "80:80"
+  mongodata:
+    image: mongo:3.3.10
+    volumes:
+      - /data/db
+    command: --break-mongo
+  mongo:
+    image: mongo:3.3.10
+    volumes_from:
+      - mongodata
+    ports:
+      - "27017:27017"
+    command: --smallfiles --rest

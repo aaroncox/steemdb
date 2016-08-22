@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no,minimal-ui' />
+    <title>steemdb</title>
+    <style>
+      .ui.top.fixed.massive.menu .item {
+        padding: 1.25em;
+      }
+      body.pushable>.pusher {
+        background: #efefef;
+      }
+      .hidden.menu {
+        display: none;
+      }
+      .ui.vertical.masthead.segment {
+        color: #FBFFFF;
+        background: #133863;
+        padding: 1em 0em;
+      }
+      .masthead .logo.item img {
+        margin-right: 1em;
+      }
+      .masthead .ui.secondary.inverted.pointing.menu {
+        border: none;
+      }
+      .masthead .ui.menu .ui.button {
+        margin-left: 0.5em;
+      }
+      .masthead h1.ui.header {
+        font-size: 4em;
+        font-weight: normal;
+      }
+      .masthead h2 {
+        margin-top: 0;
+        font-size: 1.7em;
+        font-weight: normal;
+      }
+      .ui.vertical.stripe {
+        padding: 3em 0em;
+      }
+      .ui.vertical.stripe h3 {
+        font-size: 2em;
+      }
+      .ui.vertical.stripe .button + h3,
+      .ui.vertical.stripe p + h3 {
+        margin-top: 3em;
+      }
+      .ui.vertical.stripe .floated.image {
+        clear: both;
+      }
+      .ui.vertical.stripe p {
+        font-size: 1.33em;
+      }
+      .ui.vertical.stripe .horizontal.divider {
+        margin: 3em 0em;
+      }
+
+      .quote.stripe.segment {
+        padding: 0em;
+      }
+      .quote.stripe.segment .grid .column {
+        padding-top: 5em;
+        padding-bottom: 5em;
+      }
+
+      .footer.segment {
+        padding: 5em 0em;
+      }
+
+      .secondary.pointing.menu .toc.item {
+        display: none;
+      }
+
+      @media only screen and (max-width: 700px) {
+        .ui.fixed.menu {
+          display: none !important;
+        }
+        .secondary.pointing.menu .item,
+        .secondary.pointing.menu .menu {
+          display: none;
+        }
+        .secondary.pointing.menu .toc.item {
+          display: block;
+        }
+        .masthead h1.ui.header {
+          font-size: 2em;
+          margin-top: 1.5em;
+        }
+        .masthead h2 {
+          margin-top: 0.5em;
+          font-size: 1.5em;
+        }
+      }
+      .comment img,
+      .markdown img {
+        max-width: 100%;
+        height:auto;
+        display: block;
+      }
+      .ui.comments {
+        max-width: auto;
+      }
+      .ui.comments .comment .comments {
+        padding-left: 3em;
+      }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.css">
+    <link rel="stylesheet" href="/bower/plottable/plottable.css">
+  </head>
+  <body>
+    <!-- Following Menu -->
+    <div class="ui large blue inverted top fixed massive menu">
+      <div class="ui container">
+        <a href="/" class="{{ (router.getControllerName() == 'comment') ? 'active' : '' }} item">posts</a>
+        <a href="/accounts" class="{{ (router.getControllerName() == 'account') ? 'active' : '' }} item">accounts</a>
+        <a href="/witnesses" class="{{ (router.getControllerName() == 'witness') ? 'active' : '' }} item">witnesses</a>
+        <div class="right menu">
+          <div class="item">
+            <a href="https://steemit.com/?r=jesta">
+              <small>Create Account</small>
+            </a>
+          </div>
+          <div class="ui category search item">
+            <div class="ui icon input">
+              <input class="prompt" type="text" placeholder="Search accounts...">
+              <i class="search icon"></i>
+            </div>
+            <div class="results"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar Menu -->
+    <div class="ui vertical inverted sidebar menu">
+      <a href="/" class="{{ (router.getControllerName() == 'comment') ? 'active' : '' }} item">posts</a>
+      <a href="/accounts" class="{{ (router.getControllerName() == 'account') ? 'active' : '' }} item">accounts</a>
+      <a href="/witnesses" class="{{ (router.getControllerName() == 'witness') ? 'active' : '' }} item">witnesses</a>
+    </div>
+
+    <!-- Page Contents -->
+    <div class="pusher" style="padding-top: 5em">
+      {% block header %}{% endblock %}
+
+      {% if this.flashSession.has() %}
+      <div class="ui container">
+        <div class="ui error message">
+          <?php $this->flashSession->output() ?>
+        </div>
+      </div>
+      {% endif %}
+
+      {% block content %}{% endblock %}
+
+      <div class="ui inverted vertical footer segment">
+        <div class="ui container">
+          <div class="ui stackable inverted divided equal height stackable grid">
+<!--             <div class="three wide column">
+              <h4 class="ui inverted header"></h4>
+              <div class="ui inverted link list">
+
+              </div>
+            </div>
+            <div class="three wide column">
+              <h4 class="ui inverted header"></h4>
+              <div class="ui inverted link list">
+
+              </div>
+            </div>
+            <div class="three wide column">
+              <h4 class="ui inverted header"></h4>
+              <div class="ui inverted link list">
+
+              </div>
+            </div> -->
+            <div class="sixteen wide center aligned column">
+              <h4 class="ui inverted header">
+                created by
+                <a href="https://steemit.com/@jesta">@jesta</a>
+              </h4>
+              <p>Powered by the <a href="https://steem.io">Steem Blockchain</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.js"></script>
+    <script type="text/javascript" src="/bower/d3/d3.min.js"></script>
+    <script type="text/javascript" src="/bower/plottable/plottable.min.js"></script>
+    <script type="text/javascript" src="/js/tablesort.js"></script>
+
+    {% block scripts %}{% endblock %}
+    <script>
+    $(document)
+      .ready(function() {
+
+        $('.ui.category.search')
+          .search({
+            apiSettings: {
+              url: '/search?q={query}'
+            },
+            debug: true,
+            type: 'category'
+          })
+        ;
+
+        $('.ui.sortable.table').tablesort();
+
+        // fix menu when passed
+        $('.masthead')
+          .visibility({
+            once: false,
+            onBottomPassed: function() {
+              $('.fixed.menu').transition('fade in');
+            },
+            onBottomPassedReverse: function() {
+              $('.fixed.menu').transition('fade out');
+            }
+          })
+        ;
+
+        // create sidebar and attach to menu open
+        // $('.ui.sidebar')
+        //   .sidebar('attach events', '.toc.item')
+        // ;
+
+        $('.ui.dropdown')
+          .dropdown({
+
+          })
+        ;
+
+        $('.ui.dropdown.tags')
+          .dropdown({
+            onChange: function(value, text, $choice) {
+              var selectedSort = $("#selectedSort").val(),
+                  selectedDate = $("#selectedDate").val();
+              window.location.href = value + '/' + selectedSort + '/' + selectedDate;
+            },
+            apiSettings: {
+              url: '/api/tags/{query}'
+            }
+          });
+
+      })
+    ;
+    </script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-81121004-2', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+  </body>
+</html>

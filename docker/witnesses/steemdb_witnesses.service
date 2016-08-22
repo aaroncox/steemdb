@@ -1,0 +1,11 @@
+[Unit]
+Description=SteemDB.com Witnesses Service
+
+[Service]
+Environment=steemnode=node.steem.ws
+WorkingDirectory=/var/www/com_steemdb/docker/witnesses
+ExecStart=/usr/bin/python3 witnesses.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

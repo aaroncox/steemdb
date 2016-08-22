@@ -1,0 +1,11 @@
+[Unit]
+Description=SteemDB.com Sync Service
+
+[Service]
+Environment=steemnode=node.steem.ws
+WorkingDirectory=/var/www/com_steemdb/docker/sync
+ExecStart=/usr/bin/python3 sync.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

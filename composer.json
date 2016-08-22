@@ -1,0 +1,9 @@
+{
+  "require": {
+    "mongodb/mongodb": "^1.0.0",
+    "phalcon/incubator": "~3.0",
+    "michelf/php-markdown": "~1.6.0",
+    "fguillot/json-rpc": "^1.2",
+    "ezyang/htmlpurifier": "~4.8.0"
+  }
+}

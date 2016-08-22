@@ -1,0 +1,18 @@
+version: '2'
+services:
+  history:
+    build: ./docker/history
+    links:
+      - mongo
+  mongodata:
+    image: mongo:3.3.10
+    volumes:
+      - /data/db
+    command: --break-mongo
+  mongo:
+    image: mongo:3.3.10
+    volumes_from:
+      - mongodata
+    ports:
+      - "27017:27017"
+    command: --smallfiles --rest

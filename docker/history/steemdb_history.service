@@ -1,0 +1,10 @@
+[Unit]
+Description=SteemDB.com History Service
+
+[Service]
+WorkingDirectory=/var/www/com_steemdb/docker/history
+ExecStart=/usr/bin/python3 fix.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

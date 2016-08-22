@@ -1,0 +1,23 @@
+{
+  "name": "steemdb",
+  "homepage": "https://github.com/aaroncox/steemdb",
+  "authors": [
+    "Aaron Cox <aaron.cox@greymass.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "plottable": "^2.2.0",
+    "d3": "^4.2.1",
+    "glidejs": "^2.0.9"
+  }
+}
