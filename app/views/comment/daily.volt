@@ -27,7 +27,13 @@
             {% endif %}
             </strong>
             {% if tag !== 'all' %}
-            tagged with <strong>{{ tag }}</strong>
+            tagged with
+            <span class='ui icon label'>
+              {{ tag }}
+              <a href="/posts/all/{{ sort ? sort : 'earnings' }}/{{ date('Y-m-d', date)}}">
+                <i class="close icon" style="margin-right: 0"></i>
+              </a>
+            </span>
             {% endif %}
             posts created on {{ date('Y-m-d', date)}}.
           </div>
