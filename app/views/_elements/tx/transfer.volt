@@ -7,7 +7,7 @@
   </a>
 </span>
 <span class="ui green label">
-  ${{ item[1]['op'][1]['amount'] }}
+  {{ item[1]['op'][1]['amount'] }}
 </span>
 {% if item[1]['op'][1]['memo'] %}
 <div class="ui segment">
