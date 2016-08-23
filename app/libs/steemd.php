@@ -25,6 +25,12 @@ class steemd
     return $this->client->call($api, 'get_account_history', [$username, $skip, $limit]);;
   }
 
+  public function getProps($username, $limit = 100, $skip = -1)
+  {
+    $api = $this->getApi('database_api');
+    return $this->client->call($api, 'get_dynamic_global_properties', []);
+  }
+
   public function getApi($name)
   {
     return $this->client->call(1, 'get_api_by_name', [$name]);

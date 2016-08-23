@@ -1,6 +1,5 @@
 <span class="ui blue label">
-  +<?php echo $this->largeNumber::format($item[1]['op'][1]['vesting_payout']); ?>
-  VESTS
+  +<?php echo $this->convert::vest2sp($item[1]['op'][1]['vesting_payout']); ?>
 </span>
 <span class="ui green label">
   +<?php echo $this->largeNumber::format($item[1]['op'][1]['sbd_payout']); ?>

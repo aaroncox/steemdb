@@ -44,12 +44,6 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
     php composer-setup.php --install-dir=/usr/bin --filename=composer && \
     php -r "unlink('composer-setup.php');"
 
-ADD conf/supervisord.conf /etc/supervisord.conf
-
-# Copy our nginx config
-RUN rm -Rf /etc/nginx/nginx.conf
-ADD conf/nginx.conf /etc/nginx/nginx.conf
-
 # nginx site conf
 RUN mkdir -p /etc/nginx/sites-available/ && \
     mkdir -p /etc/nginx/sites-enabled/ && \
@@ -87,11 +81,19 @@ RUN apt-get install -y php-pear libcurl4-openssl-dev pkg-config libssl-dev libss
     echo "extension=mongodb.so" > /etc/php/7.0/fpm/conf.d/30-mongo.ini && \
     echo "extension=mongodb.so" > /etc/php/7.0/cli/conf.d/30-mongo.ini
 
+RUN apt-get install -y memcached php-memcached
+
 # Add Scripts
 ADD scripts/start.sh /start.sh
 RUN chmod 755 /start.sh
 
+# Copy our nginx config
+RUN rm -Rf /etc/nginx/nginx.conf
+ADD conf/nginx.conf /etc/nginx/nginx.conf
 COPY conf/vhost.conf /etc/nginx/sites-enabled/default
+
+# Services
+ADD conf/supervisord.conf /etc/supervisord.conf
 
 EXPOSE 443 80
 

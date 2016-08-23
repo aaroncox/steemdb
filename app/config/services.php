@@ -148,6 +148,25 @@ $di->set('steemd', function() {
   return new Steemd('https://node.steem.ws');
 });
 
+$di->set('memcached', function() {
+  $frontendOptions = array(
+    'lifetime' => 60 * 5
+  );
+  $frontCache = new \Phalcon\Cache\Frontend\Data($frontendOptions);
+  $backendOptions = array(
+    "servers" => array(
+      array(
+        'host' => 'localhost',
+        'port' => 11211,
+        'weight' => 1
+      ),
+    )
+  );
+  $cache = new \Phalcon\Cache\Backend\Libmemcached($frontCache, $backendOptions);
+  return $cache;
+});
+
+$di->set('convert', function () { return new SteemDB\Helpers\Convert(); });
 $di->set('largeNumber', function () { return new SteemDB\Helpers\LargeNumber(); });
 $di->set('reputation', function () { return new SteemDB\Helpers\Reputation(); });
 $di->set('timeAgo', function () { return new SteemDB\Helpers\TimeAgo(); });
