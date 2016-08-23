@@ -3,22 +3,19 @@ services:
   # history:
   #   build: ./docker/history
   #   environment:
-  #     # steemnode: "node.steem.ws"
-  #     steemnode: "10.0.1.20:8090"
+  #     steemnode: "node.steem.ws"
   #   links:
   #     - mongo
   # sync:
   #   build: ./docker/sync
   #   environment:
-  #     # steemnode: "node.steem.ws"
-  #     steemnode: "10.0.1.20:8090"
+  #     steemnode: "node.steem.ws"
   #   links:
   #     - mongo
   # witnesses:
   #   build: ./docker/witnesses
   #   environment:
-  #     # steemnode: "node.steem.ws"
-  #     steemnode: "10.0.1.20:8090"
+  #     steemnode: "node.steem.ws"
   #   links:
   #     - mongo
   development:
