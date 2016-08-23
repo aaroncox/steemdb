@@ -19,9 +19,7 @@ class steemd
 
   public function getAccountHistory($username, $limit = 100, $skip = -1)
   {
-    // Load the appropriate API
     $api = $this->getApi('database_api');
-    // Get our followers
     return $this->client->call($api, 'get_account_history', [$username, $skip, $limit]);;
   }
 
@@ -38,9 +36,7 @@ class steemd
 
   public function getFollowing($username, $limit = 100, $skip = -1)
   {
-    // Load the appropriate API
     $api = $this->getApi('follow_api');
-    // Get our followers
     return $this->client->call($api, 'get_following', [$username, $skip, $limit]);;
   }
 }
