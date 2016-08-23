@@ -10,32 +10,6 @@
       body.pushable>.pusher {
         background: #efefef;
       }
-      .hidden.menu {
-        display: none;
-      }
-      .ui.vertical.masthead.segment {
-        color: #FBFFFF;
-        background: #133863;
-        padding: 1em 0em;
-      }
-      .masthead .logo.item img {
-        margin-right: 1em;
-      }
-      .masthead .ui.secondary.inverted.pointing.menu {
-        border: none;
-      }
-      .masthead .ui.menu .ui.button {
-        margin-left: 0.5em;
-      }
-      .masthead h1.ui.header {
-        font-size: 4em;
-        font-weight: normal;
-      }
-      .masthead h2 {
-        margin-top: 0;
-        font-size: 1.7em;
-        font-weight: normal;
-      }
       .ui.vertical.stripe {
         padding: 3em 0em;
       }
@@ -55,7 +29,6 @@
       .ui.vertical.stripe .horizontal.divider {
         margin: 3em 0em;
       }
-
       .quote.stripe.segment {
         padding: 0em;
       }
@@ -63,34 +36,8 @@
         padding-top: 5em;
         padding-bottom: 5em;
       }
-
       .footer.segment {
         padding: 5em 0em;
-      }
-
-      .secondary.pointing.menu .toc.item {
-        display: none;
-      }
-
-      @media only screen and (max-width: 700px) {
-        .ui.fixed.menu {
-          display: none !important;
-        }
-        .secondary.pointing.menu .item,
-        .secondary.pointing.menu .menu {
-          display: none;
-        }
-        .secondary.pointing.menu .toc.item {
-          display: block;
-        }
-        .masthead h1.ui.header {
-          font-size: 2em;
-          margin-top: 1.5em;
-        }
-        .masthead h2 {
-          margin-top: 0.5em;
-          font-size: 1.5em;
-        }
       }
       .comment img,
       .markdown img {
@@ -104,11 +51,55 @@
       .ui.comments .comment .comments {
         padding-left: 3em;
       }
+      @media only screen and (min-width: 769px) {
+        .mobile.visible {
+          display: none
+        }
+      }
+      @media only screen and (max-width: 768px) {
+        .ui.tabular.menu {
+          overflow-y: scroll;
+        }
+        .mobile.hidden {
+          display: none !important;
+        }
+      }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.css">
     <link rel="stylesheet" href="/bower/plottable/plottable.css">
   </head>
   <body>
+
+    <div class="ui fixed inverted main menu">
+      <div class="ui container">
+        <a class="launch icon item">
+          <i class="content icon"></i>
+        </a>
+
+          <div class="item">
+            Menu
+          </div>
+
+        <div class="right menu">
+
+          <div class="vertically fitted borderless item">
+            <iframe class="github" src="http://ghbtns.com/github-btn.html?user=semantic-org&amp;repo=semantic-ui&amp;type=watch&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"></iframe>
+          </div>
+
+          <!--
+          <div class="item">
+            <div class="ui hidden right aligned search input" id="search">
+              <div class="ui transparent icon input">
+                <input class="prompt" type="text" placeholder="Search...">
+                <i class="inverted search link icon" data-content="Search UI"></i>
+              </div>
+              <div class="results"></div>
+            </div>
+          </div>
+          -->
+        </div>
+      </div>
+    </div>
     <!-- Following Menu -->
     <div class="ui large blue inverted top fixed massive menu">
       <div class="ui container">
@@ -208,19 +199,6 @@
         ;
 
         $('.ui.sortable.table').tablesort();
-
-        // fix menu when passed
-        $('.masthead')
-          .visibility({
-            once: false,
-            onBottomPassed: function() {
-              $('.fixed.menu').transition('fade in');
-            },
-            onBottomPassedReverse: function() {
-              $('.fixed.menu').transition('fade out');
-            }
-          })
-        ;
 
         // create sidebar and attach to menu open
         // $('.ui.sidebar')

@@ -5,7 +5,7 @@
   <div class="ui top aligned stackable grid container">
     <div class="row">
       <div class="twelve wide column">
-        <table class="ui small table">
+        <table class="ui small unstackable table">
           <thead>
             <tr>
               <th>#</th>

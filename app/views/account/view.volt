@@ -13,12 +13,15 @@
                   <?php echo $this->reputation::number($account->reputation) ?>
                 </span>
                 {{ account.name }}
+                <span class="mobile visible">
+                  {{ partial("_elements/vesting_shares", ['current': account]) }}
+                </span>
                 <div class="sub header">
                   Updated <?php echo $this->timeAgo::mongo($account->scanned); ?>
                 </div>
               </div>
             </div>
-            <div class="three wide right aligned column">
+            <div class="three wide right aligned mobile hidden column">
               {{ partial("_elements/vesting_shares", ['current': account]) }}
             </div>
           </div>

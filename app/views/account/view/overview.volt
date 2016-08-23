@@ -1,5 +1,5 @@
 <svg width="100%" height="200px" id="account-history"></svg>
-<div class="ui three statistics">
+<div class="ui three small statistics">
   <div class="statistic">
     <div class="value">
       {{ account.followers | length }}
@@ -25,7 +25,7 @@
     </div>
   </div>
 </div>
-<table class="ui table">
+<table class="ui stackable table">
   <thead></thead>
   <tbody>
   {% for item in activity %}

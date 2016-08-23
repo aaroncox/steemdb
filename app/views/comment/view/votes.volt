@@ -1,17 +1,17 @@
-<table class="ui table">
+<table class="ui unstackable table">
   <thead>
     <tr>
-      <th>%</th>
+      <th class="mobile hidden">%</th>
       <th>Voter</th>
-      <th>Time</th>
-      <th>Weight</th>
-      <th>Round Shares</th>
+      <th class="mobile hidden">Time</th>
+      <th class="mobile hidden">Weight</th>
+      <th>Reward Shares</th>
     </tr>
   </thead>
   <tbody>
     {% for voter in votes %}
     <tr>
-      <td>
+      <td class="mobile hidden">
         {{ voter.percent / 100 }}%
       </td>
       <td>
@@ -19,10 +19,10 @@
           {{ voter.voter }}
         </a>
       </td>
-      <td>
+      <td class="mobile hidden">
         {{ voter.time }}
       </td>
-      <td>
+      <td class="mobile hidden">
         {% include "_elements/voter_weight.volt" %}
       </td>
       <td>

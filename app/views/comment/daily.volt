@@ -37,7 +37,7 @@
         <div class="ui top attached menu">
           <a href="/posts/{{ tag ? tag : 'all' }}/{{ sort ? sort : 'earnings' }}/{{ date('Y-m-d', date - 86400)}}" class="item">
             <i class="left arrow icon"></i>
-            {{ date('Y-m-d', date - 86400)}}
+            <span class="mobile hidden">{{ date('Y-m-d', date - 86400)}}</span>
           </a>
           <div class="ui dropdown item">
             Sorting <i class="dropdown icon"></i>
@@ -61,12 +61,12 @@
           <div class="right menu">
             <?php if($date > time() - 86400): ?>
             <a class="disabled item">
-              {{ date('Y-m-d', date + 86400)}}
+              <span class="mobile hidden">{{ date('Y-m-d', date + 86400)}}</span>
               <i class="right arrow icon"></i>
             </a>
             <?php else: ?>
             <a href="/posts/{{ tag ? tag : 'all' }}/{{ sort ? sort : 'earnings' }}/{{ date('Y-m-d', date + 86400)}}" class="item">
-              {{ date('Y-m-d', date + 86400)}}
+              <span class="mobile hidden">{{ date('Y-m-d', date + 86400)}}</span>
               <i class="right arrow icon"></i>
             </a>
             <?php endif ?>
