@@ -13,7 +13,7 @@
     {% endif %}
     <div class="item">
       <?php echo $this->timeAgo::mongo($post->created); ?><br>
-      <a href="{{ post.category }}/@{{ post.author }}/{{ post.permlink }}">
+      <a href="{{ post.url }}">
         {{ post.title }}
       </a>
 
