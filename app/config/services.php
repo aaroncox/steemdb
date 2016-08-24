@@ -184,3 +184,4 @@ $di->set('convert', function () { return new SteemDB\Helpers\Convert(); });
 $di->set('largeNumber', function () { return new SteemDB\Helpers\LargeNumber(); });
 $di->set('reputation', function () { return new SteemDB\Helpers\Reputation(); });
 $di->set('timeAgo', function () { return new SteemDB\Helpers\TimeAgo(); });
+$di->set('opName', function () { return new SteemDB\Helpers\OpName(); });
