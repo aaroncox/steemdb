@@ -55,28 +55,8 @@
           </div>
         </div>
         {% include '_elements/cards/author.volt' %}
-        <div class="ui divided relaxed  list">
-          <div class="item">
-            <strong>
-              More posts by
-              <a href="/@{{ comment.author }}">
-                {{ comment.author }}
-              </a>
-            </strong>
-          </div>
-          {% for post in posts %}
-            {% if post.url === comment.url %}
-              {% continue %}
-            {% endif %}
-            <div class="item">
-              <?php echo $this->timeAgo::mongo($post->created); ?><br>
-              <a href="{{ post.category }}/@{{ post.author }}/{{ post.permlink }}">
-                {{ post.title }}
-              </a>
-
-            </div>
-          {% endfor %}
-        </div>
+        {% include '_elements/sidebar/earnings.volt' %}
+        {% include '_elements/sidebar/readmore.volt' %}
       </div>
     </div>
   </div>
