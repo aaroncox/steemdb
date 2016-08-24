@@ -128,6 +128,22 @@ if __name__ == '__main__':
         for item in queue:
             update_comment(item['author'], item['permlink'])
 
+        # Find 100 comments that have past the last payout and need an update
+        queue = db.comment.find({
+            'cashout_time': {
+              '$lt': datetime.now()
+            },
+            'mode': {
+              '$in': ['first_payout', 'second_payout']
+            },
+            'depth': 0,
+            'pending_payout_value': {
+              '$gt': 0
+            }
+        }).limit(queue_length)
+        pprint("Processing Payout Queue - " + str(queue_length) + " of " + str(queue.count()))
+        for item in queue:
+            update_comment(item['author'], item['permlink'])
 
         # Process New Blocks
         props = rpc.get_dynamic_global_properties()
