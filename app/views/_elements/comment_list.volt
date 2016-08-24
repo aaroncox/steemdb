@@ -20,9 +20,15 @@
               {{ comment.author }}
             </a>
             in
+            {% if sort is defined and date is defined %}
             <a href="/posts/{{ comment.category }}/{{ sort ? sort : 'earnings' }}/{{ date('Y-m-d', date)}}">
               #{{ comment.category }}
             </a>
+            {% else %}
+            <a href="/posts/{{ comment.category }}/earnings/{{ date('Y-m-d') }}">
+              #{{ comment.category }}
+            </a>
+            {% endif %}
             <span class="mobile hidden">&mdash;</span>
             <br class="mobile visible">
             <span class="ui small left floated green header mobile visible">
