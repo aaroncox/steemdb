@@ -1,15 +1,16 @@
 <?php
 namespace SteemDB\Controllers;
 
+use MongoDB\BSON\ObjectID;
 use MongoDB\BSON\Regex;
 use MongoDB\BSON\UTCDateTime;
 
+use SteemDB\Models\AccountHistory;
 use SteemDB\Models\Block;
 use SteemDB\Models\Comment;
+use SteemDB\Models\Pow;
 use SteemDB\Models\Statistics;
 use SteemDB\Models\Vote;
-use SteemDB\Models\AccountHistory;
-use MongoDB\BSON\ObjectID;
 
 class AccountApiController extends ControllerBase
 {
@@ -47,7 +48,7 @@ class AccountApiController extends ControllerBase
 
   public function miningAction() {
     $account = $this->dispatcher->getParam("account");
-    $data = Block::aggregate([
+    $witness = Block::aggregate([
       [
         '$match' => [
           'witness' => $account,
@@ -82,7 +83,43 @@ class AccountApiController extends ControllerBase
         'batchSize' => 0
       ]
     ])->toArray();
-    echo json_encode($data); exit;
+    $pow = Pow::aggregate([
+      [
+        '$match' => [
+          'work.input.worker_account' => $account,
+          '_ts' => [
+            '$gte' => new UTCDateTime(strtotime("-45 days") * 1000),
+          ],
+        ]
+      ],
+      [
+        '$project' => [
+          'work.input.worker_account' => 1,
+          '_ts' => 1,
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => [
+            'doy' => ['$dayOfYear' => '$_ts'],
+            'year' => ['$year' => '$_ts'],
+            'month' => ['$month' => '$_ts'],
+            'week' => ['$week' => '$_ts'],
+            'day' => ['$dayOfMonth' => '$_ts']
+          ],
+          'blocks' => [
+            '$sum' => 1
+          ]
+        ]
+      ]
+    ], [
+      'allowDiskUse' => true,
+      'cursor' => [
+        'batchSize' => 0
+      ]
+    ])->toArray();
+
+    echo json_encode(['pow' => $pow, 'witness' => $witness]); exit;
   }
 
   public function votesAction() {

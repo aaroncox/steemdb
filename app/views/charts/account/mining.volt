@@ -1,9 +1,10 @@
 <script>
 if(!window.steemdb) window.steemdb = {};
-window.steemdb.chart_mining = function() {
+window.steemdb.chart_blocks = function() {
   d3.json("/api/account/{{ account.name }}/mining").get(function(error, rows) {
     var data = rows;
-    var dataset = new Plottable.Dataset(data);
+    var dataset = new Plottable.Dataset(data['pow']).metadata(2);
+    var dataset2 = new Plottable.Dataset(data['witness']).metadata(5);
     var dayOffset = (24*60*60*1000); // 1 day
     var today = new Date();
     var xScale = new Plottable.Scales.Time()
@@ -22,16 +23,19 @@ window.steemdb.chart_mining = function() {
     };
     var pBlocks = function(d) { return +d.blocks; };
 
-    // Chart Highest Payouts
-    var lBlocks = new Plottable.Plots.Bar();
+    var colorScale = new Plottable.Scales.InterpolatedColor();
+    colorScale.range(["#BDCEF0", "#5279C7"]);
+
+    var lBlocks = new Plottable.Plots.ClusteredBar();
     lBlocks.addDataset(dataset);
+    lBlocks.addDataset(dataset2);
     lBlocks.x(pDate, xScale)
             .y(pBlocks, yScale)
-            .attr("fill", "#58DC0A");
+            .attr("fill", function(d, i, dataset) { return dataset.metadata(); }, colorScale)
 
     var cs = new Plottable.Scales.Color();
-    cs.range(["#58DC0A"]);
-    cs.domain(["Blocks"]);
+    cs.range(["#BDCEF0", "#5279C7"]);
+    cs.domain(["POW", "Witnessed"]);
     var legend = new Plottable.Components.Legend(cs);
     legend.maxEntriesPerRow(3);
 
@@ -46,7 +50,7 @@ window.steemdb.chart_mining = function() {
     legend.maxEntriesPerRow(5)
 
     var yLabelPosts = new Plottable.Components.AxisLabel("Blocks", "90");
-    var xLabelTitle = new Plottable.Components.TitleLabel("45-day Mining Activity", "0");
+    var xLabelTitle = new Plottable.Components.TitleLabel("45-day Block Generation Activity", "0");
 
     var plots = new Plottable.Components.Group([lBlocks]);
     var table = new Plottable.Components.Table([

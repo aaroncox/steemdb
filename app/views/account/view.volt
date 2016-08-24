@@ -35,7 +35,7 @@
           <a class="item" data-tab="following">Following</a>
           <a class="item" data-tab="witness">Witness</a>
           {% if mining | length > 0 %}
-          <a class="item" data-tab="mining">Mining</a>
+          <a class="item" data-tab="blocks">Blocks</a>
           {% endif %}
           <a class="item" data-tab="data">Raw Data</a>
         </div>
@@ -61,8 +61,8 @@
           <div class="ui tab" data-tab="witness">
             {% include "account/view/witness.volt" %}
           </div>
-          <div class="ui tab" data-tab="mining">
-            {% include "account/view/mining.volt" %}
+          <div class="ui tab" data-tab="blocks">
+            {% include "account/view/blocks.volt" %}
           </div>
           <div class="ui tab" data-tab="data">
             {% include "account/view/data.volt" %}
