@@ -114,11 +114,12 @@ if __name__ == '__main__':
 
         # -- Process Queue
         queue_length = 100
-        # Don't update if it's older than 31 days
+        # Don't update automatically if it's older than 3 days (let it update when votes occur)
         max_date = datetime.now() + timedelta(-3)
-        # Don't update if it's been scanned within the twelve hours
+        # Don't update if it's been scanned within the six hours
         scan_ignore = datetime.now() - timedelta(hours=6)
-        # Find 100 comments to update
+
+        # Find 100 previous comments to update
         queue = db.comment.find({
             'created': {'$gt': max_date},
             'scanned': {'$lt': scan_ignore},
