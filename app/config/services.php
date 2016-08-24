@@ -1,17 +1,18 @@
 <?php
-use Phalcon\Mvc\View;
 use Phalcon\Crypt;
-use Phalcon\Mvc\Dispatcher;
-use Phalcon\Mvc\Url as UrlResolver;
-use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
-use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
-use Phalcon\Mvc\Model\Metadata\Files as MetaDataAdapter;
-use Phalcon\Session\Adapter\Files as SessionAdapter;
+use Phalcon\Db\Adapter\MongoDB\Client;
+use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Flash\Direct as Flash;
 use Phalcon\Logger\Adapter\File as FileLogger;
 use Phalcon\Logger\Formatter\Line as FormatterLine;
 use Phalcon\Mvc\Collection\Manager;
-use Phalcon\Db\Adapter\MongoDB\Client;
+use Phalcon\Mvc\Dispatcher as MvcDispatcher;
+use Phalcon\Mvc\Dispatcher\Exception as DispatchException;
+use Phalcon\Mvc\Model\Metadata\Files as MetaDataAdapter;
+use Phalcon\Mvc\Url as UrlResolver;
+use Phalcon\Mvc\View;
+use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
+use Phalcon\Session\Adapter\Files as SessionAdapter;
 
 /**
  * Register the global configuration as config
@@ -112,9 +113,22 @@ $di->set('crypt', function () {
  * Dispatcher use a default namespace
  */
 $di->set('dispatcher', function () {
-    $dispatcher = new Dispatcher();
-    $dispatcher->setDefaultNamespace('SteemDB\Controllers');
-    return $dispatcher;
+  $eventsManager = new EventsManager();
+  $eventsManager->attach("dispatch:beforeException", function ($event, $dispatcher, $exception) {
+    if ($exception instanceof DispatchException) {
+      $dispatcher->forward(
+        array(
+          'controller' => 'index',
+          'action'     => 'show404'
+        )
+      );
+      return false;
+    }
+  });
+  $dispatcher = new MvcDispatcher();
+  $dispatcher->setDefaultNamespace('SteemDB\Controllers');
+  $dispatcher->setEventsManager($eventsManager);
+  return $dispatcher;
 });
 
 /**
