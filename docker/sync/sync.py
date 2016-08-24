@@ -58,7 +58,13 @@ def save_block(block, blockid):
 
 def save_pow(op, block, blockid):
     _id = str(blockid) + '-' + op['work'][1]['input']['worker_account']
-    db.pow.update({'_id': _id}, op, upsert=True)
+    doc = op.copy()
+    doc.update({
+        '_id': _id,
+        '_ts': datetime.strptime(block['timestamp'], "%Y-%m-%dT%H:%M:%S"),
+        'block': blockid,
+    })
+    db.pow.update({'_id': _id}, doc, upsert=True)
 
 def save_vote(op, block, blockid):
     vote = op.copy()
