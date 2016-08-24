@@ -4,6 +4,13 @@ db.comment.createIndex({scanned: 1, created: 1});
 db.comment.createIndex({depth: 1, created: 1});
 db.comment.createIndex({author: 1, depth: 1, created: 1});
 
+# Comment index for sync service to find posts with a pending payout
+#   and being past their cashout time
+db.comment.createIndex({
+  pending_payout_value: 1,
+  cashout_time: 1
+}, {sparse: true});
+
 # Block Indexes:
 db.block.createIndex({witness: 1, _ts: 1})
 
