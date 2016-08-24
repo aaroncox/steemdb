@@ -57,7 +57,7 @@ def save_block(block, blockid):
     db.block.update({'_id': blockid}, doc, upsert=True)
 
 def save_pow(op, block, blockid):
-    _id = str(blockid) + '-' + op['work'][1]['input']['nonce']
+    _id = str(blockid) + '-' + op['work'][1]['input']['worker_account']
     db.pow.update({'_id': _id}, op, upsert=True)
 
 def save_vote(op, block, blockid):
