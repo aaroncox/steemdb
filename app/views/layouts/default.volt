@@ -167,6 +167,7 @@
             </div> -->
             <div class="sixteen wide center aligned column">
               <h4 class="ui inverted header">
+                <a href="https://steemdb.com">steemdb</a>
                 created by
                 <a href="https://steemit.com/@jesta">@jesta</a>
               </h4>
