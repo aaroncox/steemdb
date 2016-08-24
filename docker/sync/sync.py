@@ -18,6 +18,15 @@ if(init):
 else:
   last_block = 1
 
+# ------------
+# For development:
+#
+# If you're looking for a faster way to sync the data and get started,
+# uncomment this line with a more recent block, and the chain will start
+# to sync from that point onwards. Great for a development environment
+# where you want some data but don't want to sync the entire blockchain.
+# ------------
+
 # last_block = 4155048
 
 def process_block(block, blockid):
