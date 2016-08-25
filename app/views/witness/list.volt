@@ -90,6 +90,7 @@
         <div class="ui divided list">
         {% for miner in queue.value %}
           <div class="ui item">
+            {{ loop.index }}.
             <a href="/@{{ miner }}">
               {{ miner }}
             </a>
