@@ -198,16 +198,16 @@
         },
         {
             "name": "phalcon/incubator",
-            "version": "v3.0.0",
+            "version": "v3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/incubator.git",
-                "reference": "a72891bce0d5107f12ce8bc36c2e556fac2cb46a"
+                "reference": "82aa8c7d23272b164a1d24989c6b3a25d94be589"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/incubator/zipball/a72891bce0d5107f12ce8bc36c2e556fac2cb46a",
-                "reference": "a72891bce0d5107f12ce8bc36c2e556fac2cb46a",
+                "url": "https://api.github.com/repos/phalcon/incubator/zipball/82aa8c7d23272b164a1d24989c6b3a25d94be589",
+                "reference": "82aa8c7d23272b164a1d24989c6b3a25d94be589",
                 "shasum": ""
             },
             "require": {
@@ -216,7 +216,7 @@
                 "swiftmailer/swiftmailer": "~5.2"
             },
             "require-dev": {
-                "codeception/aerospike-module": "~0.1",
+                "codeception/aerospike-module": "~1.0",
                 "codeception/codeception": "~2.2",
                 "codeception/mockery-module": "~0.2",
                 "codeception/specify": "~0.4",
@@ -258,7 +258,7 @@
                 "incubator",
                 "phalcon"
             ],
-            "time": "2016-07-29 21:38:28"
+            "time": "2016-08-24 23:11:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
