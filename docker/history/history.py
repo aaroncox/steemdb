@@ -68,6 +68,7 @@ def update_history():
               account['following'].append(following['following'])
           following_results = rpc.get_following(user, last_account, "blog", 100, api="follow")
         # Convert to Numbers
+        account['proxy_witness'] = float(account['proxied_vsf_votes'][0]) / 1000000
         for key in ['lifetime_bandwidth', 'reputation', 'to_withdraw']:
             account[key] = float(account[key])
         for key in ['activity_shares', 'balance', 'sbd_balance', 'sbd_seconds', 'vesting_balance', 'vesting_shares', 'vesting_withdraw_rate']:
@@ -79,7 +80,7 @@ def update_history():
         account['scanned'] = datetime.now()
         db.account.update({'_id': user}, account, upsert=True)
         # Create our Snapshot dict
-        wanted_keys = ['name', 'activity_shares', 'average_bandwidth', 'average_market_bandwidth', 'balance', 'comment_count', 'curation_rewards', 'lifetime_bandwidth', 'lifetime_vote_count', 'next_vesting_withdrawal', 'reputation', 'post_bandwidth', 'post_count', 'posting_rewards', 'sbd_balance', 'sbd_last_interest_payment', 'sbd_seconds', 'sbd_seconds_last_update', 'to_withdraw', 'vesting_balance', 'vesting_shares', 'vesting_withdraw_rate', 'voting_power', 'withdraw_routes', 'withdrawn', 'witnesses_voted_for']
+        wanted_keys = ['name', 'proxy_witness', 'activity_shares', 'average_bandwidth', 'average_market_bandwidth', 'balance', 'comment_count', 'curation_rewards', 'lifetime_bandwidth', 'lifetime_vote_count', 'next_vesting_withdrawal', 'reputation', 'post_bandwidth', 'post_count', 'posting_rewards', 'sbd_balance', 'sbd_last_interest_payment', 'sbd_seconds', 'sbd_seconds_last_update', 'to_withdraw', 'vesting_balance', 'vesting_shares', 'vesting_withdraw_rate', 'voting_power', 'withdraw_routes', 'withdrawn', 'witnesses_voted_for']
         snapshot = dict((k, account[k]) for k in wanted_keys if k in account)
         snapshot.update({
           'account': user,
