@@ -91,11 +91,18 @@ class AccountController extends ControllerBase
       'sort' => array('_ts' => -1),
       'limit' => 100
     ));
-    $this->view->witnessing = Account::find(array(
-      array(
-        'witness_votes' => $account,
-      ),
-      'sort' => array('vesting_shares' => -1)
-    ));
+    $this->view->witnessing = Account::aggregate(array(
+      ['$match' => [
+          'witness_votes' => $account,
+      ]],
+      ['$project' => [
+        'name' => '$name',
+        'weight' => ['$sum' => ['$vesting_shares', '$proxy_witness']]
+      ]],
+      ['$sort' => ['weight' => -1]]
+    ))->toArray();
+    $this->view->witness_votes = array_sum(array_map(function($item) {
+      return $item['weight'];
+    }, $this->view->witnessing));
   }
 }
