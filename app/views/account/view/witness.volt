@@ -35,7 +35,7 @@
         {% for voter in witnessing %}
         <div class="item">
           <div class="right floated content">
-            {{ partial("_elements/vesting_shares", ['current': voter]) }}
+            {{ partial("_elements/witness_vesting_shares", ['weight': voter.weight]) }}
           </div>
           <a href="@{{ voter.name }}">
             {{ voter.name }}
