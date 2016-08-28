@@ -12,11 +12,33 @@ class AccountController extends ControllerBase
 
   public function listAction()
   {
-    $query = array(
-    );
+    $filter = $this->dispatcher->getParam("filter");
+    $query = array();
     $sort = array(
-      'vesting_shares' => -1,
+      "vesting_shares" => -1,
     );
+    if($filter) {
+      switch($filter) {
+        case "reputation":
+          $query['reputation'] = array('$gt' => 0);
+          $sort = array(
+            "reputation" => -1,
+          );
+          break;
+        case "posts":
+          $sort = array(
+            "post_count" => -1,
+          );
+          break;
+        case "followers":
+          $sort = array(
+            "followers" => -1,
+          );
+          break;
+        default:
+          break;
+      }
+    }
     $limit = 50;
     $this->view->accounts = Account::find(array(
       $query,
