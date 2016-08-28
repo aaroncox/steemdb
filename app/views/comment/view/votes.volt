@@ -4,8 +4,8 @@
       <th class="mobile hidden">%</th>
       <th>Voter</th>
       <th class="mobile hidden">Time</th>
-      <th class="mobile hidden">Weight</th>
-      <th>Reward Shares</th>
+      <th class="mobile hidden right aligned">Weight</th>
+      <th class="right aligned">Reward Shares</th>
     </tr>
   </thead>
   <tbody>
@@ -22,10 +22,10 @@
       <td class="mobile hidden">
         {{ voter.time }}
       </td>
-      <td class="mobile hidden">
+      <td class="mobile hidden right aligned">
         {% include "_elements/voter_weight.volt" %}
       </td>
-      <td>
+      <td class="right aligned">
         {% include "_elements/voter_rshares.volt" %}
       </td>
     </tr>

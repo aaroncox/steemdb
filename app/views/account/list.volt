@@ -35,7 +35,7 @@
               <td class="collapsing">
                 {{ account.post_count }}
               </td>
-              <td class="collapsing">
+              <td class="collapsing right aligned">
                 {{ partial("_elements/vesting_shares", ['current': account]) }}
               </td>
             </tr>
