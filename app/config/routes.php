@@ -14,7 +14,7 @@ $router->add('/{tag}/@{author}/{permlink}', [
   'action' => 'view'
 ]);
 
-$router->add('/accounts', [
+$router->add('/accounts[/]?{filter}?', [
   'controller' => 'account',
   'action' => 'list'
 ]);
