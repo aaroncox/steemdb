@@ -212,6 +212,10 @@
           })
         ;
 
+        $('[data-popup]')
+          .popup()
+        ;
+
         $('.ui.dropdown.tags')
           .dropdown({
             onChange: function(value, text, $choice) {
