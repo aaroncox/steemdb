@@ -1,11 +1,3 @@
-{% if voter.weight >= 10000000000000000 %}
-<div class="ui orange label">
-{% elseif voter.weight >= 100000000000000 %}
-<div class="ui purple label">
-{% elseif voter.weight >= 1000000000000 %}
-<div class="ui blue label">
-{% else %}
-<div class="ui green label">
-{% endif %}
+<div class="ui <?php echo $this->largeNumber::color($voter->weight / 1000000)?> label" data-popup data-content="<?php echo number_format($voter->weight, 3, ".", ",") ?> VESTS" data-variation="inverted" data-position="left center">
   <?php echo $this->largeNumber::format($voter->weight); ?>
 </div>

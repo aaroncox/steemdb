@@ -1,11 +1,3 @@
-{% if voter.rshares >= 1000000000000 %}
-<div class="ui orange label">
-{% elseif voter.rshares >= 10000000000 %}
-<div class="ui purple label">
-{% elseif voter.rshares >= 100000000 %}
-<div class="ui blue label">
-{% else %}
-<div class="ui green label">
-{% endif %}
-    <?php echo $this->largeNumber::format($voter->rshares); ?>
+<div class="ui <?php echo $this->largeNumber::color($voter->rshares / 1000)?> label" data-popup data-content="<?php echo number_format($voter->rshares, 3, ".", ",") ?> Reward Shares" data-variation="inverted" data-position="left center">
+  <?php echo $this->largeNumber::format($voter->rshares, 'RS'); ?>
 </div>
