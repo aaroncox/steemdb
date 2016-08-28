@@ -10,7 +10,7 @@ window.steemdb.chart_blocks = function() {
     var xScale = new Plottable.Scales.Time()
         .domain([
           new Date(today.getTime() - dayOffset * 45),
-          new Date(today.getTime())
+          new Date(today.getTime() + dayOffset)
         ]);
 
     var xAxis = new Plottable.Axes.Time(xScale, "bottom");
@@ -34,8 +34,8 @@ window.steemdb.chart_blocks = function() {
             .attr("fill", function(d, i, dataset) { return dataset.metadata(); }, colorScale)
 
     var cs = new Plottable.Scales.Color();
-    cs.range(["#BDCEF0", "#5279C7"]);
-    cs.domain(["POW", "Witnessed"]);
+    cs.range(["#BDCEF0","#5279C7"]);
+    cs.domain(["Witnessed","POW"]);
     var legend = new Plottable.Components.Legend(cs);
     legend.maxEntriesPerRow(3);
 
