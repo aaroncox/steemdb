@@ -17,7 +17,7 @@
               }
               break;
             case "double":
-              echo number_format($value, 0, '', '');
+              echo number_format($value, 3, '.', ',');
               break;
             default:
               echo htmlspecialchars($value);
