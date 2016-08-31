@@ -9,6 +9,7 @@ use SteemDB\Models\Comment;
 use SteemDB\Models\Statistics;
 use SteemDB\Models\Vote;
 use SteemDB\Models\AccountHistory;
+use SteemDB\Models\PropsHistory;
 use MongoDB\BSON\ObjectID;
 
 class ApiController extends ControllerBase
@@ -212,6 +213,16 @@ class ApiController extends ControllerBase
         '$limit' => 10
       ],
     ])->toArray();
+    echo json_encode($data); exit;
+  }
+
+  public function propsAction()
+  {
+    $data = PropsHistory::find([
+      [],
+      'sort' => array('date' => -1),
+      'limit' => 500
+    ]);
     echo json_encode($data); exit;
   }
 
