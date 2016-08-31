@@ -17,6 +17,18 @@ mongo = MongoClient("mongodb://mongo")
 db = mongo.steemdb
 
 def update_history():
+
+    pprint("SteemDB - Update Global Properties")
+
+    props = rpc.get_dynamic_global_properties()
+    for key in ['max_virtual_bandwidth', 'recent_slots_filled', 'total_activity_fund_shares', 'total_reward_shares2']:
+        props[key] = float(props[key])
+    for key in ['confidential_sbd_supply', 'confidential_supply', 'current_sbd_supply', 'current_supply', 'total_activity_fund_steem', 'total_reward_fund_steem', 'total_vesting_fund_steem', 'total_vesting_shares', 'virtual_supply']:
+        props[key] = float(props[key].split()[0])
+    for key in ['time']:
+        props[key] = datetime.strptime(props[key], "%Y-%m-%dT%H:%M:%S")
+    db.props_history.insert(props)
+
     users = rpc.lookup_accounts(-1, 1000)
     more = True
     # more = False
