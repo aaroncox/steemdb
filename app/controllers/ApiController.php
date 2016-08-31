@@ -216,6 +216,52 @@ class ApiController extends ControllerBase
     echo json_encode($data); exit;
   }
 
+  public function supplyAction()
+  {
+    $data = AccountHistory::aggregate([
+      [
+        '$match' => [
+          'date' => [
+            '$gte' => new UTCDateTime(strtotime("-30 days") * 1000),
+            '$lte' => new UTCDateTime(strtotime("midnight") * 1000),
+          ]
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => [
+            'doy' => ['$dayOfYear' => '$date'],
+            'year' => ['$year' => '$date'],
+            'month' => ['$month' => '$date'],
+            'day' => ['$dayOfMonth' => '$date'],
+          ],
+          'sbd' => [
+            '$sum' => '$sbd_balance'
+          ],
+          'steem' => [
+            '$sum' => '$balance'
+          ],
+          'vests' => [
+            '$sum' => '$vesting_shares'
+          ]
+        ],
+      ],
+      [
+        '$sort' => [
+          '_id.year' => -1,
+          '_id.doy' => 1
+        ]
+      ],
+      [
+        '$limit' => 30
+      ],
+    ])->toArray();
+    foreach($data as $idx => $date) {
+      $data[$idx]->sp = (float) $this->convert->vest2sp($data[$idx]->vests, null);
+    }
+    echo json_encode($data); exit;
+  }
+
   public function propsAction()
   {
     $data = PropsHistory::find([

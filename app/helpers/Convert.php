@@ -14,7 +14,7 @@ class Convert extends Tag
     return static::getDI()->getShared('steemd')->getProps();
   }
 
-  static private function getConversionRate($key) {
+  static public function getConversionRate($key) {
     $cache = static::getCache();
     $cached = $cache->get($key);
     if($cached === null) {
@@ -29,9 +29,9 @@ class Convert extends Tag
     return $cached;
   }
 
-  static public function vest2sp($value)
+  static public function vest2sp($value, $label = ' SP')
   {
     $values = static::getConversionRate('convert_vest2sp');
-    return round($values['total_vest_steem'] * ($value / $values['total_vests']), 3) . ' SP';
+    return round($values['total_vest_steem'] * ($value / $values['total_vests']), 3) . $label;
   }
 }
