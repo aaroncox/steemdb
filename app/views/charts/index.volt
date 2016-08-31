@@ -16,6 +16,9 @@
     <div class="row">
       <div class="center aligned column">
         <div class="ui segment">
+          <svg width="100%" height="500px" id="supply"></svg>
+        </div>
+        <div class="ui segment">
           <svg width="100%" height="500px" id="activity"></svg>
         </div>
         <div class="ui segment">
@@ -63,6 +66,7 @@
 {% endblock %}
 
 {% block scripts %}
+  {% include 'charts/supply.volt' %}
   {% include 'charts/activity.volt' %}
   {% include 'charts/growth.volt' %}
   {% include 'charts/authors.volt' %}
