@@ -6,6 +6,7 @@ use SteemDB\Models\AccountHistory;
 use SteemDB\Models\Block;
 use SteemDB\Models\Comment;
 use SteemDB\Models\Vote;
+use SteemDB\Models\Statistics;
 
 class AccountController extends ControllerBase
 {
@@ -13,6 +14,7 @@ class AccountController extends ControllerBase
   public function listAction()
   {
     $filter = $this->dispatcher->getParam("filter");
+    $this->view->page = $page = (int) $this->request->get("page") ?: 1;
     $query = array();
     $sort = array(
       "vesting_shares" => -1,
@@ -39,9 +41,16 @@ class AccountController extends ControllerBase
           break;
       }
     }
-    $limit = 50;
+    $limit = 10;
+    // Determine how many pages of users we have
+    $this->view->pages = ceil(Statistics::findFirst(array(
+      array('key' => 'users'),
+      "sort" => array('date' => -1)
+    ))->toArray()['value'] / $limit);
+    // Load the accounts
     $this->view->accounts = Account::find(array(
       $query,
+      "skip" => $limit * ($page - 1),
       "sort" => $sort,
       "limit" => $limit
     ));

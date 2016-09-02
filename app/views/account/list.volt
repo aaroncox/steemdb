@@ -42,6 +42,7 @@
             {% endfor %}
           </tbody>
         </table>
+        {% include "_elements/paginator.volt" %}
       </div>
     </div>
   </div>
