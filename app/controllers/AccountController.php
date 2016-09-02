@@ -34,7 +34,7 @@ class AccountController extends ControllerBase
           break;
         case "followers":
           $sort = array(
-            "followers" => -1,
+            "followers_count" => -1,
           );
           break;
         default:
