@@ -171,7 +171,7 @@
                 created by
                 <a href="https://steemit.com/@jesta">@jesta</a>
               </h4>
-              <p>Powered by the <a href="https://steem.io">Steem Blockchain</a></p>
+              <p>If you'd like to support this project, <a href="https://steemit.com/~witnesses">vote <strong>jesta</strong> as witness.</a></p>
             </div>
           </div>
         </div>
