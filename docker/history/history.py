@@ -59,6 +59,7 @@ def update_history():
         account = collections.OrderedDict(sorted(state[0].items()))
         # Get followers
         account['followers'] = []
+        account['followers_count'] = 0
         followers_results = rpc.get_followers(user, "", "blog", 100, api="follow")
         while len(followers_results) > 1:
           results = followers_results
@@ -67,9 +68,11 @@ def update_history():
             last_account = follower['follower']
             if 'blog' in follower['what'] or 'posts' in follower['what']:
               account['followers'].append(follower['follower'])
+              account['followers_count'] += 1
           followers_results = rpc.get_followers(user, last_account, "blog", 100, api="follow")
         # Get following
         account['following'] = []
+        account['following_count'] = 0
         following_results = rpc.get_following(user, -1, "blog", 100, api="follow")
         while len(following_results) > 1:
           results = following_results
@@ -78,6 +81,7 @@ def update_history():
             last_account = following['following']
             if 'blog' in following['what'] or 'posts' in following['what']:
               account['following'].append(following['following'])
+              account['following_count'] += 1
           following_results = rpc.get_following(user, last_account, "blog", 100, api="follow")
         # Convert to Numbers
         account['proxy_witness'] = float(account['proxied_vsf_votes'][0]) / 1000000

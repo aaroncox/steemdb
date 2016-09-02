@@ -46,7 +46,7 @@
                 </div>
               </td>
               <td class="collapsing">
-                {{ account.followers | length }}
+                {{ account.followers_count }}
               </td>
               <td class="collapsing">
                 {{ account.post_count }}
