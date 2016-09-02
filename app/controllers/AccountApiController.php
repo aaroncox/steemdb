@@ -14,6 +14,21 @@ use SteemDB\Models\Vote;
 
 class AccountApiController extends ControllerBase
 {
+
+  public function snapshotsAction() {
+    $account = $this->dispatcher->getParam("account");
+    $data = AccountHistory::find([
+      ['account' => $account],
+      'sort' => ['date' => 1],
+      'limit' => 100
+    ]);
+    foreach($data as $idx => $document) {
+      $data[$idx]->date = (string) $document->date;
+
+    }
+    echo json_encode($data); exit;
+  }
+
   public function historyAction() {
     $account = $this->dispatcher->getParam("account");
     $data = AccountHistory::aggregate([
