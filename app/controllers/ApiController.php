@@ -272,4 +272,19 @@ class ApiController extends ControllerBase
     echo json_encode($data); exit;
   }
 
+  public function percentageAction()
+  {
+    $results = PropsHistory::find([
+      [],
+      'sort' => array('date' => -1),
+      'limit' => 500
+    ]);
+    $data = [];
+    foreach($results as $doc) {
+      $key = $doc->time->toDateTime()->format("U");
+      $data[$key] = $doc->total_vesting_fund_steem / $doc->current_supply;
+    }
+    echo json_encode($data); exit;
+  }
+
 }
