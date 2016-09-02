@@ -13,7 +13,7 @@ class AccountController extends ControllerBase
 
   public function listAction()
   {
-    $filter = $this->dispatcher->getParam("filter");
+    $this->view->filter = $filter = $this->dispatcher->getParam("filter", "string");
     $this->view->page = $page = (int) $this->request->get("page") ?: 1;
     $query = array();
     $sort = array(
