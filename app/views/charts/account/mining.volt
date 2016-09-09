@@ -9,7 +9,7 @@ window.steemdb.chart_blocks = function() {
     var today = new Date();
     var xScale = new Plottable.Scales.Time()
         .domain([
-          new Date(today.getTime() - dayOffset * 45),
+          new Date(today.getTime() - dayOffset * 30),
           new Date(today.getTime() + dayOffset)
         ]);
 

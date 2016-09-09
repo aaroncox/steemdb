@@ -68,7 +68,7 @@ class AccountApiController extends ControllerBase
         '$match' => [
           'witness' => $account,
           '_ts' => [
-            '$gte' => new UTCDateTime(strtotime("-45 days") * 1000),
+            '$gte' => new UTCDateTime(strtotime("-30 days") * 1000),
           ],
         ]
       ],
@@ -103,7 +103,7 @@ class AccountApiController extends ControllerBase
         '$match' => [
           'work.input.worker_account' => $account,
           '_ts' => [
-            '$gte' => new UTCDateTime(strtotime("-45 days") * 1000),
+            '$gte' => new UTCDateTime(strtotime("-30 days") * 1000),
           ],
         ]
       ],
@@ -147,7 +147,7 @@ class AccountApiController extends ControllerBase
             ['author' => $account],
           ],
           '_ts' => [
-            '$gte' => new UTCDateTime(strtotime("-45 days") * 1000),
+            '$gte' => new UTCDateTime(strtotime("-30 days") * 1000),
           ],
         ]
       ],
@@ -201,7 +201,7 @@ class AccountApiController extends ControllerBase
         '$match' => [
           'author' => $account,
           'created' => [
-            '$gte' => new UTCDateTime(strtotime("-45 days") * 1000),
+            '$gte' => new UTCDateTime(strtotime("-30 days") * 1000),
           ],
         ]
       ],
