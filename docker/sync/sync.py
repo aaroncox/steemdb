@@ -90,6 +90,16 @@ def update_comment(author, permlink):
     comment.update({
         '_id': _id,
     })
+
+    # fix all values on active votes
+    active_votes = []
+    for vote in comment['active_votes']:
+        vote['rshares'] = float(vote['rshares'])
+        vote['weight'] = float(vote['weight'])
+        vote['time'] = datetime.strptime(vote['time'], "%Y-%m-%dT%H:%M:%S")
+        active_votes.append(vote)
+    comment['active_votes'] = active_votes
+
     for key in ['author_reputation', 'net_rshares', 'children_abs_rshares', 'abs_rshares', 'children_rshares2', 'vote_rshares']:
         comment[key] = float(comment[key])
     for key in ['total_pending_payout_value', 'pending_payout_value', 'max_accepted_payout', 'total_payout_value', 'curator_payout_value']:
