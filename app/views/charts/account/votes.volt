@@ -67,7 +67,7 @@ window.steemdb.chart_votes = function() {
     var yLabelOutgoing = new Plottable.Components.AxisLabel("Outgoing Votes", "90");
     var yLabelTotal = new Plottable.Components.AxisLabel("Incoming Votes", "270");
 
-    var xLabelTitle = new Plottable.Components.TitleLabel("45-day Voting Activity", "0");
+    var xLabelTitle = new Plottable.Components.TitleLabel("30-day Voting Activity", "0");
 
     var plots = new Plottable.Components.Group([lOutgoing, lIncoming]);
     var table = new Plottable.Components.Table([

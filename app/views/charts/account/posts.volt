@@ -57,7 +57,7 @@ window.steemdb.chart_posts = function() {
 
     var yLabelPosts = new Plottable.Components.AxisLabel("Posts", "90");
     var yLabelReplies = new Plottable.Components.AxisLabel("Replies", "270");
-    var xLabelTitle = new Plottable.Components.TitleLabel("45-day Posting Activity", "0");
+    var xLabelTitle = new Plottable.Components.TitleLabel("30-day Posting Activity", "0");
 
     var plots = new Plottable.Components.Group([lPosts, lReplies]);
     var table = new Plottable.Components.Table([

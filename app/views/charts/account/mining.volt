@@ -50,7 +50,7 @@ window.steemdb.chart_blocks = function() {
     legend.maxEntriesPerRow(5)
 
     var yLabelPosts = new Plottable.Components.AxisLabel("Blocks", "90");
-    var xLabelTitle = new Plottable.Components.TitleLabel("45-day Block Generation Activity", "0");
+    var xLabelTitle = new Plottable.Components.TitleLabel("30-day Block Generation Activity", "0");
 
     var plots = new Plottable.Components.Group([lBlocks]);
     var table = new Plottable.Components.Table([

@@ -66,7 +66,7 @@ d3.json("/api/account/{{ account.name }}/history").get(function(error, rows) {
 
   var yLabelCRewards = new Plottable.Components.AxisLabel("Activity", "270");
   var yLabelVests = new Plottable.Components.AxisLabel("VESTS", "90");
-  var xLabelTitle = new Plottable.Components.TitleLabel("45-day account history", "0");
+  var xLabelTitle = new Plottable.Components.TitleLabel("30-day account history", "0");
 
   var plots = new Plottable.Components.Group([lPosts, lFollowers, lVests]);
   var table = new Plottable.Components.Table([
