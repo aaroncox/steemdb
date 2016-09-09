@@ -106,6 +106,7 @@
         <a href="/" class="{{ (router.getControllerName() == 'comment') ? 'active' : '' }} item">posts</a>
         <a href="/accounts" class="{{ (router.getControllerName() == 'account') ? 'active' : '' }} item">accounts</a>
         <a href="/witnesses" class="{{ (router.getControllerName() == 'witness') ? 'active' : '' }} item">witnesses</a>
+        <a href="/labs" class="{{ (router.getControllerName() == 'labs') ? 'active' : '' }} item">labs</a>
         <div class="right menu">
           <div class="item">
             <a href="https://steemit.com/?r=jesta">
