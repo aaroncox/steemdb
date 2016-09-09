@@ -1,14 +1,26 @@
-<div class="ui divided relaxed list">
-  {% for current in account.followers %}
-    {% include '_elements/account_list_item.volt' %}
+<table class="ui table">
+  <thead>
+    <tr>
+      <th>Account</th>
+      <th>Followers</th>
+      <th>Posts</th>
+      <th>Vests</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for current in followers %}
+    {% include '_elements/account_table_row' with ['current': current] %}
   {% else %}
-    <div class="item">
-      <div class="ui centered header">
-        No accounts found
-        <div class="sub header">
-          SteemDB has no record of any accounts following this user.
+    <tr>
+      <td>
+        <div class="ui centered header">
+          No accounts found
+          <div class="sub header">
+            SteemDB has no record of any accounts following this user.
+          </div>
         </div>
-      </div>
-    </div>
+      </td>
+    </tr>
   {% endfor %}
-</div>
+  </tbody>
+</table>

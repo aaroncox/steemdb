@@ -100,6 +100,14 @@ class AccountController extends ControllerBase
       'sort' => array('_ts' => -1),
       'limit' => 100
     ));
+    $this->view->followers = Account::find([
+      ['name' => ['$in' => $this->view->account->followers]],
+      'sort' => ['vesting_shares' => -1],
+    ]);
+    $this->view->following = Account::find([
+      ['name' => ['$in' => $this->view->account->following]],
+      'sort' => ['vesting_shares' => -1],
+    ]);
     $this->view->witnessing = Account::aggregate(array(
       ['$match' => [
           'witness_votes' => $account,
