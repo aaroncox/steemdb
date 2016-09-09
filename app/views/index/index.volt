@@ -60,5 +60,5 @@
 {% endblock %}
 
 {% block scripts %}
-  {% include 'charts/daily.volt' %}
+
 {% endblock %}
