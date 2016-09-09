@@ -57,7 +57,7 @@ class ApiController extends ControllerBase
       [
         '$match' => [
           'created' => [
-            '$gte' => new UTCDateTime(strtotime("-45 days") * 1000),
+            '$gte' => new UTCDateTime(strtotime("-90 days") * 1000),
             '$lte' => new UTCDateTime(strtotime("midnight") * 1000),
           ],
           'depth' => 0,
