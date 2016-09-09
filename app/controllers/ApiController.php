@@ -287,6 +287,12 @@ class ApiController extends ControllerBase
     echo json_encode($data); exit;
   }
 
+  public function rsharesAction() {
+    header('Content-type:application/json');
+    $data = Comment::rsharesAllocation()->toArray();
+    echo json_encode($data); exit;
+  }
+
   public function downvotesAction() {
     $data = Comment::aggregate([
       [
