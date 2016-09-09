@@ -287,4 +287,97 @@ class ApiController extends ControllerBase
     echo json_encode($data); exit;
   }
 
+  public function downvotesAction() {
+    $data = Comment::aggregate([
+      [
+        '$match' => [
+          'created' => [
+            '$gte' => new UTCDateTime(strtotime("-30 days") * 1000),
+            '$lte' => new UTCDateTime(strtotime("midnight") * 1000),
+          ]
+        ]
+      ],
+      [
+        '$project' => [
+          'active_votes' => 1,
+        ]
+      ],
+      [
+        '$unwind' => '$active_votes'
+      ],
+      [
+        '$match' => [
+          'active_votes.percent' => ['$lt' => 0]
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => [
+            'voter' => '$active_votes.voter',
+            'doy' => ['$dayOfYear' => '$active_votes.time'],
+            'year' => ['$year' => '$active_votes.time'],
+            'month' => ['$month' => '$active_votes.time'],
+            'day' => ['$dayOfMonth' => '$active_votes.time'],
+          ],
+          'downvotes' => [
+            '$sum' => 1
+          ],
+        ]
+      ],
+      [
+        '$sort' => [
+          'downvotes' => -1
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => [
+            'doy' => '$_id.doy',
+            'year' => '$_id.year',
+            'month' => '$_id.month',
+            'day' => '$_id.day',
+          ],
+          'downvoters' => [
+            '$sum' => 1
+          ],
+          'accounts' => [
+            '$push' => [
+              'voter' => '$_id.voter',
+              'votes' => '$downvotes',
+            ]
+          ]
+        ]
+      ],
+      [
+        '$project' => [
+          '_id' => '$_id',
+          'total_voters' => '$total_voters',
+          'total_rshares' => '$total_rshares',
+          'total_vshares' => '$total_vshares',
+          'accounts' => [
+            '$slice' => [
+              '$accounts', 20
+            ]
+          ]
+        ]
+      ],
+      [
+        '$sort' => [
+          '_id.year' => 1,
+          '_id.doy' => 1
+        ]
+      ]
+      // [
+      //   '$limit' => 10
+      // ]
+    ], [
+      'allowDiskUse' => true,
+      'cursor' => [
+        'batchSize' => 0
+      ]
+    ])->toArray();
+    header('Content-type:application/json');
+    echo json_encode($data); exit;
+  }
+
 }
