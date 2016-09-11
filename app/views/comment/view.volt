@@ -42,13 +42,13 @@
       <div class="four wide column">
         <div class="ui list">
           <div class="item">
-            <a href="https://steemit.com{{ comment.url }}" class="ui fluid primary icon button">
+            <a href="https://steemit.com{{ comment.url }}" class="ui fluid primary icon button" target="_blank">
               <i class="external icon"></i>
               View Post on steemit.com
             </a>
           </div>
           <div class="item">
-            <a href="https://steemd.com{{ comment.url }}" class="ui fluid teal icon button">
+            <a href="https://steemd.com{{ comment.url }}" class="ui fluid teal icon button" target="_blank">
               <i class="external icon"></i>
               View Post on steemd.com
             </a>
