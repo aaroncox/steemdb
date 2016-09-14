@@ -26,6 +26,7 @@ db.account.createIndex({reputation: 1});
 db.account.createIndex({post_count: 1});
 db.account.createIndex({followers: 1});
 db.account.createIndex({witness_votes: 1});
+db.account.createIndex({name: 1, vesting_shares: 1});
 
 # Account History Indexes:
 db.account_history.createIndex({date: 1, name: 1});
