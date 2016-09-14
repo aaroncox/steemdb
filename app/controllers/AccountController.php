@@ -59,7 +59,11 @@ class AccountController extends ControllerBase
   public function viewAction()
   {
     $account = $this->dispatcher->getParam("account");
-    $this->view->activity = array_reverse($this->steemd->getAccountHistory($account));
+    try {
+      $this->view->activity = array_reverse($this->steemd->getAccountHistory($account));
+    } catch (Exception $e) {
+      $this->view->activity = false;
+    }
     $this->view->account = Account::findFirst(array(
       array(
         'name' => $account
