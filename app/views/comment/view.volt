@@ -57,6 +57,7 @@
         {% include '_elements/cards/author.volt' %}
         {% include '_elements/sidebar/earnings.volt' %}
         {% include '_elements/sidebar/readmore.volt' %}
+        {% include '_elements/sidebar/commands.volt' %}
       </div>
     </div>
   </div>
