@@ -2,6 +2,7 @@
 Description=SteemDB.com History Service
 
 [Service]
+Environment=steemnode=node.steem.ws
 WorkingDirectory=/var/www/com_steemdb/docker/history
 ExecStart=/usr/bin/python3 fix.py
 Restart=always
