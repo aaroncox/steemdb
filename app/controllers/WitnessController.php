@@ -16,7 +16,7 @@ class WitnessController extends ControllerBase
         "key" => "miner_queue"
       )
     ));
-    $this->view->witnesses = Witness::find(array(
+    $witnesses = Witness::find(array(
       array(
       ),
       "sort" => array(
@@ -24,5 +24,21 @@ class WitnessController extends ControllerBase
       ),
       "limit" => 100
     ));
+    foreach($witnesses as $index => $witness) {
+      // Highlight Green for top 19
+      if($index < 19) {
+        $witness->row_status = "positive";
+      }
+      // Highlight Red is no price feed exists
+      if($witness->sbd_exchange_rate->base === "0.000 STEEM") {
+        $witness->row_status = "negative";
+      }
+      // Highlight Red is price feed older than 24 hrs
+      if((string) $witness->last_sbd_exchange_update <= strtotime("-24 hour") * 1000) {
+        $witness->row_status = "negative";
+        $witness->last_sbd_exchange_update_late = true;
+      }
+    }
+    $this->view->witnesses = $witnesses;
   }
 }

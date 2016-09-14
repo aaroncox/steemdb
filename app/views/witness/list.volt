@@ -22,7 +22,7 @@
           </thead>
           <tbody>
             {% for witness in witnesses %}
-              <tr {% if loop.index <= 19 %}class="positive"{% endif %}{% if witness.sbd_exchange_rate.base === "0.000 STEEM" %}class="negative"{% endif %}>
+              <tr class="{{ witness.row_status }}">
                 <td class="collapsing">
                   {% if loop.index <= 19 %}
                     <strong>{{ loop.index }}</strong>
@@ -53,7 +53,7 @@
                 </td>
                 <td>
                   <div class="ui small header">
-                    {% if witness.sbd_exchange_rate.base === "0.000 STEEM" %}<i class="warning sign icon"></i>{% endif %}
+                    {% if witness.sbd_exchange_rate.base === "0.000 STEEM" or witness.last_sbd_exchange_update_late %}<i class="warning sign icon"></i>{% endif %}
                     <div class="content">
                       {{ witness.sbd_exchange_rate.base }}
                       <div class="sub header">
