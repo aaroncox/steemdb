@@ -1,3 +1,17 @@
+# -------------------------
+# MongoDB Initial Commands
+#   To establish some of the collections properly, these commands
+#   should be executed before running steemdb.
+# -------------------------
+
+# 30 Day Block Collection
+db.createCollection("block_30d", {capped: true, max: 864000, size: 2147483648})
+
+# -------------------------
+# MongoDB Indexes
+#   These indexes will improve the performance of the database queries
+# -------------------------
+
 # Comment Indexes:
 db.comment.createIndex({parent_permlink: 1})
 db.comment.createIndex({scanned: 1, created: 1});
@@ -11,8 +25,9 @@ db.comment.createIndex({
   cashout_time: 1
 }, {sparse: true});
 
-# Block Indexes:
+# Block Indexes (two collections, block and block_30d):
 db.block.createIndex({witness: 1, _ts: 1})
+db.block_30d.createIndex({witness: 1, _ts: 1})
 
 # Voter Indexes:
 db.vote.createIndex({voter: 1, author: 1, _ts: 1});

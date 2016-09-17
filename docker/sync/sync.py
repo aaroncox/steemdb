@@ -55,6 +55,7 @@ def save_block(block, blockid):
         '_ts': datetime.strptime(doc['timestamp'], "%Y-%m-%dT%H:%M:%S"),
     })
     db.block.update({'_id': blockid}, doc, upsert=True)
+    db.block_30d.update({'_id': blockid}, doc, upsert=True)
 
 def save_pow(op, block, blockid):
     _id = str(blockid) + '-' + op['work'][1]['input']['worker_account']
