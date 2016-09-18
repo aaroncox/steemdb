@@ -7,6 +7,7 @@ use SteemDB\Models\Block;
 use SteemDB\Models\Comment;
 use SteemDB\Models\Vote;
 use SteemDB\Models\Statistics;
+use SteemDB\Models\WitnessMiss;
 
 class AccountController extends ControllerBase
 {
@@ -155,6 +156,19 @@ class AccountController extends ControllerBase
       'limit' => 100
     ));
     $this->view->chart = true;
+    $this->view->pick("account/view");
+  }
+
+  public function missedAction()
+  {
+    $account = $this->getAccount();
+    $this->view->mining = WitnessMiss::find(array(
+      array(
+        'witness' => $account,
+      ),
+      'sort' => array('date' => -1),
+      'limit' => 100
+    ));
     $this->view->pick("account/view");
   }
 
