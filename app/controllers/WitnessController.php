@@ -5,6 +5,7 @@ use MongoDB\BSON\UTCDateTime;
 use MongoDB\BSON\ObjectID;
 
 use SteemDB\Models\Witness;
+use SteemDB\Models\WitnessMiss;
 use SteemDB\Models\Statistics;
 
 class WitnessController extends ControllerBase
@@ -24,6 +25,27 @@ class WitnessController extends ControllerBase
       ),
       "limit" => 100
     ));
+    $pipeline = [
+      [
+        '$match' => [
+          'date' => [
+            '$gte' => new UTCDateTime(strtotime("-7 days") * 1000)
+          ]
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => '$witness',
+          'total' => [
+            '$sum' => '$increase'
+          ]
+        ]
+      ]
+    ];
+    $aggregate = WitnessMiss::aggregate($pipeline)->toArray();
+    foreach($aggregate as $data) {
+      $misses[$data['_id']] = $data['total'];
+    }
     foreach($witnesses as $index => $witness) {
       // Highlight Green for top 19
       if($index < 19) {
@@ -38,6 +60,8 @@ class WitnessController extends ControllerBase
         $witness->row_status = "negative";
         $witness->last_sbd_exchange_update_late = true;
       }
+      // Add the new 7 day misses
+      $witness->misses_7day = (isset($misses[$witness->owner]) ? $misses[$witness->owner] : 0);
     }
     $this->view->witnesses = $witnesses;
   }

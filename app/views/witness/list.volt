@@ -8,10 +8,10 @@
         <table class="ui small unstackable table">
           <thead>
             <tr>
-              <th>#</th>
+              <th class="right aligned">#</th>
               <th>Witness</th>
               <th>Votes</th>
-              <th>Misses</th>
+              <th class="center aligned">Weekly Misses</th>
               <th>Last Block</th>
               <th>Feed</th>
               <th>Reg Fee</th>
@@ -23,7 +23,7 @@
           <tbody>
             {% for witness in witnesses %}
               <tr class="{{ witness.row_status }}">
-                <td class="collapsing">
+                <td class="right aligned collapsing">
                   {% if loop.index <= 19 %}
                     <strong>{{ loop.index }}</strong>
                   {% else %}
@@ -45,8 +45,13 @@
                 <td class="collapsing">
                   <?php echo $this->largeNumber::format($witness->votes); ?>
                 </td>
-                <td>
-                  {{ witness.total_missed }}
+                <td class="center aligned">
+                  <div class="ui small header">
+                    {{ witness.misses_7day }}
+                    <div class="sub header">
+                      <small>{{ witness.total_missed }}</small>
+                    </div>
+                  </div>
                 </td>
                 <td>
                   {{ witness.last_confirmed_block_num }}
