@@ -3,18 +3,43 @@ from steemapi.steemnoderpc import SteemNodeRPC
 from piston.steem import Post
 from pymongo import MongoClient
 from pprint import pprint
+from time import gmtime, strftime
+from apscheduler.schedulers.background import BackgroundScheduler
 import collections
 import time
 import sys
 import os
 
-from apscheduler.schedulers.background import BackgroundScheduler
-
-# rpc = SteemNodeRPC(host, "", "", ['follow_api'])
-
 rpc = SteemNodeRPC("ws://" + os.environ['steemnode'], "", "", apis=["follow", "database"])
 mongo = MongoClient("mongodb://mongo")
 db = mongo.steemdb
+
+misses = {}
+
+# Command to check how many blocks a witness has missed
+def check_misses():
+    global misses
+    witnesses = rpc.get_witnesses_by_vote('', 100)
+    for witness in witnesses:
+        owner = str(witness['owner'])
+        # Check if we have a status on the current witness
+        if owner in misses.keys():
+            # Has the count increased?
+            if witness['total_missed'] > misses[owner]:
+                # Update the misses collection
+                record = {
+                  'date': datetime.now(),
+                  'witness': owner,
+                  'increase': witness['total_missed'] - misses[owner],
+                  'total': witness['total_missed']
+                }
+                db.witness_misses.insert(record)
+                # Update the misses in memory
+                misses[owner] = witness['total_missed']
+        else:
+            misses.update({owner: witness['total_missed']})
+
+
 
 def update_witnesses():
     now = datetime.now().date()
@@ -53,9 +78,10 @@ def update_witnesses():
 if __name__ == '__main__':
     # Start job immediately
     update_witnesses()
-    # Schedule it to run every 5 minutes
+    # Schedule it to run every 1 minute
     scheduler = BackgroundScheduler()
     scheduler.add_job(update_witnesses, 'interval', minutes=1, id='update_witnesses')
+    scheduler.add_job(check_misses, 'interval', minutes=1, id='check_misses')
     scheduler.start()
     # Loop
     try:
