@@ -40,6 +40,7 @@
         </div>
       </div>
       <div class="four wide column">
+        {% include '_elements/cards/account' with ['account': author] %}
         <div class="ui list">
           <div class="item">
             <a href="https://steemit.com{{ comment.url }}" class="ui fluid primary icon button" target="_blank">
@@ -54,7 +55,6 @@
             </a>
           </div>
         </div>
-        {% include '_elements/cards/author.volt' %}
         {% include '_elements/sidebar/earnings.volt' %}
         {% include '_elements/sidebar/readmore.volt' %}
         {% include '_elements/sidebar/commands.volt' %}
