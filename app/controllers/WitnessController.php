@@ -34,7 +34,7 @@ class WitnessController extends ControllerBase
         $witness->row_status = "negative";
       }
       // Highlight Red is price feed older than 24 hrs
-      if((string) $witness->last_sbd_exchange_update <= strtotime("-24 hour") * 1000) {
+      if((string) $witness->last_sbd_exchange_update <= strtotime("-1 week") * 1000) {
         $witness->row_status = "negative";
         $witness->last_sbd_exchange_update_late = true;
       }
