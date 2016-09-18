@@ -39,6 +39,45 @@
           {% include "account/view/" ~ router.getActionName() %}
         </div>
       </div>
+      <div class="four wide column">
+        {% include '_elements/cards/account.volt' %}
+        <div class="ui list">
+          <div class="item">
+            <a href="https://steemit.com/@{{ account.name }}" class="ui fluid primary icon small basic button" target="_blank">
+              <i class="external icon"></i>
+              View Account on steemit.com
+            </a>
+          </div>
+          <div class="item">
+            <a href="https://steemd.com/@{{ account.name }}" class="ui fluid teal icon small basic button" target="_blank">
+              <i class="external icon"></i>
+              View Account on steemd.com
+            </a>
+          </div>
+        </div>
+        <table class="ui definition table">
+          <tbody>
+            <tr>
+              <td>VESTS</td>
+              <td>{{ partial("_elements/vesting_shares", ['current': account]) }}</td>
+            </tr>
+            <tr>
+              <td>STEEM</td>
+              <td><?php echo number_format($account->balance, 3, '.', ','); ?></td>
+            </tr>
+            <tr>
+              <td>SBD</td>
+              <td><?php echo number_format($account->sbd_balance, 3, '.', ','); ?></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="ui tiny centered header">
+          <span class="sub header">
+            Account snapshot taken
+            <?php echo $this->timeAgo::mongo($account->scanned); ?>
+          </span>
+        </div>
+      </div>
     </div>
   </div>
 </div>
