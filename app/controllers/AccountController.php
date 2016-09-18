@@ -11,48 +11,7 @@ use SteemDB\Models\Statistics;
 class AccountController extends ControllerBase
 {
 
-  public function listAction()
   {
-    $this->view->filter = $filter = $this->dispatcher->getParam("filter", "string");
-    $this->view->page = $page = (int) $this->request->get("page") ?: 1;
-    $query = array();
-    $sort = array(
-      "vesting_shares" => -1,
-    );
-    if($filter) {
-      switch($filter) {
-        case "reputation":
-          $query['reputation'] = array('$gt' => 0);
-          $sort = array(
-            "reputation" => -1,
-          );
-          break;
-        case "posts":
-          $sort = array(
-            "post_count" => -1,
-          );
-          break;
-        case "followers":
-          $sort = array(
-            "followers_count" => -1,
-          );
-          break;
-        default:
-          break;
-      }
-    }
-    $limit = 10;
-    // Determine how many pages of users we have
-    $this->view->pages = ceil(Statistics::findFirst(array(
-      array('key' => 'users'),
-      "sort" => array('date' => -1)
-    ))->toArray()['value'] / $limit);
-    // Load the accounts
-    $this->view->accounts = Account::find(array(
-      $query,
-      "skip" => $limit * ($page - 1),
-      "sort" => $sort,
-      "limit" => $limit
     ));
   }
 
@@ -68,7 +27,6 @@ class AccountController extends ControllerBase
       array(
         'name' => $account
       )
-    ));
     if(!$this->view->account) {
       $this->flashSession->error('The account "'.$account.'" does not exist on SteemDB currently.');
       $this->response->redirect();
