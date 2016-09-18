@@ -1,6 +1,4 @@
 <script>
-if(!window.steemdb) window.steemdb = {};
-window.steemdb.chart_posts = function() {
   d3.json("/api/account/{{ account.name }}/posts").get(function(error, rows) {
     var data = rows;
     var dataset = new Plottable.Dataset(data);
@@ -69,5 +67,4 @@ window.steemdb.chart_posts = function() {
 
     table.renderTo("svg#account-posts");
   });
-}
 </script>

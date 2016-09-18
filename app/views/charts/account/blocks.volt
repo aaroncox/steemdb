@@ -1,6 +1,4 @@
 <script>
-if(!window.steemdb) window.steemdb = {};
-window.steemdb.chart_blocks = function() {
   d3.json("/api/account/{{ account.name }}/mining").get(function(error, rows) {
     var data = rows;
     var dataset = new Plottable.Dataset(data['pow']).metadata(2);
@@ -62,5 +60,4 @@ window.steemdb.chart_blocks = function() {
 
     table.renderTo("svg#account-mining");
   });
-}
 </script>

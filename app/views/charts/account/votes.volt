@@ -1,6 +1,4 @@
 <script>
-if(!window.steemdb) window.steemdb = {};
-window.steemdb.chart_votes = function() {
   d3.json("/api/account/{{ account.name }}/votes").get(function(error, rows) {
     var data = rows;
     var dataset = new Plottable.Dataset(data);
@@ -79,5 +77,4 @@ window.steemdb.chart_votes = function() {
 
     table.renderTo("svg#account-votes");
   });
-}
 </script>

@@ -4,10 +4,17 @@
  */
 $router = new Phalcon\Mvc\Router();
 
-$router->add('/@{account}', [
+$router->add('/@([a-z\-.]+)', [
   'controller' => 'account',
-  'action' => 'view'
-]);
+  'action' => 'view',
+  'account' => 1
+])->setName("account-view");
+
+$router->add('/@([a-z\-.]+)/([a-z\-]+)', [
+  'controller' => 'account',
+  'account' => 1,
+  'action' => 2
+])->setName("account-view-section");
 
 $router->add('/{tag}/@{author}/{permlink}', [
   'controller' => 'comment',
