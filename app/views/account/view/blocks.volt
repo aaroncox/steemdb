@@ -11,7 +11,9 @@
     {% for b in mining %}
     <tr>
       <td class="collapsing">
-        {{ b._id }}
+        <a href="/block/{{ b._id }}">
+          {{ b._id }}
+        </a>
       </td>
       <td class="collapsing">
         <?php echo $this->timeAgo::mongo($b->_ts); ?>

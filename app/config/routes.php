@@ -16,6 +16,13 @@ $router->add('/@([a-z\-.]+)/([a-z\-]+)', [
   'action' => 2
 ])->setName("account-view-section");
 
+$router->add('/block/([a-z0-9]+)', [
+  'controller' => 'block',
+  'action' => 'view',
+  'height' => 1
+])->setName("block-view");
+
+
 $router->add('/{tag}/@{author}/{permlink}', [
   'controller' => 'comment',
   'action' => 'view'
