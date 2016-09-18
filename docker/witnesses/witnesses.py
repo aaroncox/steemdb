@@ -70,7 +70,8 @@ def update_witnesses():
         snapshot = user.copy()
         _id = user['owner'] + '|' + now.strftime('%Y%m%d')
         snapshot.update({
-          '_id': _id
+          '_id': _id,
+          'created': datetime.now()
         })
         # Save Snapshot in Database
         db.witness_history.update({'_id': _id}, snapshot, upsert=True)
