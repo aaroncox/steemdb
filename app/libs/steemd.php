@@ -19,14 +19,20 @@ class steemd
 
   public function getAccountHistory($username, $limit = 100, $skip = -1)
   {
-    $api = $this->getApi('database_api');
-    return $this->client->call($api, 'get_account_history', [$username, $skip, $limit]);;
+    try {
+      return $this->client->call(0, 'get_account_history', [$username, $skip, $limit]);;
+    } catch (Exception $e) {
+      return array();
+    }
   }
 
   public function getProps($username, $limit = 100, $skip = -1)
   {
-    $api = $this->getApi('database_api');
-    return $this->client->call($api, 'get_dynamic_global_properties', []);
+    try {
+      return $this->client->call(0, 'get_dynamic_global_properties', []);
+    } catch (Exception $e) {
+      return array();
+    }
   }
 
   public function getApi($name)
