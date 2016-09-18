@@ -69,10 +69,21 @@ class AccountController extends ControllerBase
   public function votesAction()
   {
     $account = $this->getAccount();
+    $this->view->filter = $this->request->get('type');
+    switch($this->view->filter) {
+      case "incoming":
+        $query = array(
+          'author' => $account,
+        );
+        break;
+      default:
+        $query = array(
+          'voter' => $account,
+        );
+        break;
+    }
     $this->view->votes = Vote::find(array(
-      array(
-        'voter' => $account,
-      ),
+      $query,
       'sort' => array('_ts' => -1),
       'limit' => 100
     ));

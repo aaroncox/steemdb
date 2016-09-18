@@ -1,19 +1,27 @@
 <svg width="100%" height="200px" id="account-votes"></svg>
-<table class="ui table">
-  <thead>
-    <tr>
-      <th>When</th>
-      <th>Who/What</th>
-      <th>Weight</th>
-    </tr>
-  </thead>
+
+<div class="ui two item menu">
+  <a href="/@{{ account.name }}/votes?type=outgoing" class="{{ filter is not defined or filter is defined and filter == 'outgoing' ? "active" : "" }} item">Outgoing Votes</a>
+  <a href="/@{{ account.name }}/votes?type=incoming" class="{{ filter is defined and filter == "incoming" ? "active" : ""}} item">Incoming Votes</a>
+</div>
+<table class="ui striped table">
   <tbody>
     {% for vote in votes %}
     <tr>
-      <td class="collapsing">
+      <td class="center aligned collapsing">
+        {% if vote.weight > 0 %}
+        <span class="ui green label">
+        {% elseif vote.weight < 0 %}
+        <span class="ui red label">
+        {% else %}
+        <span class="ui label">
+        {% endif %}
+          <?= round($vote->weight / 100) ?>%
+        </span>
+        <br>
         <?php echo $this->timeAgo::mongo($vote->_ts); ?>
       </td>
-      <td class="twelve wide">
+      <td class="">
         <div class="ui small header">
           <a href="/tag/@{{ vote.author }}/{{ vote.permlink }}">
             {{ vote.permlink }}
@@ -27,15 +35,6 @@
         </div>
       </td>
       <td class="collapsing">
-        {% if vote.weight > 0 %}
-        <span class="ui green label">
-        {% elseif vote.weight < 0 %}
-        <span class="ui red label">
-        {% else %}
-        <span class="ui label">
-        {% endif %}
-          <?= round($vote->weight / 100) ?>%
-        </span>
       </td>
     </tr>
     {% else %}
