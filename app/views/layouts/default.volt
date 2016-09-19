@@ -39,6 +39,10 @@
       .footer.segment {
         padding: 5em 0em;
       }
+      .footer.segment a {
+        color: #fff;
+        text-decoration: underline;
+      }
       .comment img,
       .markdown img {
         max-width: 100%;
@@ -145,6 +149,13 @@
 
       {% block content %}{% endblock %}
 
+      <div class="ui container">
+        <div class="ui basic segment">
+          <div class="ui tiny center aligned header">
+            * All Steem Power & VEST calculations are done using the current conversion rate, not a historical rate. This may cause some calculations to be incorrect.
+          </div>
+        </div>
+      </div>
       <div class="ui inverted vertical footer segment">
         <div class="ui container">
           <div class="ui stackable inverted divided equal height stackable grid">
