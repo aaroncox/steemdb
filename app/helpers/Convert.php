@@ -34,4 +34,10 @@ class Convert extends Tag
     $values = static::getConversionRate('convert_vest2sp');
     return number_format($values['total_vest_steem'] * ($value / $values['total_vests']), 3, '.', ',') . $label;
   }
+
+  static public function sp2vest($value, $label = ' VEST')
+  {
+    $values = static::getConversionRate('convert_vest2sp');
+    return number_format((($value * 1000) / $values['total_vest_steem']) * $values['total_vests'], 3, '.', ',') . $label;
+  }
 }
