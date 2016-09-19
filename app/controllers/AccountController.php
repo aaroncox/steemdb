@@ -32,7 +32,7 @@ class AccountController extends ControllerBase
   {
     $account = $this->getAccount();
     try {
-      $this->view->activity = array_reverse($this->steemd->getAccountHistory($this->view->account));
+      $this->view->activity = array_reverse($this->steemd->getAccountHistory($this->view->account->name));
     } catch (Exception $e) {
       $this->view->activity = false;
     }
