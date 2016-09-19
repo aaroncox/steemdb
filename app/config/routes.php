@@ -4,13 +4,13 @@
  */
 $router = new Phalcon\Mvc\Router();
 
-$router->add('/@([a-z\-.]+)', [
+$router->add('/@([-a-z0-9.]+)', [
   'controller' => 'account',
   'action' => 'view',
   'account' => 1
 ])->setName("account-view");
 
-$router->add('/@([a-z\-.]+)/([a-z\-]+)', [
+$router->add('/@([-a-z0-9.]+)/([-a-z0-9]+)', [
   'controller' => 'account',
   'account' => 1,
   'action' => 2
