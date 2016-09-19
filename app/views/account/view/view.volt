@@ -30,7 +30,7 @@
   <tbody>
   {% for item in activity %}
   <tr>
-    <td class="two wide">
+    <td class="three wide">
       <div class="ui small header">
         <?php echo $this->opName::string($item[1]['op'], $account) ?>
         <div class="sub header">
