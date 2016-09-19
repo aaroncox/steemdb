@@ -1,5 +1,10 @@
 <div class="ui comments">
-  <h3 class="ui dividing header">Replies</h3>
+  <h3 class="ui dividing header">
+    Replies
+    <div class="sub header">
+      Posts that @{{ account.name }} has replied to
+    </div>
+  </h3>
   {% for comment in replies %}
   <div class="comment">
     <a class="avatar">

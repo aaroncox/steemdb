@@ -1,3 +1,9 @@
+<h3 class="ui dividing header">
+  @{{ account.name }} is following
+  <div class="sub header">
+    Sorted by total vests
+  </div>
+</h3>
 <table class="ui table">
   <thead>
     <tr>
