@@ -15,7 +15,7 @@
     {% for b in mining %}
     <tr>
       <td class="collapsing">
-        <?php echo $this->timeAgo::mongo($b->date); ?>
+        <?php echo $b->date->toDateTime()->format('Y-m-d\TH:i:s.u'); ?>
       </td>
       <td>{{ b.witness }}</td>
     </tr>
