@@ -62,6 +62,10 @@
               <td>{{ partial("_elements/vesting_shares", ['current': account]) }}</td>
             </tr>
             <tr>
+              <td>SP</td>
+              <td><?php echo $this->convert::vest2sp($current->vesting_shares); ?></td>
+            </tr>
+            <tr>
               <td>STEEM</td>
               <td><?php echo number_format($account->balance, 3, '.', ','); ?></td>
             </tr>
