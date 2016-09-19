@@ -1,3 +1,9 @@
+<h3 class="ui dividing header">
+  Witness Voting
+  <div class="sub header">
+    Snapshot of blockchain information cached <?php echo $this->timeAgo::mongo($account->scanned); ?>
+  </div>
+</h3>
 <div class="ui stackable grid container">
   <div class="row">
     <div class="eight wide column">
