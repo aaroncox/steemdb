@@ -11,7 +11,7 @@
               <th class="right aligned">#</th>
               <th>Witness</th>
               <th>Votes</th>
-              <th class="center aligned">Weekly Misses</th>
+              <th class="center aligned">Weekly/Total Misses</th>
               <th>Last Block</th>
               <th>Feed</th>
               <th>Reg Fee</th>
@@ -46,12 +46,12 @@
                   <?php echo $this->largeNumber::format($witness->votes); ?>
                 </td>
                 <td class="center aligned">
-                  <div class="ui small header">
-                    {{ witness.misses_7day }}
+                  <a href="/@{{ witness.owner }}/missed" class="ui small header">
+                    {{ (witness.misses_7day > 0) ? '+' ~ witness.misses_7day : '&nbsp;' }}
                     <div class="sub header">
                       <small>{{ witness.total_missed }}</small>
                     </div>
-                  </div>
+                  </a>
                 </td>
                 <td>
                   {{ witness.last_confirmed_block_num }}
