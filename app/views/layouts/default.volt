@@ -55,6 +55,9 @@
       .ui.comments .comment .comments {
         padding-left: 3em;
       }
+      .definition.table td.wide {
+        overflow-x: scroll;
+      }
       @media only screen and (min-width: 769px) {
         .mobile.visible {
           display: none
