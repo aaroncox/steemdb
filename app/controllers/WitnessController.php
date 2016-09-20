@@ -60,6 +60,11 @@ class WitnessController extends ControllerBase
         $witness->row_status = "negative";
         $witness->last_sbd_exchange_update_late = true;
       }
+      // Highlight Red if the signing key is invalid
+      if(!$witness->signing_key || $witness->signing_key == "") {
+        $witness->row_status = "negative";
+        $witness->invalid_signing_key = true;
+      }
       // Add the new 7 day misses
       $witness->misses_7day = (isset($misses[$witness->owner]) ? $misses[$witness->owner] : 0);
     }
