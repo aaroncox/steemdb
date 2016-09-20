@@ -47,7 +47,13 @@
                 </td>
                 <td class="center aligned">
                   <a href="/@{{ witness.owner }}/missed" class="ui small header">
-                    {{ (witness.misses_7day > 0) ? '+' ~ witness.misses_7day : '&nbsp;' }}
+                    {% if witness.misses_7day > 0 %}
+                      <div class="ui tiny grey label">
+                        {{ '+' ~ witness.misses_7day }}
+                      </div>
+                    {% else %}
+                      &nbsp;
+                    {% endif %}
                     <div class="sub header">
                       <small>{{ witness.total_missed }}</small>
                     </div>
