@@ -108,7 +108,7 @@
     <div class="ui large blue inverted top fixed massive menu">
       <div class="ui container">
         <a href="/" class="{{ (router.getControllerName() == 'comment') ? 'active' : '' }} item">posts</a>
-        <a href="/accounts" class="{{ (router.getControllerName() == 'account' || router.getControllerName() == 'accounts') ? 'active' : '' }} item">accounts</a>
+        <a href="/accounts" class="{{ (router.getControllerName() == 'account' or router.getControllerName() == 'accounts') ? 'active' : '' }} item">accounts</a>
         <a href="/witnesses" class="{{ (router.getControllerName() == 'witness') ? 'active' : '' }} item">witnesses</a>
         <a href="/labs" class="{{ (router.getControllerName() == 'labs') ? 'active' : '' }} item">labs</a>
         <div class="right menu">
