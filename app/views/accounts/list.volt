@@ -46,12 +46,12 @@
           <div class="right menu">
           </div>
         </div>
-        <table class="ui table">
+        <table class="ui attached table">
           <thead>
             <tr>
               <th>Account</th>
-              <th>Followers</th>
-              <th>Posts</th>
+              <th class="center aligned">Followers</th>
+              <th class="center aligned">Posts</th>
               <th class="right aligned">Vests</th>
               <th class="right aligned">Balances</th>
             </tr>
