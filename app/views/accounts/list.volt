@@ -44,6 +44,9 @@
             Reputation
           </a>
           <div class="right menu">
+            <div class="item">
+              Data updated <?php echo $this->timeAgo::mongo($accounts[0]->scanned); ?>
+            </div>
           </div>
         </div>
         <table class="ui attached table">
