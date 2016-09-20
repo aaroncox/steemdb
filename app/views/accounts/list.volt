@@ -28,9 +28,18 @@
           <a class="{{ filter == 'posts' ? 'active' : '' }} item" href="/accounts/posts">
             Posts
           </a>
-          <a class="{{ filter == 'followers' ? 'active' : '' }} item" href="/accounts/followers">
-            Followers
-          </a>
+          <div class="ui dropdown item">
+            Social
+            <i class="dropdown icon"></i>
+            <div class="menu">
+              <a class="{{ filter == 'followers' ? 'active' : '' }} item" href="/accounts/followers">
+                Followers
+              </a>
+              <a class="{{ filter == 'followers_mvest' ? 'active' : '' }} item" href="/accounts/followers_mvest">
+                Value of Followers
+              </a>
+            </div>
+          </div>
           <a class="{{ filter == 'reputation' ? 'active' : '' }} item" href="/accounts/reputation">
             Reputation
           </a>
@@ -58,8 +67,13 @@
                   {{ link_to("/@" ~ account.name, account.name) }}
                 </div>
               </td>
-              <td class="collapsing">
-                {{ account.followers_count }}
+              <td class="collapsing center aligned">
+                <div class="ui small header">
+                  {{ account.followers_count }}
+                  <div class="sub header">
+                    <?php echo $this->largeNumber::format($account->followers_mvest); ?>
+                  </div>
+                </div>
               </td>
               <td class="collapsing center aligned">
                 {{ account.post_count }}

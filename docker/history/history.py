@@ -16,6 +16,13 @@ rpc = SteemNodeRPC("ws://" + os.environ['steemnode'], "", "", apis=["follow", "d
 mongo = MongoClient("mongodb://mongo")
 db = mongo.steemdb
 
+mvest_per_account = {}
+
+def load_accounts():
+    pprint("SteemDB - Loading mvest per account")
+    for account in db.account.find():
+        mvest_per_account.update({account['name']: account['vesting_shares']})
+
 def update_history():
 
     pprint("SteemDB - Update Global Properties")
@@ -60,6 +67,7 @@ def update_history():
         # Get followers
         account['followers'] = []
         account['followers_count'] = 0
+        account['followers_mvest'] = 0
         followers_results = rpc.get_followers(user, "", "blog", 100, api="follow")
         while len(followers_results) > 1:
           results = followers_results
@@ -69,6 +77,8 @@ def update_history():
             if 'blog' in follower['what'] or 'posts' in follower['what']:
               account['followers'].append(follower['follower'])
               account['followers_count'] += 1
+              if follower['follower'] in mvest_per_account.keys():
+                account['followers_mvest'] += float(mvest_per_account[follower['follower']])
           followers_results = rpc.get_followers(user, last_account, "blog", 100, api="follow")
         # Get following
         account['following'] = []
@@ -92,6 +102,8 @@ def update_history():
         # Convert to Date
         for key in ['created', 'last_account_recovery', 'last_active', 'last_active_proved', 'last_activity_payout', 'last_bandwidth_update', 'last_market_bandwidth_update', 'last_owner_proved', 'last_owner_update', 'last_post', 'last_root_post', 'last_vote_time', 'next_vesting_withdrawal', 'sbd_last_interest_payment', 'sbd_seconds_last_update']:
             account[key] = datetime.strptime(account[key], "%Y-%m-%dT%H:%M:%S")
+        # Update our current info about the account
+        mvest_per_account.update({account['name']: account['vesting_shares']})
         # Save current state of account
         account['scanned'] = datetime.now()
         db.account.update({'_id': user}, account, upsert=True)
@@ -111,6 +123,8 @@ def update_history():
         }, snapshot, upsert=True)
 
 if __name__ == '__main__':
+    # Load all account data into memory
+    load_accounts()
     # Start job immediately
     update_history()
     # Schedule it to run every 6 hours

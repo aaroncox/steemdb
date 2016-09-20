@@ -17,6 +17,11 @@ class AccountsController extends ControllerBase
     );
     if($filter) {
       switch($filter) {
+        case "followers_mvest":
+          $sort = array(
+            "followers_mvest" => -1,
+          );
+          break;
         case "sbd":
           $sort = array(
             "sbd_balance" => -1,
