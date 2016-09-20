@@ -11,6 +11,7 @@ use SteemDB\Models\Comment;
 use SteemDB\Models\Pow;
 use SteemDB\Models\Statistics;
 use SteemDB\Models\Vote;
+use SteemDB\Models\WitnessHistory;
 
 class AccountApiController extends ControllerBase
 {
@@ -245,4 +246,32 @@ class AccountApiController extends ControllerBase
     echo json_encode($data); exit;
   }
 
+  public function witnessAction() {
+    $account = $this->dispatcher->getParam("account");
+    $data = WitnessHistory::aggregate([
+      [
+        '$match' => [
+          'owner' => $account
+        ]
+      ],
+      [
+        '$project' => [
+          '_id' => [
+            'doy' => ['$dayOfYear' => '$created'],
+            'year' => ['$year' => '$created'],
+            'month' => ['$month' => '$created'],
+            'day' => ['$dayOfMonth' => '$created'],
+          ],
+          'votes' => '$votes'
+        ]
+      ],
+      [
+        '$sort' => [
+          '_id.year' => -1,
+          '_id.doy' => 1
+        ]
+      ]
+    ])->toArray();
+    echo json_encode($data); exit;
+  }
 }

@@ -4,6 +4,7 @@
     Snapshot of blockchain information cached <?php echo $this->timeAgo::mongo($account->scanned); ?>
   </div>
 </h3>
+<svg width="100%" height="200px" id="account-witness"></svg>
 <div class="ui stackable grid container">
   <div class="row">
     <div class="eight wide column">
@@ -16,7 +17,7 @@
       <div class="ui divided relaxed list">
         {% for votee in account.witness_votes %}
         <div class="item">
-          <a href="@{{ votee }}">
+          <a href="/@{{ votee }}">
             {{ votee }}
           </a>
         </div>
@@ -43,7 +44,7 @@
           <div class="right floated content">
             {{ partial("_elements/witness_vesting_shares", ['weight': voter.weight]) }}
           </div>
-          <a href="@{{ voter.name }}">
+          <a href="/@{{ voter.name }}">
             {{ voter.name }}
           </a>
         </div>

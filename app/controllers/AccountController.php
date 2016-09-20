@@ -142,6 +142,7 @@ class AccountController extends ControllerBase
     $this->view->witness_votes = array_sum(array_map(function($item) {
       return $item['weight'];
     }, $this->view->witnessing));
+    $this->view->chart = true;
     $this->view->pick("account/view");
   }
 
