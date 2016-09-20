@@ -28,12 +28,14 @@ def update_history():
     pprint("SteemDB - Update Global Properties")
 
     props = rpc.get_dynamic_global_properties()
-    for key in ['max_virtual_bandwidth', 'recent_slots_filled', 'total_activity_fund_shares', 'total_reward_shares2']:
+
+    for key in ['max_virtual_bandwidth', 'recent_slots_filled', 'total_reward_shares2']:
         props[key] = float(props[key])
-    for key in ['confidential_sbd_supply', 'confidential_supply', 'current_sbd_supply', 'current_supply', 'total_activity_fund_steem', 'total_reward_fund_steem', 'total_vesting_fund_steem', 'total_vesting_shares', 'virtual_supply']:
+    for key in ['confidential_sbd_supply', 'confidential_supply', 'current_sbd_supply', 'current_supply', 'total_reward_fund_steem', 'total_vesting_fund_steem', 'total_vesting_shares', 'virtual_supply']:
         props[key] = float(props[key].split()[0])
     for key in ['time']:
         props[key] = datetime.strptime(props[key], "%Y-%m-%dT%H:%M:%S")
+
     db.props_history.insert(props)
 
     users = rpc.lookup_accounts(-1, 1000)
@@ -97,10 +99,10 @@ def update_history():
         account['proxy_witness'] = float(account['proxied_vsf_votes'][0]) / 1000000
         for key in ['lifetime_bandwidth', 'reputation', 'to_withdraw']:
             account[key] = float(account[key])
-        for key in ['activity_shares', 'balance', 'sbd_balance', 'sbd_seconds', 'vesting_balance', 'vesting_shares', 'vesting_withdraw_rate']:
+        for key in ['balance', 'sbd_balance', 'sbd_seconds', 'savings_balance', 'savings_sbd_balance', 'vesting_balance', 'vesting_shares', 'vesting_withdraw_rate']:
             account[key] = float(account[key].split()[0])
         # Convert to Date
-        for key in ['created', 'last_account_recovery', 'last_active', 'last_active_proved', 'last_activity_payout', 'last_bandwidth_update', 'last_market_bandwidth_update', 'last_owner_proved', 'last_owner_update', 'last_post', 'last_root_post', 'last_vote_time', 'next_vesting_withdrawal', 'sbd_last_interest_payment', 'sbd_seconds_last_update']:
+        for key in ['created', 'last_account_recovery', 'last_account_update', 'last_active_proved', 'savings_sbd_last_interest_payment', 'savings_sbd_seconds_last_update', 'reset_request_time', 'last_bandwidth_update', 'last_market_bandwidth_update', 'last_owner_proved', 'last_owner_update', 'last_post', 'last_root_post', 'last_vote_time', 'next_vesting_withdrawal', 'sbd_last_interest_payment', 'sbd_seconds_last_update']:
             account[key] = datetime.strptime(account[key], "%Y-%m-%dT%H:%M:%S")
         # Update our current info about the account
         mvest_per_account.update({account['name']: account['vesting_shares']})
