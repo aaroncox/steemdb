@@ -16,6 +16,13 @@ use SteemDB\Models\WitnessHistory;
 class AccountApiController extends ControllerBase
 {
 
+  public function initialize()
+  {
+    header('Content-type:application/json');
+    $this->view->disable();
+    ini_set('precision', 20);
+  }
+
   public function snapshotsAction() {
     $account = $this->dispatcher->getParam("account");
     $data = AccountHistory::find([
@@ -27,7 +34,7 @@ class AccountApiController extends ControllerBase
       $data[$idx]->date = (string) $document->date;
 
     }
-    echo json_encode($data); exit;
+    echo json_encode($data, JSON_PRETTY_PRINT);
   }
 
   public function historyAction() {
@@ -59,7 +66,7 @@ class AccountApiController extends ControllerBase
         ]
       ]
     ])->toArray();
-    echo json_encode($data); exit;
+    echo json_encode($data, JSON_PRETTY_PRINT);
   }
 
   public function miningAction() {
@@ -135,7 +142,7 @@ class AccountApiController extends ControllerBase
       ]
     ])->toArray();
 
-    echo json_encode(['pow' => $pow, 'witness' => $witness]); exit;
+    echo json_encode(['pow' => $pow, 'witness' => $witness]);
   }
 
   public function votesAction() {
@@ -192,7 +199,7 @@ class AccountApiController extends ControllerBase
         'batchSize' => 0
       ]
     ])->toArray();
-    echo json_encode($data); exit;
+    echo json_encode($data, JSON_PRETTY_PRINT);
   }
 
   public function postsAction() {
@@ -243,7 +250,7 @@ class AccountApiController extends ControllerBase
         'batchSize' => 0
       ]
     ])->toArray();
-    echo json_encode($data); exit;
+    echo json_encode($data, JSON_PRETTY_PRINT);
   }
 
   public function witnessAction() {
@@ -272,6 +279,6 @@ class AccountApiController extends ControllerBase
         ]
       ]
     ])->toArray();
-    echo json_encode($data); exit;
+    echo json_encode($data, JSON_PRETTY_PRINT);
   }
 }

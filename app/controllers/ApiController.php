@@ -15,6 +15,13 @@ use MongoDB\BSON\ObjectID;
 class ApiController extends ControllerBase
 {
 
+  public function initialize()
+  {
+    header('Content-type:application/json');
+    $this->view->disable();
+    ini_set('precision', 20);
+  }
+
   public function voteAction()
   {
     $pipeline = [
@@ -48,7 +55,7 @@ class ApiController extends ControllerBase
       ]
     ];
     $data = Vote::aggregate($pipeline)->toArray();
-    echo json_encode($pipeline); exit;
+    echo json_encode($pipeline, JSON_PRETTY_PRINT);
   }
 
   public function activityAction()
@@ -100,7 +107,7 @@ class ApiController extends ControllerBase
         ]
       ],
     ])->toArray();
-    echo json_encode($data); exit;
+    echo json_encode($data, JSON_PRETTY_PRINT);
   }
 
   public function growthAction()
@@ -175,7 +182,7 @@ class ApiController extends ControllerBase
         $data[$key]['users'] = 0;
       }
     }
-    echo json_encode($data); exit;
+    echo json_encode($data, JSON_PRETTY_PRINT);
   }
 
   public function newbiesAction()
@@ -213,7 +220,7 @@ class ApiController extends ControllerBase
         '$limit' => 10
       ],
     ])->toArray();
-    echo json_encode($data); exit;
+    echo json_encode($data, JSON_PRETTY_PRINT);
   }
 
   public function supplyAction()
@@ -259,7 +266,7 @@ class ApiController extends ControllerBase
     foreach($data as $idx => $date) {
       $data[$idx]->sp = (float) $this->convert->vest2sp($data[$idx]->vests, null);
     }
-    echo json_encode($data); exit;
+    echo json_encode($data, JSON_PRETTY_PRINT);
   }
 
   public function propsAction()
@@ -269,7 +276,7 @@ class ApiController extends ControllerBase
       'sort' => array('date' => -1),
       'limit' => 500
     ]);
-    echo json_encode($data); exit;
+    echo json_encode($data, JSON_PRETTY_PRINT);
   }
 
   public function percentageAction()
@@ -284,13 +291,12 @@ class ApiController extends ControllerBase
       $key = $doc->time->toDateTime()->format("U");
       $data[$key] = $doc->total_vesting_fund_steem / $doc->current_supply;
     }
-    echo json_encode($data); exit;
+    echo json_encode($data, JSON_PRETTY_PRINT);
   }
 
   public function rsharesAction() {
-    header('Content-type:application/json');
     $data = Comment::rsharesAllocation()->toArray();
-    echo json_encode($data); exit;
+    echo json_encode($data, JSON_PRETTY_PRINT);
   }
 
   public function downvotesAction() {
@@ -383,7 +389,7 @@ class ApiController extends ControllerBase
       ]
     ])->toArray();
     header('Content-type:application/json');
-    echo json_encode($data); exit;
+    echo json_encode($data, JSON_PRETTY_PRINT);
   }
 
 }
