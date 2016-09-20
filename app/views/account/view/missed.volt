@@ -4,6 +4,7 @@
     Blocks that @{{ account.name }} has missed via witnessing
   </div>
 </h3>
+<p><strong>Date/time is approximate within 1 minutes</strong></p>
 <table class="ui table">
   <thead>
     <tr>
