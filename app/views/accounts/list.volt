@@ -9,10 +9,22 @@
   <div class="ui middle aligned stackable grid container">
     <div class="row">
       <div class="column">
-        <div class="ui secondary menu">
-          <a class="{{ filter == '' ? 'active' : '' }} item" href="/accounts">
-            Vests
-          </a>
+        <div class="ui top attached menu">
+          <div class="ui dropdown item">
+            Richlist
+            <i class="dropdown icon"></i>
+            <div class="menu">
+              <a class="{{ filter == 'vest' ? 'active' : '' }} item" href="/accounts/vest">
+                Vests/SP
+              </a>
+              <a class="{{ filter == 'sbd' ? 'active' : '' }} item" href="/accounts/sbd">
+                SBD
+              </a>
+              <a class="{{ filter == 'steem' ? 'active' : '' }} item" href="/accounts/steem">
+                STEEM
+              </a>
+            </div>
+          </div>
           <a class="{{ filter == 'posts' ? 'active' : '' }} item" href="/accounts/posts">
             Posts
           </a>
@@ -31,7 +43,8 @@
               <th>Account</th>
               <th>Followers</th>
               <th>Posts</th>
-              <th>Vests</th>
+              <th class="right aligned">Vests</th>
+              <th class="right aligned">Balances</th>
             </tr>
           </thead>
           <tbody>
@@ -48,11 +61,19 @@
               <td class="collapsing">
                 {{ account.followers_count }}
               </td>
-              <td class="collapsing">
+              <td class="collapsing center aligned">
                 {{ account.post_count }}
               </td>
               <td class="collapsing right aligned">
                 {{ partial("_elements/vesting_shares", ['current': account]) }}
+              </td>
+              <td class="collapsing right aligned">
+                <div class="ui small header">
+                  <?php echo number_format($account->sbd_balance, 3, ".", ",") ?> SBD
+                  <div class="sub header">
+                    <?php echo number_format($account->balance, 3, ".", ",") ?> STEEM
+                  </div>
+                </div>
               </td>
             </tr>
             {% endfor %}

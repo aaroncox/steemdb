@@ -17,6 +17,16 @@ class AccountsController extends ControllerBase
     );
     if($filter) {
       switch($filter) {
+        case "sbd":
+          $sort = array(
+            "sbd_balance" => -1,
+          );
+          break;
+        case "steem":
+          $sort = array(
+            "balance" => -1,
+          );
+          break;
         case "reputation":
           $query['reputation'] = array('$gt' => 0);
           $sort = array(
