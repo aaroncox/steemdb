@@ -10,10 +10,14 @@ class OpName extends Tag
     "account_update" => "Account Update",
     "account_witness_proxy" => "Witness Proxy",
     "account_witness_vote" => "Witness Vote",
+    "author_reward" => "Author Reward",
+    "cancel_transfer_from_savings" => "Cancel Savings Withdrawal",
     "comment" => "Post",
     "comment_reward" => "Post Reward",
     "convert" => "Convert",
     "curate_reward" => "Curate Reward",
+    "curation_reward" => "Curation Reward",
+    "delete_comment" => "Post Delete",
     "feed_publish" => "Feed Publish",
     "fill_order" => "Fill Order",
     "fill_vesting_withdraw" => "Power Down",
@@ -23,9 +27,11 @@ class OpName extends Tag
     "pow" => "Mining",
     "pow2" => "Mining",
     "transfer" => "Transfer",
+    "transfer_to_savings" => "Transfer to Savings",
+    "transfer_from_savings" => "Transfer from Savings",
     "transfer_to_vesting" => "Power Up",
     "vote" => "Vote",
-    "witness_update" => "Witness Vote",
+    "witness_update" => "Witness Update",
   );
 
   public static function string($op, $account) {

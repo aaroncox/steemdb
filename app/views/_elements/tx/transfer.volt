@@ -10,7 +10,7 @@
   {{ item[1]['op'][1]['amount'] }}
 </span>
 {% if item[1]['op'][1]['memo'] %}
-<div class="ui segment">
+<div class="ui segment" style="max-width: 620px; overflow: scroll">
   {{ item[1]['op'][1]['memo'] }}
 </div>
 {% endif %}
