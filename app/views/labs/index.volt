@@ -98,6 +98,16 @@
                 </div>
               </div>
             </div>
+            <div class="item">
+              <div class="ui header">
+                <a href="/api/topwitnesses">
+                  top 50 witnesses voters
+                </a>
+                <div class="sub header">
+                  a list of the top 50 witnesses, each with details on the accounts voting for them
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
