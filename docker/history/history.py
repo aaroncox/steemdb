@@ -104,6 +104,9 @@ def update_history():
         # Convert to Date
         for key in ['created', 'last_account_recovery', 'last_account_update', 'last_active_proved', 'savings_sbd_last_interest_payment', 'savings_sbd_seconds_last_update', 'reset_request_time', 'last_bandwidth_update', 'last_market_bandwidth_update', 'last_owner_proved', 'last_owner_update', 'last_post', 'last_root_post', 'last_vote_time', 'next_vesting_withdrawal', 'sbd_last_interest_payment', 'sbd_seconds_last_update']:
             account[key] = datetime.strptime(account[key], "%Y-%m-%dT%H:%M:%S")
+        # Combine Savings + Balance
+        account['total_balance'] = account['balance'] + account['savings_balance']
+        account['total_sbd_balance'] = account['sbd_balance'] + account['savings_sbd_balance']
         # Update our current info about the account
         mvest_per_account.update({account['name']: account['vesting_shares']})
         # Save current state of account
