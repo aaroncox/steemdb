@@ -27,7 +27,7 @@ else:
 # where you want some data but don't want to sync the entire blockchain.
 # ------------
 
-# last_block = 4155048
+# last_block = 5208000
 
 def process_block(block, blockid):
     save_block(block, blockid)
@@ -43,10 +43,41 @@ def process_block(block, blockid):
                     # Update the comment and vote
                     update_comment(op['author'], op['permlink'])
                     save_vote(op, block, blockid)
+                if opType == "custom_json":
+                    save_custom_json(op, block, blockid)
                 if opType == "account_witness_vote":
                     save_witness_vote(op, block, blockid)
                 if opType == "pow" or opType == "pow2":
                     save_pow(op, block, blockid)
+
+def save_custom_json(op, block, blockid):
+    try:
+        data = json.loads(op['json'])
+        if type(data) is list:
+            if data[0] == 'reblog':
+                save_reblog(data, op, block, blockid)
+            if data[0] == 'follow':
+                save_follow(data, op, block, blockid)
+    except ValueError:
+        pprint("Processing failure")
+        pprint(blockid)
+        pprint(op['json'])
+
+def save_follow(data, op, block, blockid):
+    doc = data[1].copy()
+    doc.update({
+        '_block': blockid,
+        '_ts': datetime.strptime(block['timestamp'], "%Y-%m-%dT%H:%M:%S"),
+    })
+    db.following.insert(doc)
+
+def save_reblog(data, op, block, blockid):
+    doc = data[1].copy()
+    doc.update({
+        '_block': blockid,
+        '_ts': datetime.strptime(block['timestamp'], "%Y-%m-%dT%H:%M:%S"),
+    })
+    db.reblog.insert(doc)
 
 def save_block(block, blockid):
     doc = block.copy()
