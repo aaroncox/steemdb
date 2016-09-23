@@ -4,12 +4,14 @@ namespace SteemDB\Controllers;
 use MongoDB\BSON\Regex;
 use MongoDB\BSON\UTCDateTime;
 
+use SteemDB\Models\Account;
 use SteemDB\Models\Block;
 use SteemDB\Models\Comment;
 use SteemDB\Models\Statistics;
 use SteemDB\Models\Vote;
 use SteemDB\Models\AccountHistory;
 use SteemDB\Models\PropsHistory;
+use SteemDB\Models\Witness;
 use MongoDB\BSON\ObjectID;
 
 class ApiController extends ControllerBase
@@ -389,6 +391,31 @@ class ApiController extends ControllerBase
       ]
     ])->toArray();
     header('Content-type:application/json');
+    echo json_encode($data, JSON_PRETTY_PRINT);
+  }
+
+  public function topwitnessesAction() {
+    $witnesses = Witness::find(array(
+      array(
+      ),
+      "sort" => array(
+        'votes' => -1
+      ),
+      "limit" => 50
+    ));
+    $data = array();
+    foreach($witnesses as $witness) {
+      $data[$witness->owner] = Account::aggregate(array(
+        ['$match' => [
+            'witness_votes' => $witness->owner,
+        ]],
+        ['$project' => [
+          'name' => '$name',
+          'weight' => ['$sum' => ['$vesting_shares', '$proxy_witness']]
+        ]],
+        ['$sort' => ['weight' => -1]]
+      ))->toArray();
+    }
     echo json_encode($data, JSON_PRETTY_PRINT);
   }
 
