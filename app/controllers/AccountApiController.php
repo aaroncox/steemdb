@@ -5,6 +5,7 @@ use MongoDB\BSON\ObjectID;
 use MongoDB\BSON\Regex;
 use MongoDB\BSON\UTCDateTime;
 
+use SteemDB\Models\Account;
 use SteemDB\Models\AccountHistory;
 use SteemDB\Models\Block;
 use SteemDB\Models\Comment;
@@ -23,6 +24,13 @@ class AccountApiController extends ControllerBase
     ini_set('precision', 20);
   }
 
+  public function viewAction() {
+    $account = $this->dispatcher->getParam("account");
+    $data = Account::findFirst([
+      ['name' => $account]
+    ]);
+    echo json_encode($data->toArray(), JSON_PRETTY_PRINT);
+  }
   public function snapshotsAction() {
     $account = $this->dispatcher->getParam("account");
     $data = AccountHistory::find([

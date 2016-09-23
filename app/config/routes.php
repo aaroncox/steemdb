@@ -58,9 +58,13 @@ $router->add('/api/tags/{tag}', [
   'action' => 'tags'
 ]);
 
-$router->add('/api/account/{account}/{action}', [
+$router->add('/api/account/{account}', [
   'controller' => 'account_api',
-  'action' => 'test'
+  'action' => 'view'
+]);
+
+$router->add('/api/account/{account}/{action}', [
+  'controller' => 'account_api'
 ]);
 
 // $router->add('/api/mining/{account}', [
