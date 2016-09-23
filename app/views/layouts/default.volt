@@ -56,7 +56,7 @@
         padding-left: 3em;
       }
       .definition.table td.wide {
-        overflow-x: scroll;
+        overflow-x: auto;
       }
       @media only screen and (min-width: 769px) {
         .mobile.visible {
