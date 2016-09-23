@@ -86,9 +86,9 @@
               </td>
               <td class="collapsing right aligned">
                 <div class="ui small header">
-                  <?php echo number_format($account->sbd_balance, 3, ".", ",") ?> SBD
+                  <?php echo number_format($account->total_sbd_balance, 3, ".", ",") ?> SBD
                   <div class="sub header">
-                    <?php echo number_format($account->balance, 3, ".", ",") ?> STEEM
+                    <?php echo number_format($account->total_balance, 3, ".", ",") ?> STEEM
                   </div>
                 </div>
               </td>
