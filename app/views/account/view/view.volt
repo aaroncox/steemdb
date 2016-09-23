@@ -25,7 +25,7 @@
     </div>
   </div>
 </div>
-<table class="ui stackable table">
+<table class="ui stackable definition table">
   <thead></thead>
   <tbody>
   {% for item in activity %}
