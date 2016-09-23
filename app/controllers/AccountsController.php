@@ -24,12 +24,12 @@ class AccountsController extends ControllerBase
           break;
         case "sbd":
           $sort = array(
-            "sbd_balance" => -1,
+            "total_sbd_balance" => -1,
           );
           break;
         case "steem":
           $sort = array(
-            "balance" => -1,
+            "total_balance" => -1,
           );
           break;
         case "reputation":
