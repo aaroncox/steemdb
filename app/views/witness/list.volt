@@ -12,12 +12,21 @@
                 <th class="right aligned">#</th>
                 <th>Witness</th>
                 <th>Votes</th>
-                <th class="center aligned">Weekly/Total Misses</th>
-                <th>Last Block</th>
-                <th>Feed</th>
-                <th>Reg Fee</th>
-                <th>APR</th>
-                <th>Block Size</th>
+                <th class="center aligned">
+                  Weekly<br>
+                  &amp; Total<br>
+                  Misses
+                </th>
+                <th>Price Feed</th>
+                <th>
+                  Reg Fee<br>
+                  APR<br>
+                  Block Size
+                </th>
+                <th>
+                  Last Block<br>
+                  Found
+                </th>
                 <th>Version</th>
               </tr>
             </thead>
@@ -44,28 +53,32 @@
                     </div>
                   </td>
                   <td class="collapsing">
-                    <?php echo $this->largeNumber::format($witness->votes); ?>
+                    <div class="ui small header">
+                      <?php echo $this->largeNumber::format($witness->votes); ?>
+                    </div>
                   </td>
                   <td class="center aligned">
                     <a href="/@{{ witness.owner }}/missed" class="ui small header">
-                      {% if witness.misses_7day > 0 %}
-                        <div class="ui tiny grey label">
-                          {{ '+' ~ witness.misses_7day }}
-                        </div>
-                      {% else %}
-                        &nbsp;
+                      {% if witness.invalid_signing_key %}
+                      <i class="warning sign icon" data-popup data-title="Witness Disabled" data-content="This witness does not have a signing key either at the owners request or because too many blocks have been missed."></i>
                       {% endif %}
-                      <div class="sub header">
-                        <small>{{ witness.total_missed }}</small>
+                      <div class="content">
+                        {% if witness.misses_7day > 0 %}
+                          <div class="ui tiny grey label">
+                            {{ '+' ~ witness.misses_7day }}
+                          </div>
+                        {% else %}
+                          ~
+                        {% endif %}
+                        <div class="sub header">
+                          <small>{{ witness.total_missed }}</small>
+                        </div>
                       </div>
                     </a>
                   </td>
                   <td>
-                    {{ witness.last_confirmed_block_num }}
-                  </td>
-                  <td>
                     <div class="ui small header">
-                      {% if witness.sbd_exchange_rate.base === "0.000 STEEM" or witness.last_sbd_exchange_update_late %}<i class="warning sign icon"></i>{% endif %}
+                      {% if witness.sbd_exchange_rate.base === "0.000 STEEM" or witness.last_sbd_exchange_update_late %}<i class="warning sign icon" data-popup data-title="Outdated Price Feed" data-content="This witness has not submitted a price feed update in over a week."></i>{% endif %}
                       <div class="content">
                         {{ witness.sbd_exchange_rate.base }}
                         <div class="sub header">
@@ -80,12 +93,13 @@
                   </td>
                   <td>
                     {{ witness.props.account_creation_fee }}
-                  </td>
-                  <td>
-                    {{ witness.props.sbd_interest_rate / 100 }}<small>%</small>
-                  </td>
-                  <td>
+                    <br>
+                    {{ witness.props.sbd_interest_rate / 100 }}<small>%</small> APR
+                    <br>
                     {{ witness.props.maximum_block_size }}
+                  </td>
+                  <td>
+                    {{ witness.last_confirmed_block_num }}
                   </td>
                   <td>
                     {{ witness.running_version }}
