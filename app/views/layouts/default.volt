@@ -228,7 +228,9 @@
         ;
 
         $('[data-popup]')
-          .popup()
+          .popup({
+            hoverable: true
+          })
         ;
 
         $('.ui.dropdown.tags')
