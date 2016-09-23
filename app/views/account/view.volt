@@ -59,19 +59,35 @@
           <tbody>
             <tr>
               <td>VESTS</td>
-              <td>{{ partial("_elements/vesting_shares", ['current': account]) }}</td>
+              <td>
+                {{ partial("_elements/vesting_shares", ['current': account]) }}
+              </td>
             </tr>
-            <tr>
+            <tr {% if account.vesting_withdraw_rate and account.vesting_withdraw_rate > 1 %}data-popup data-html="<table class='ui small definition table'><tr><td>Power Down - Rate</td><td>-<?php echo $this->convert::vest2sp($current->vesting_withdraw_rate, " SP"); ?></td></tr><tr><td>Power Down - Datetime</td><td><?php echo gmdate("Y-m-d H:i:s e", (string) $account->next_vesting_withdrawal / 1000) ?></td></tr></table>" data-position="left center" data-variation="very wide"{% endif %}>
               <td>SP</td>
-              <td><?php echo $this->convert::vest2sp($current->vesting_shares); ?></td>
+              <td>
+                <div class="ui tiny header">
+                  <?php echo $this->convert::vest2sp($current->vesting_shares); ?>
+                </div>
+              </td>
             </tr>
-            <tr>
+            <tr data-popup data-html="<table class='ui small definition table'><tr><td>Balance</td><td><?php echo number_format($account->balance, 3, '.', ','); ?></td></tr><tr><td>Savings Balance</td><td><?php echo number_format($account->savings_balance, 3, '.', ','); ?></td></tr>{% if account.vesting_withdraw_rate and account.vesting_withdraw_rate > 1 %}<tr><td>Power Down - Rate</td><td>+<?php echo $this->convert::vest2sp($current->vesting_withdraw_rate, " STEEM"); ?></td></tr><tr><td>Power Down - Datetime</td><td><?php echo gmdate("Y-m-d H:i:s e", (string) $account->next_vesting_withdrawal / 1000) ?></td></tr>{% endif %}</table>" data-position="left center" data-variation="very wide">
               <td>STEEM</td>
-              <td><?php echo number_format($account->balance, 3, '.', ','); ?></td>
+              <td>
+                <div class="ui tiny header">
+                  <?php echo number_format($account->total_balance, 3, '.', ','); ?>
+                </div>
+              </td>
             </tr>
-            <tr>
+            <tr data-popup data-html="<table class='ui small definition table'><tr><td>Balance</td><td><?php echo number_format($account->sbd_balance, 3, '.', ','); ?></td></tr><tr><td>Savings Balance</td><td><?php echo number_format($account->savings_sbd_balance, 3, '.', ','); ?></td></tr><tr><td>Next Interest (10% APY)</td><td><?php echo gmdate("Y-m-d H:i:s e", strtotime("+30 days", (string) $account->sbd_last_interest_payment / 1000)); ?></td></tr></table>" data-position="left center" data-variation="very wide">
               <td>SBD</td>
-              <td><?php echo number_format($account->sbd_balance, 3, '.', ','); ?></td>
+              <td>
+                <div class="ui tiny header">
+                  <?php echo number_format($account->total_sbd_balance, 3, '.', ','); ?>
+                  <div class="sub header">
+                  </div>
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
