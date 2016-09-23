@@ -31,6 +31,22 @@ class AccountApiController extends ControllerBase
     ]);
     echo json_encode($data->toArray(), JSON_PRETTY_PRINT);
   }
+
+  public function witnessvotesAction() {
+    $account = $this->dispatcher->getParam("account");
+    $data = Account::aggregate(array(
+      ['$match' => [
+          'witness_votes' => $account,
+      ]],
+      ['$project' => [
+        'name' => '$name',
+        'weight' => ['$sum' => ['$vesting_shares', '$proxy_witness']]
+      ]],
+      ['$sort' => ['weight' => -1]]
+    ))->toArray();
+    echo json_encode($data, JSON_PRETTY_PRINT);
+  }
+
   public function snapshotsAction() {
     $account = $this->dispatcher->getParam("account");
     $data = AccountHistory::find([
