@@ -53,7 +53,7 @@ def update_witnesses():
       'updated': datetime.combine(now, datetime.min.time()),
       'value': miners
     }, upsert=True)
-
+    scantime = datetime.now()
     users = rpc.get_witnesses_by_vote('', 100)
     pprint("SteemDB - Update Witnesses (" + str(len(users)) + " accounts)")
     db.witness.remove({})
@@ -71,7 +71,7 @@ def update_witnesses():
         _id = user['owner'] + '|' + now.strftime('%Y%m%d')
         snapshot.update({
           '_id': _id,
-          'created': datetime.now()
+          'created': scantime
         })
         # Save Snapshot in Database
         db.witness_history.update({'_id': _id}, snapshot, upsert=True)
