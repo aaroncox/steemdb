@@ -425,4 +425,52 @@ class ApiController extends ControllerBase
     echo json_encode($data, JSON_PRETTY_PRINT);
   }
 
+  public function accountsAction() {
+
+    $query = array();
+    $sorting = array();
+
+    $filter = $this->request->get('sort');
+    switch($filter) {
+      case "sbd":
+        $sorting = array('total_sbd_balance' => -1);
+        break;
+      case "steem":
+        $sorting = array('total_balance' => -1);
+        break;
+      case "vest":
+        $sorting = array('vesting_balance' => -1);
+        break;
+      case "reputation":
+        $sorting = array('reputation' => -1);
+        break;
+      case "followers":
+        $sorting = array('followers_count' => -1);
+        break;
+    }
+
+    $account = $this->request->get('account');
+    if($account) {
+      if(is_array($account)) {
+        $query['name'] = ['$in' => $account];
+      } else {
+        $query['name'] = (string) $account;
+      }
+
+    }
+
+    $page = $this->request->get('page') ?: 1;
+    $perPage = 100;
+    $skip = $perPage * ($page - 1);
+
+    $data = Account::find(array(
+      $query,
+      "sort" => $sorting,
+      "limit" => $perPage,
+      "skip" => $skip
+    ));
+
+    echo json_encode($data, JSON_PRETTY_PRINT);
+  }
+
 }
