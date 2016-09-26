@@ -88,11 +88,6 @@
           </div>
 
         <div class="right menu">
-
-          <div class="vertically fitted borderless item">
-            <iframe class="github" src="http://ghbtns.com/github-btn.html?user=semantic-org&amp;repo=semantic-ui&amp;type=watch&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"></iframe>
-          </div>
-
           <!--
           <div class="item">
             <div class="ui hidden right aligned search input" id="search">
