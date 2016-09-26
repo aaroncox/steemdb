@@ -69,7 +69,7 @@ def save_follow(data, op, block, blockid):
         '_block': blockid,
         '_ts': datetime.strptime(block['timestamp'], "%Y-%m-%dT%H:%M:%S"),
     })
-    db.following.insert(doc)
+    db.follow.insert(doc)
 
 def save_reblog(data, op, block, blockid):
     doc = data[1].copy()
