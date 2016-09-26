@@ -1,5 +1,5 @@
 <svg width="100%" height="200px" id="account-posts"></svg>
-<div class="ui two small statistics">
+<div class="ui two tiny statistics">
   <div class="statistic">
     <div class="value">
       <?php echo number_format($total_payouts, 3, '.', ','); ?> SBD
