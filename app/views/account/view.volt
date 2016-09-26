@@ -107,4 +107,11 @@
   {% if chart is defined %}
     {% include 'charts/account/' ~ router.getActionName() %}
   {% endif %}
+  <script>
+    $('.tabular.menu .item')
+      .tab({
+
+      })
+    ;
+  </script>
 {% endblock %}

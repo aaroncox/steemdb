@@ -9,6 +9,7 @@ use SteemDB\Models\Follow;
 use SteemDB\Models\Vote;
 use SteemDB\Models\Statistics;
 use SteemDB\Models\WitnessMiss;
+use SteemDB\Models\WitnessVote;
 
 class AccountController extends ControllerBase
 {
@@ -140,6 +141,10 @@ class AccountController extends ControllerBase
   public function witnessAction()
   {
     $account = $this->getAccount();
+    $this->view->votes = WitnessVote::find([
+      ["witness" => $account],
+      "sort" => ['_ts' => -1]
+    ]);
     $this->view->witnessing = Account::aggregate(array(
       ['$match' => [
           'witness_votes' => $account,
