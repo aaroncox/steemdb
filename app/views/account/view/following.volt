@@ -1,30 +1,30 @@
 <h3 class="ui dividing header">
   @{{ account.name }} is following
   <div class="sub header">
-    Sorted by total vests
+    Most recently followed accounts displayed first
   </div>
 </h3>
 <table class="ui table">
   <thead>
     <tr>
+      <th class="three wide">When</th>
       <th>Account</th>
-      <th>Followers</th>
-      <th>Posts</th>
-      <th>Vests</th>
+      <th class="collapsing">What</th>
     </tr>
   </thead>
   <tbody>
-  {% for current in following %}
-    {% include '_elements/account_table_row' with ['current': current] %}
-  {% else %}
+  {% for current in followers %}
     <tr>
       <td>
-        <div class="ui centered header">
-          No accounts found
-          <div class="sub header">
-            SteemDB has no record of this account following any users.
-          </div>
-        </div>
+        <?php echo $this->timeAgo::mongo($current->_ts); ?>
+      </td>
+      <td>
+        <a href="/@{{ current.follower }}">
+          {{ current.following }}
+        </a>
+      </td>
+      <td>
+        {{ (current.what[0]) ? current.what[0] : "unfollow" }}
       </td>
     </tr>
   {% endfor %}

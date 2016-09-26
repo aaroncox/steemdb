@@ -5,6 +5,7 @@ use SteemDB\Models\Account;
 use SteemDB\Models\AccountHistory;
 use SteemDB\Models\Block;
 use SteemDB\Models\Comment;
+use SteemDB\Models\Follow;
 use SteemDB\Models\Vote;
 use SteemDB\Models\Statistics;
 use SteemDB\Models\WitnessMiss;
@@ -119,9 +120,9 @@ class AccountController extends ControllerBase
   public function followersAction()
   {
     $account = $this->getAccount();
-    $this->view->followers = Account::find([
-      ['name' => ['$in' => $this->view->account->followers]],
-      'sort' => ['vesting_shares' => -1],
+    $this->view->followers = Follow::find([
+      ["following" => $account],
+      "sort" => ['_ts' => -1]
     ]);
     $this->view->pick("account/view");
   }
@@ -129,9 +130,9 @@ class AccountController extends ControllerBase
   public function followingAction()
   {
     $account = $this->getAccount();
-    $this->view->following = Account::find([
-      ['name' => ['$in' => $this->view->account->following]],
-      'sort' => ['vesting_shares' => -1],
+    $this->view->followers = Follow::find([
+      ["follower" => $account],
+      "sort" => ['_ts' => -1]
     ]);
     $this->view->pick("account/view");
   }
