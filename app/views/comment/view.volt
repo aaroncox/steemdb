@@ -18,6 +18,7 @@
           <a class="active item" data-tab="post">Content</a>
           <a class="item" data-tab="tags">Tags ({{ comment.metadata('tags') | length }})</a>
           <a class="item" data-tab="replies">Replies ({{ comment.children }})</a>
+          <a class="item" data-tab="reblogs">Reblogs ({{ reblogs | length }})</a>
           <a class="item" data-tab="votes">Votes ({{ comment.net_votes }})</a>
           <a class="item" data-tab="data">Raw Data</a>
         </div>
@@ -30,6 +31,9 @@
           </div>
           <div class="ui tab" data-tab="replies">
             {% include "comment/view/replies.volt" %}
+          </div>
+          <div class="ui tab" data-tab="reblogs">
+            {% include "comment/view/reblogs.volt" %}
           </div>
           <div class="ui tab" data-tab="votes">
             {% include "comment/view/votes.volt" %}

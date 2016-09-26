@@ -2,8 +2,10 @@
 namespace SteemDB\Controllers;
 
 use MongoDB\BSON\UTCDateTime;
-use SteemDB\Models\Comment;
+
 use SteemDB\Models\Account;
+use SteemDB\Models\Comment;
+use SteemDB\Models\Reblog;
 
 class CommentController extends ControllerBase
 {
@@ -55,6 +57,15 @@ class CommentController extends ControllerBase
     $this->view->replies = Comment::find(array(
       $query,
       "sort" => ['created' => -1]
+    ));
+    // And get it's reblogs
+    $query = array(
+      'permlink' => $comment->permlink,
+      'author' => $comment->author,
+    );
+    $this->view->reblogs = Reblog::find(array(
+      $query,
+      "sort" => ['_ts' => 1]
     ));
     // And finally the author
     $query = array(
