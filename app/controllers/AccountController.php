@@ -63,6 +63,16 @@ class AccountController extends ControllerBase
       'sort' => array('created' => -1),
       'limit' => 100
     ));
+    $this->view->total_payouts = 0;
+    $this->view->total_pending = 0;
+    foreach($this->view->comments as $comment) {
+      if($comment->total_pending_payout_value) {
+        $this->view->total_pending += $comment->total_pending_payout_value;
+      }
+      if($comment->total_payout_value) {
+        $this->view->total_payouts += $comment->total_payout_value;
+      }
+    }
     $this->view->chart = true;
     $this->view->pick("account/view");
   }
