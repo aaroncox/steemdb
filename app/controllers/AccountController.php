@@ -219,6 +219,16 @@ class AccountController extends ControllerBase
     ));
     $this->view->pick("account/view");
   }
+
+  public function proxiedAction()
+  {
+    $account = $this->getAccount();
+    $this->view->proxied = Account::find(array(
+      array('proxy' => $account)
+    ));
+    $this->view->pick("account/view");
+  }
+
   public function dataAction()
   {
     $account = $this->getAccount();
