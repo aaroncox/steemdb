@@ -14,6 +14,7 @@
               {{ link_to(["for": "account-view-section", "account": account.name, "action": "posts"], "Posts", "class": "item" ~ (router.getActionName() == "posts" ? " active" : "")) }}
               {{ link_to(["for": "account-view-section", "account": account.name, "action": "votes"], "Votes", "class": "item" ~ (router.getActionName() == "votes" ? " active" : "")) }}
               {{ link_to(["for": "account-view-section", "account": account.name, "action": "replies"], "Replies", "class": "item" ~ (router.getActionName() == "replies" ? " active" : "")) }}
+              {{ link_to(["for": "account-view-section", "account": account.name, "action": "reblogs"], "Reblogs", "class": "item" ~ (router.getActionName() == "reblogs" ? " active" : "")) }}
             </div>
           </div>
           <div class="ui dropdown item">
@@ -22,6 +23,7 @@
             <div class="menu">
               {{ link_to(["for": "account-view-section", "account": account.name, "action": "followers"], "Followers", "class": "item" ~ (router.getActionName() == "followers" ? " active" : "")) }}
               {{ link_to(["for": "account-view-section", "account": account.name, "action": "following"], "Following", "class": "item" ~ (router.getActionName() == "following" ? " active" : "")) }}
+              {{ link_to(["for": "account-view-section", "account": account.name, "action": "reblogged"], "Reblogged", "class": "item" ~ (router.getActionName() == "reblogged" ? " active" : "")) }}
             </div>
           </div>
           <div class="ui dropdown item">

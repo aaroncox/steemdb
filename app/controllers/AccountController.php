@@ -6,6 +6,7 @@ use SteemDB\Models\AccountHistory;
 use SteemDB\Models\Block;
 use SteemDB\Models\Comment;
 use SteemDB\Models\Follow;
+use SteemDB\Models\Reblog;
 use SteemDB\Models\Vote;
 use SteemDB\Models\Statistics;
 use SteemDB\Models\WitnessMiss;
@@ -189,6 +190,35 @@ class AccountController extends ControllerBase
     $this->view->pick("account/view");
   }
 
+  public function reblogsAction()
+  {
+    $account = $this->getAccount();
+    $page = $this->view->page = (int) $this->request->get('page') ?: 1;
+    $this->view->reblogs = Reblog::find(array(
+      array(
+        'account' => $account,
+      ),
+      'sort' => array('_ts' => -1),
+      'limit' => 100,
+      'skip' => 100 * ($page - 1)
+    ));
+    $this->view->pick("account/view");
+  }
+
+  public function rebloggedAction()
+  {
+    $account = $this->getAccount();
+    $page = $this->view->page = (int) $this->request->get('page') ?: 1;
+    $this->view->reblogs = Reblog::find(array(
+      array(
+        'author' => $account,
+      ),
+      'sort' => array('_ts' => -1),
+      'limit' => 100,
+      'skip' => 100 * ($page - 1)
+    ));
+    $this->view->pick("account/view");
+  }
   public function dataAction()
   {
     $account = $this->getAccount();
