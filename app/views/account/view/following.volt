@@ -24,7 +24,15 @@
         </a>
       </td>
       <td>
-        {{ (current.what[0]) ? current.what[0] : "unfollow" }}
+        {% if current.what[0] %}
+          <div class="ui green label">
+            Follow
+          </div>
+        {% else %}
+          <div class="ui red label">
+            Unfollow
+          </div>
+        {% endif %}
       </td>
     </tr>
   {% endfor %}
