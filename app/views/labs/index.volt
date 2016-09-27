@@ -37,6 +37,19 @@
                 </div>
               </div>
             </div>
+            <div class="item">
+              <div class="ui header">
+                <i class="list icon"></i>
+                <div class="content">
+                  <a href="/powerup">
+                    biggest power ups
+                  </a>
+                  <div class="sub header">
+                    The accounts who have powered up the most SP over the past 30 days.
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="ui segment">

@@ -33,6 +33,12 @@ $router->add('/accounts[/]?{filter}?', [
   'action' => 'list'
 ]);
 
+$router->add('/powerup', [
+  'controller' => 'labs',
+  'action' => 'powerup'
+]);
+
+
 $router->add('/posts', [
   'controller' => 'comment',
   'action' => 'list'
