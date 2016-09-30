@@ -105,7 +105,7 @@ class CommentController extends ControllerBase
     // Sort the votes by rshares
     $votes = $comment->active_votes;
     usort($votes, function($a, $b) {
-      return $b->rshares - $a->rshares;
+      return (string) $a->time - (string) $b->time;
     });
     $this->view->votes = $votes;
     // And get it's replies
