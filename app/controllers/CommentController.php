@@ -110,6 +110,7 @@ class CommentController extends ControllerBase
     $this->view->votes = $votes;
     // And get it's replies
     $query = array(
+      'parent_author' => $author,
       'parent_permlink' => $permlink
     );
     $this->view->replies = Comment::find(array(
