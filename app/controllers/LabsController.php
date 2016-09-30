@@ -90,6 +90,28 @@ class LabsController extends ControllerBase
     });
     $this->view->powerups = $transactions;
   }
+  public function photochallengeAction() {
+    $query = array(
+      'depth' => 0,
+      'json_metadata.tags' => 'steemitphotochallenge'
+    );
+    $sort = array('created' => -1);
+    $posts = Comment::find(array(
+      $query,
+      'sort' => $sort,
+      'limit' => 5000
+    ));
+    header('Content-type: text/csv');
+    header('Content-Disposition: attachment; filename="posts.csv"');
+    $file = fopen('php://output', 'w');
+    foreach($posts as $post) {
+      fputcsv($file, [
+        $post->created->toDateTime()->format("Y-m-d H:i:s"),
+        $post->author,
+        $post->permlink,
+      ]);
+    }
+  }
   public function votefocusingAction() {
     $this->view->focus = Vote::Aggregate([
       [
