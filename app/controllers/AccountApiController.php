@@ -7,7 +7,7 @@ use MongoDB\BSON\UTCDateTime;
 
 use SteemDB\Models\Account;
 use SteemDB\Models\AccountHistory;
-use SteemDB\Models\Block;
+use SteemDB\Models\Block30d;
 use SteemDB\Models\Comment;
 use SteemDB\Models\Pow;
 use SteemDB\Models\Statistics;
@@ -95,7 +95,7 @@ class AccountApiController extends ControllerBase
 
   public function miningAction() {
     $account = $this->dispatcher->getParam("account");
-    $witness = Block::aggregate([
+    $witness = Block30d::aggregate([
       [
         '$match' => [
           'witness' => $account,
