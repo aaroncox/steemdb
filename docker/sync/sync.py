@@ -65,19 +65,29 @@ def save_custom_json(op, block, blockid):
 
 def save_follow(data, op, block, blockid):
     doc = data[1].copy()
+    query = {
+        '_block': blockid,
+        'follower': doc['follower'],
+        'following': doc['following']
+    }
     doc.update({
         '_block': blockid,
         '_ts': datetime.strptime(block['timestamp'], "%Y-%m-%dT%H:%M:%S"),
     })
-    db.follow.insert(doc)
+    db.follow.update(query, doc, upsert=True)
 
 def save_reblog(data, op, block, blockid):
     doc = data[1].copy()
+    query = {
+        '_block': blockid,
+        'permlink': doc['permlink'],
+        'account': doc['account']
+    }
     doc.update({
         '_block': blockid,
         '_ts': datetime.strptime(block['timestamp'], "%Y-%m-%dT%H:%M:%S"),
     })
-    db.reblog.insert(doc)
+    db.reblog.update(query, doc, upsert=True)
 
 def save_block(block, blockid):
     doc = block.copy()
@@ -109,10 +119,15 @@ def save_vote(op, block, blockid):
 
 def save_witness_vote(op, block, blockid):
     witness_vote = op.copy()
+    query = {
+        '_ts': datetime.strptime(block['timestamp'], "%Y-%m-%dT%H:%M:%S"),
+        'account': witness_vote['account'],
+        'witness': witness_vote['witness']
+    }
     witness_vote.update({
         '_ts': datetime.strptime(block['timestamp'], "%Y-%m-%dT%H:%M:%S")
     })
-    db.witness_vote.insert(witness_vote)
+    db.witness_vote.update(query, witness_vote, upsert=True)
 
 def update_comment(author, permlink):
     _id = author + '/' + permlink
