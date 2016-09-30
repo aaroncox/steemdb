@@ -10,6 +10,7 @@ use SteemDB\Models\AccountHistory;
 use SteemDB\Models\Block30d;
 use SteemDB\Models\Comment;
 use SteemDB\Models\Pow;
+use SteemDB\Models\Reblog;
 use SteemDB\Models\Statistics;
 use SteemDB\Models\Vote;
 use SteemDB\Models\WitnessHistory;
@@ -302,6 +303,90 @@ class AccountApiController extends ControllerBase
           '_id.doy' => 1
         ]
       ]
+    ])->toArray();
+    echo json_encode($data, JSON_PRETTY_PRINT);
+  }
+  public function contentvoteAction() {
+    $account = $this->dispatcher->getParam("account");
+    $data = Vote::aggregate([
+      [
+        '$match' => [
+          'voter' => $account,
+        ]
+      ],
+      [
+        '$sort' => [
+          '_ts' => -1,
+        ]
+      ],
+      [
+        '$project' => [
+          '_id' => ['$concat' => ['$author', '/', '$permlink']],
+          'voter' => 1,
+          'author' => 1,
+          'permlink' => 1,
+          'ts' => '$_ts',
+          'time' => [
+            '$dateToString' => [
+              'format' => '%Y-%m-%d %H:%M:%S',
+              'date' => '$_ts',
+            ]
+          ]
+        ]
+      ],
+      [
+        '$lookup' => [
+          'from' => 'comment',
+          'localField' => 'permlink',
+          'foreignField' => 'permlink',
+          'as' => 'content'
+        ]
+      ],
+      [
+        '$limit' => 10,
+      ],
+    ])->toArray();
+    echo json_encode($data, JSON_PRETTY_PRINT);
+  }
+  public function contentreblogAction() {
+    $account = $this->dispatcher->getParam("account");
+    $data = Reblog::aggregate([
+      [
+        '$match' => [
+          'account' => $account,
+        ]
+      ],
+      [
+        '$sort' => [
+          '_ts' => -1,
+        ]
+      ],
+      [
+        '$project' => [
+          '_id' => ['$concat' => ['$author', '/', '$permlink']],
+          'account' => 1,
+          'author' => 1,
+          'permlink' => 1,
+          'ts' => '$_ts',
+          'time' => [
+            '$dateToString' => [
+              'format' => '%Y-%m-%d %H:%M:%S',
+              'date' => '$_ts',
+            ]
+          ]
+        ]
+      ],
+      [
+        '$lookup' => [
+          'from' => 'comment',
+          'localField' => '_id',
+          'foreignField' => '_id',
+          'as' => 'content',
+        ]
+      ],
+      [
+        '$limit' => 10,
+      ],
     ])->toArray();
     echo json_encode($data, JSON_PRETTY_PRINT);
   }
