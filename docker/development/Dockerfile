@@ -29,6 +29,7 @@ RUN apt-get install -y bash \
     php7.0-phar \
     php7.0-dom \
     php7.0-phalcon \
+    php-xdebug \
     ca-certificates \
     dialog \
     gcc \
