@@ -284,6 +284,9 @@ class ApiController extends ControllerBase
       'sort' => array('date' => -1),
       'limit' => 500
     ]);
+    foreach($data as $idx => $document) {
+      $data[$idx] = $document->toArray();
+    }
     echo json_encode($data, JSON_PRETTY_PRINT);
   }
 
@@ -469,6 +472,10 @@ class ApiController extends ControllerBase
       "limit" => $perPage,
       "skip" => $skip
     ));
+
+    foreach($data as $idx => $document) {
+      $data[$idx] = $document->toArray();
+    }
 
     echo json_encode($data, JSON_PRETTY_PRINT);
   }

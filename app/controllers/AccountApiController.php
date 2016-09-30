@@ -56,8 +56,7 @@ class AccountApiController extends ControllerBase
       'limit' => 100
     ]);
     foreach($data as $idx => $document) {
-      $data[$idx]->date = (string) $document->date;
-
+      $data[$idx] = $document->toArray();
     }
     echo json_encode($data, JSON_PRETTY_PRINT);
   }
