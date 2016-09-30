@@ -4,6 +4,7 @@ namespace SteemDB\Controllers;
 use SteemDB\Models\Account;
 use SteemDB\Models\Block30d;
 use SteemDB\Models\Comment;
+use SteemDB\Models\Vote;
 use MongoDB\BSON\UTCDateTime;
 
 class LabsController extends ControllerBase
@@ -88,5 +89,73 @@ class LabsController extends ControllerBase
       return $b['total'] - $a['total'];
     });
     $this->view->powerups = $transactions;
+  }
+  public function votefocusingAction() {
+    $this->view->focus = Vote::Aggregate([
+      [
+        '$match' => [
+          '_ts' => [
+            '$gte' => new UTCDateTime(strtotime("-30 days") * 1000),
+            '$lte' => new UTCDateTime(strtotime("midnight") * 1000),
+          ],
+          'weight' => [
+            '$gt' => 500
+          ]
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => [
+            'permlink' => '$permlink',
+            'voter' => '$voter',
+            'author' => '$author'
+          ],
+          'weight' => ['$avg' => '$weight']
+        ]
+      ],
+      [
+        '$project' => [
+          '_id' => true,
+          'weight' => true,
+          'voterisauthor' => ['$eq' => ['$_id.voter', '$_id.author']],
+        ]
+      ],
+      [
+        '$match' => [
+          'voterisauthor' => false
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => [
+            'voter' => '$_id.voter',
+            'author' => '$_id.author'
+          ],
+          'count' => ['$sum' => 1],
+          'weight' => ['$avg' => '$weight'],
+        ]
+      ],
+      [
+        '$sort' => [
+          'count' => -1
+        ]
+      ],
+      [
+        '$limit' => 200
+      ],
+      [
+        '$lookup' => [
+          'from' => 'account',
+          'localField' => '_id.voter',
+          'foreignField' => 'name',
+          'as' => 'account'
+        ]
+      ],
+    ], [
+      'allowDiskUse' => true,
+      'cursor' => [
+        'batchSize' => 0
+      ]
+    ])->toArray();
   }
 }
