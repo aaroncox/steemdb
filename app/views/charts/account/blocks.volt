@@ -33,7 +33,7 @@
 
     var cs = new Plottable.Scales.Color();
     cs.range(["#BDCEF0","#5279C7"]);
-    cs.domain(["Witnessed","POW"]);
+    cs.domain(["POW","Witnessed"]);
     var legend = new Plottable.Components.Legend(cs);
     legend.maxEntriesPerRow(3);
 
