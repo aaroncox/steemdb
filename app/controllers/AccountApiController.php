@@ -165,7 +165,10 @@ class AccountApiController extends ControllerBase
         'batchSize' => 0
       ]
     ])->toArray();
-
+    if(empty($pow)) {
+      // Plottable doesn't play well when the first series is empty.
+      $pow = array(array('_id' => ['doy' => 0,'year' => 0,'month' => 0,'week' => 0,'day' => 0], 'blocks' => 0));
+    }
     echo json_encode(['pow' => $pow, 'witness' => $witness]);
   }
 
