@@ -17,6 +17,14 @@ class steemd
     $this->client = new Client($host, false, $httpClient);
   }
 
+  public function getAccount($account)
+  {
+    try {
+      return $this->client->call(0, 'get_accounts', [[$account]]);
+    } catch (Exception $e) {
+      return array();
+    }
+  }
   public function getAccountHistory($username, $limit = 100, $skip = -1)
   {
     try {

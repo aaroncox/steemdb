@@ -18,15 +18,22 @@ class AccountController extends ControllerBase
   private function getAccount()
   {
     $account = $this->dispatcher->getParam("account");
+    $cacheKey = 'account-'.$account;
+    // Load account from the database
     $this->view->account = Account::findFirst(array(
       array(
         'name' => $account
       )
     ));
-    if(!$this->view->account) {
-      $this->flashSession->error('The account "'.$account.'" does not exist on SteemDB currently.');
-      $this->response->redirect();
-      return;
+    // Check the cache for this account from the blockchain
+    $cached = $this->memcached->get($cacheKey);
+    // No cache, let's load
+    if($cached === null) {
+      $this->view->live = $this->steemd->getAccount($this->view->account->name);
+      $this->memcached->save($cacheKey, $this->view->live, 60);
+    } else {
+      // Use cache
+      $this->view->live = $cached;
     }
     return $account;
   }
