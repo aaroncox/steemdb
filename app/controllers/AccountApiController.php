@@ -9,6 +9,7 @@ use SteemDB\Models\Account;
 use SteemDB\Models\AccountHistory;
 use SteemDB\Models\Block30d;
 use SteemDB\Models\Comment;
+use SteemDB\Models\CurationReward;
 use SteemDB\Models\Pow;
 use SteemDB\Models\Reblog;
 use SteemDB\Models\Statistics;
@@ -310,6 +311,38 @@ class AccountApiController extends ControllerBase
     echo json_encode($data, JSON_PRETTY_PRINT);
   }
 
+  public function curationAction() {
+    $account = $this->dispatcher->getParam("account");
+    $data = CurationReward::aggregate([
+      [
+        '$match' => [
+          'curator' => $account,
+          '_ts' => [
+            '$gte' => new UTCDateTime(strtotime("-90 days") * 1000),
+          ],
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => [
+            'doy' => ['$dayOfYear' => '$_ts'],
+            'year' => ['$year' => '$_ts'],
+            'month' => ['$month' => '$_ts'],
+            'day' => ['$dayOfMonth' => '$_ts'],
+          ],
+          'count' => ['$sum' => 1],
+          'value' => ['$sum' => '$reward'],
+        ]
+      ],
+      [
+        '$sort' => [
+          '_id.year' => -1,
+          '_id.doy' => 1
+        ]
+      ]
+    ])->toArray();
+    echo json_encode($data, JSON_PRETTY_PRINT);
+  }
   public function transfersAction() {
     $account = $this->dispatcher->getParam("account");
     $data = Transfer::aggregate([
