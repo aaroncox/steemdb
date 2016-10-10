@@ -58,7 +58,7 @@ class ApiController extends ControllerBase
       ]
     ];
     $data = Vote::aggregate($pipeline)->toArray();
-    echo json_encode($pipeline, JSON_PRETTY_PRINT);
+    echo json_encode($data, JSON_PRETTY_PRINT);
   }
 
   public function activityAction()
