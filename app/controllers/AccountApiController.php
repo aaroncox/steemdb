@@ -565,6 +565,11 @@ class AccountApiController extends ControllerBase
         '$limit' => 10,
       ],
     ])->toArray();
+    foreach($data as $idx => $doc) {
+      if(!empty($doc['content'])) {
+        $doc['content'][0]['created'] = (string) $doc['content'][0]['created'] / 1000;
+      }
+    }
     echo json_encode($data, JSON_PRETTY_PRINT);
   }
   public function contentreblogAction() {
@@ -607,6 +612,11 @@ class AccountApiController extends ControllerBase
         '$limit' => 10,
       ],
     ])->toArray();
+    foreach($data as $idx => $doc) {
+      if(!empty($doc['content'])) {
+        $doc['content'][0]['created'] = (string) $doc['content'][0]['created'] / 1000;
+      }
+    }
     echo json_encode($data, JSON_PRETTY_PRINT);
   }
 }
