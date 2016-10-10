@@ -15,6 +15,8 @@
               {{ link_to(["for": "account-view-section", "account": account.name, "action": "votes"], "Votes", "class": "item" ~ (router.getActionName() == "votes" ? " active" : "")) }}
               {{ link_to(["for": "account-view-section", "account": account.name, "action": "replies"], "Replies", "class": "item" ~ (router.getActionName() == "replies" ? " active" : "")) }}
               {{ link_to(["for": "account-view-section", "account": account.name, "action": "reblogs"], "Reblogs", "class": "item" ~ (router.getActionName() == "reblogs" ? " active" : "")) }}
+              {{ link_to(["for": "account-view-section", "account": account.name, "action": "authoring"], "Rewards", "class": "item" ~ (router.getActionName() == "authoring" ? " active" : "")) }}
+              {{ link_to(["for": "account-view-section", "account": account.name, "action": "transfers"], "Transfers", "class": "item" ~ (router.getActionName() == "transfers" ? " active" : "")) }}
             </div>
           </div>
           <div class="ui dropdown item">
