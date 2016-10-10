@@ -20,7 +20,7 @@ class steemd
   public function getAccountHistory($username, $limit = 100, $skip = -1)
   {
     try {
-      return $this->client->call(0, 'get_account_history', [$username, $skip, $limit]);;
+      return $this->client->call(0, 'get_account_history', [$username, $skip, $limit]);
     } catch (Exception $e) {
       return array();
     }
@@ -43,6 +43,6 @@ class steemd
   public function getFollowing($username, $limit = 100, $skip = -1)
   {
     $api = $this->getApi('follow_api');
-    return $this->client->call($api, 'get_following', [$username, $skip, $limit]);;
+    return $this->client->call($api, 'get_following', [$username, $skip, $limit]);
   }
 }
