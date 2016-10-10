@@ -128,6 +128,10 @@
     {% include 'charts/account/' ~ router.getActionName() %}
   {% endif %}
   <script>
+    $('.ui.indicating.progress')
+      .progress({
+        percent: {{ live[0]['voting_power'] / 100 }}
+      });
     $('.tabular.menu .item')
       .tab({
 
