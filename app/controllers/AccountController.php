@@ -133,6 +133,7 @@ class AccountController extends ControllerBase
       ["following" => $account],
       "sort" => ['_ts' => -1]
     ]);
+    $this->view->chart = true;
     $this->view->pick("account/view");
   }
 

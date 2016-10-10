@@ -38,7 +38,12 @@
           </div>
           {{ link_to(["for": "account-view-section", "account": account.name, "action": "data"], "Data", "class": "item" ~ (router.getActionName() == "data" ? " active" : "")) }}
         </div>
-        <div class="ui bottom attached segment">
+        {% if chart %}
+        <div class="ui attached segment">
+          <svg width="100%" height="200px" id="account-{{ router.getActionName() }}"></svg>
+        </div>
+        {% endif %}
+        <div class="ui bottom attached secondary segment">
           {% include "account/view/" ~ router.getActionName() %}
         </div>
       </div>
