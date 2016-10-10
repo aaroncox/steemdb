@@ -61,6 +61,54 @@ class ApiController extends ControllerBase
     echo json_encode($data, JSON_PRETTY_PRINT);
   }
 
+  public function votersAction()
+  {
+    $pipeline = [
+      [
+        '$match' => [
+          '_ts' => [
+            '$gte' => new UTCDateTime(strtotime("-45 days") * 1000),
+            '$lte' => new UTCDateTime(strtotime("midnight") * 1000),
+          ]
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => [
+            'voter' => '$voter',
+            'doy' => ['$dayOfYear' => '$_ts'],
+            'year' => ['$year' => '$_ts'],
+            'month' => ['$month' => '$_ts'],
+            'week' => ['$week' => '$_ts'],
+            'day' => ['$dayOfMonth' => '$_ts']
+          ]
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => [
+            'doy' => '$_id.doy',
+            'year' => '$_id.year',
+            'month' => '$_id.month',
+            'week' => '$_id.week',
+            'day' => '$_id.day',
+          ],
+          'count' => [
+            '$sum' => 1
+          ]
+        ]
+      ],
+      [
+        '$sort' => [
+          '_id.year' => -1,
+          '_id.doy' => 1
+        ]
+      ]
+    ];
+    $data = Vote::aggregate($pipeline)->toArray();
+    echo json_encode($data, JSON_PRETTY_PRINT);
+  }
+
   public function activityAction()
   {
     $data = Comment::aggregate([
