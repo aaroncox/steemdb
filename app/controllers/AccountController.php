@@ -1,10 +1,13 @@
 <?php
 namespace SteemDB\Controllers;
 
+use MongoDB\BSON\UTCDateTime;
+
 use SteemDB\Models\Account;
 use SteemDB\Models\AccountHistory;
 use SteemDB\Models\Block;
 use SteemDB\Models\Comment;
+use SteemDB\Models\CurationReward;
 use SteemDB\Models\Follow;
 use SteemDB\Models\Reblog;
 use SteemDB\Models\Vote;
@@ -237,6 +240,68 @@ class AccountController extends ControllerBase
     $this->view->pick("account/view");
   }
 
+  public function curationAction()
+  {
+    $account = $this->getAccount();
+    $this->view->page = $page = (int) $this->request->get("page") ?: 1;
+    $limit = 200;
+    $this->view->curation = CurationReward::find(array(
+      array('curator' => $account),
+      'sort' => array('_ts' => -1),
+      'skip' => $limit * ($page - 1),
+      'limit' => $limit,
+    ));
+    $this->view->stats = CurationReward::aggregate([
+      [
+        '$match' => [
+          'curator' => $account,
+          '_ts' => [
+            '$gte' => new UTCDateTime(strtotime("-30 days") * 1000),
+          ],
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => '$curator',
+          'day' => ['$sum' => ['$cond' => [
+            [
+              '$gte' => [
+                '$_ts',
+                new UTCDateTime(strtotime("-1 days") * 1000)
+              ]
+            ],
+            '$reward',
+            0
+          ]]],
+          'week' => ['$sum' => ['$cond' => [
+            [
+              '$gte' => [
+                '$_ts',
+                new UTCDateTime(strtotime("-7 days") * 1000)
+              ]
+            ],
+            '$reward',
+            0
+          ]]],
+          'month' => ['$sum' => ['$cond' => [
+            [
+              '$gte' => [
+                '$_ts',
+                new UTCDateTime(strtotime("-30 days") * 1000)
+              ]
+            ],
+            '$reward',
+            0
+          ]]],
+        ]
+      ]
+    ])->toArray();
+    $this->view->pages = ceil(CurationReward::count(array(
+      array('curator' => $account)
+    )) / $limit);
+    $this->view->chart = true;
+    $this->view->pick("account/view");
+  }
   public function dataAction()
   {
     $account = $this->getAccount();
