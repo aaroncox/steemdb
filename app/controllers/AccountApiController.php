@@ -17,6 +17,7 @@ use SteemDB\Models\Reblog;
 use SteemDB\Models\Statistics;
 use SteemDB\Models\Transfer;
 use SteemDB\Models\Vote;
+use SteemDB\Models\VestingDeposit;
 use SteemDB\Models\WitnessHistory;
 
 class AccountApiController extends ControllerBase
@@ -408,6 +409,38 @@ class AccountApiController extends ControllerBase
               ]
             ]
           ],
+        ]
+      ],
+      [
+        '$sort' => [
+          '_id.year' => -1,
+          '_id.doy' => 1
+        ]
+      ]
+    ])->toArray();
+    echo json_encode($data, JSON_PRETTY_PRINT);
+  }
+
+  public function powerupAction() {
+    $account = $this->dispatcher->getParam("account");
+    $data = VestingDeposit::aggregate([
+      [
+        '$match' => [
+          'to' => $account,
+          '_ts' => [
+            '$gte' => new UTCDateTime(strtotime("-90 days") * 1000),
+          ],
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => [
+            'doy' => ['$dayOfYear' => '$_ts'],
+            'year' => ['$year' => '$_ts'],
+            'month' => ['$month' => '$_ts'],
+            'day' => ['$dayOfMonth' => '$_ts'],
+          ],
+          'value' => ['$sum' => '$amount'],
         ]
       ],
       [
