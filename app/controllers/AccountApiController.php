@@ -12,6 +12,7 @@ use SteemDB\Models\Comment;
 use SteemDB\Models\Pow;
 use SteemDB\Models\Reblog;
 use SteemDB\Models\Statistics;
+use SteemDB\Models\Transfer;
 use SteemDB\Models\Vote;
 use SteemDB\Models\WitnessHistory;
 
@@ -308,6 +309,46 @@ class AccountApiController extends ControllerBase
     ])->toArray();
     echo json_encode($data, JSON_PRETTY_PRINT);
   }
+
+  public function transfersAction() {
+    $account = $this->dispatcher->getParam("account");
+    $data = Transfer::aggregate([
+      [
+        '$match' => [
+          '$or' => [
+            ['from' => $account],
+            ['to' => $account],
+          ],
+          '_ts' => [
+            '$gte' => new UTCDateTime(strtotime("-90 days") * 1000),
+          ],
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => [
+            'doy' => ['$dayOfYear' => '$_ts'],
+            'year' => ['$year' => '$_ts'],
+            'month' => ['$month' => '$_ts'],
+            'day' => ['$dayOfMonth' => '$_ts'],
+          ],
+          'value' => ['$sum' => ['$cond' => [
+            ['$eq' => ['$to', $account]],
+            '$amount',
+            ['$multiply' => ['$amount', -1]]
+          ]]],
+        ]
+      ],
+      [
+        '$sort' => [
+          '_id.year' => -1,
+          '_id.doy' => 1
+        ]
+      ]
+    ])->toArray();
+    echo json_encode($data, JSON_PRETTY_PRINT);
+  }
+
   public function contentvoteAction() {
     $account = $this->dispatcher->getParam("account");
     $data = Vote::aggregate([
