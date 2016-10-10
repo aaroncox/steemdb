@@ -6,7 +6,7 @@
     <div class="row">
       <div class="twelve wide column" id="main-context">
         <div class="ui top attached menu">
-          {{ link_to(["for": "account-view", "account": account.name], "Overview", "class": "item" ~ (router.getActionName() == "view" ? " active" : "")) }}
+          {{ link_to(["for": "account-view", "account": account.name], "<i class='home icon'></i>", "class": "icon item" ~ (router.getActionName() == "view" ? " active" : "")) }}
           <div class="ui dropdown item">
             Activity
             <i class="dropdown icon"></i>
