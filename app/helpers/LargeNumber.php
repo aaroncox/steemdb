@@ -17,15 +17,15 @@ class LargeNumber extends Tag
   {
     $dec = 2;
          if($n>1000000000000000)
-      return number_format(($n/1000000000000000),$dec,".",",").' <strong>P'.$unit.'</strong>';
+      return number_format(($n/1000000000000000),$dec,".",",").'&nbsp;<strong>P'.$unit.'</strong>';
     else if($n>1000000000000)
-      return number_format(($n/1000000000000),$dec,".",",").' <strong>T'.$unit.'</strong>';
+      return number_format(($n/1000000000000),$dec,".",",").'&nbsp;<strong>T'.$unit.'</strong>';
     else if($n>1000000000)
-      return number_format(($n/1000000000),$dec,".",",").' <strong>G'.$unit.'</strong>';
+      return number_format(($n/1000000000),$dec,".",",").'&nbsp;<strong>G'.$unit.'</strong>';
     else if($n>1000000)
-      return number_format(($n/1000000),$dec,".",",").' <strong>M'.$unit.'</strong>';
+      return number_format(($n/1000000),$dec,".",",").'&nbsp;<strong>M'.$unit.'</strong>';
     else if($n>1000)
-      return number_format(($n/1000),$dec,".",",").' <strong>k'.$unit.'</strong>';
+      return number_format(($n/1000),$dec,".",",").'&nbsp;<strong>k'.$unit.'</strong>';
     return number_format($n, $dec);
   }
 
