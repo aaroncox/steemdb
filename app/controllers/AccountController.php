@@ -14,6 +14,7 @@ use SteemDB\Models\Reblog;
 use SteemDB\Models\Vote;
 use SteemDB\Models\Statistics;
 use SteemDB\Models\VestingDeposit;
+use SteemDB\Models\VestingWithdraw;
 use SteemDB\Models\WitnessMiss;
 use SteemDB\Models\WitnessVote;
 
@@ -336,6 +337,16 @@ class AccountController extends ControllerBase
     $this->view->pick("account/view");
   }
 
+  public function powerdownAction()
+  {
+    $account = $this->getAccount();
+    $this->view->powerdown = VestingWithdraw::find(array(
+      array('from_account' => $account),
+      'sort' => array('_ts' => -1)
+    ));
+    $this->view->chart = true;
+    $this->view->pick("account/view");
+  }
   public function dataAction()
   {
     $account = $this->getAccount();
