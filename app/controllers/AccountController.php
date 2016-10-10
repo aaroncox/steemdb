@@ -13,6 +13,7 @@ use SteemDB\Models\Follow;
 use SteemDB\Models\Reblog;
 use SteemDB\Models\Vote;
 use SteemDB\Models\Statistics;
+use SteemDB\Models\VestingDeposit;
 use SteemDB\Models\WitnessMiss;
 use SteemDB\Models\WitnessVote;
 
@@ -323,6 +324,18 @@ class AccountController extends ControllerBase
     $this->view->chart = true;
     $this->view->pick("account/view");
   }
+
+  public function powerupAction()
+  {
+    $account = $this->getAccount();
+    $this->view->powerup = VestingDeposit::find(array(
+      array('to' => $account),
+      'sort' => array('_ts' => -1)
+    ));
+    $this->view->chart = true;
+    $this->view->pick("account/view");
+  }
+
   public function dataAction()
   {
     $account = $this->getAccount();
