@@ -17,14 +17,24 @@ class WitnessController extends ControllerBase
         "key" => "miner_queue"
       )
     ));
-    $witnesses = Witness::find(array(
-      array(
-      ),
-      "sort" => array(
-        'votes' => -1
-      ),
-      "limit" => 100
-    ));
+    $witnesses = Witness::aggregate(array(
+      [
+        '$sort' => [
+          'votes' => -1
+        ]
+      ],
+      [
+        '$limit' => 100
+      ],
+      [
+        '$lookup' => [
+          'from' => 'account',
+          'localField' => 'owner',
+          'foreignField' => 'name',
+          'as' => 'account',
+        ]
+      ],
+    ))->toArray();
     $pipeline = [
       [
         '$match' => [

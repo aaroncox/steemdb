@@ -9,7 +9,7 @@
           <table class="ui small unstackable table">
             <thead>
               <tr>
-                <th class="right aligned">#</th>
+                <th class="right aligned">Votes<br>Rank</th>
                 <th>Witness</th>
                 <th>Votes</th>
                 <th class="center aligned">
@@ -23,11 +23,8 @@
                   APR<br>
                   Block Size
                 </th>
-                <th>
-                  Last Block<br>
-                  Found
-                </th>
                 <th>Version</th>
+                <th>VESTS</th>
               </tr>
             </thead>
             <tbody>
@@ -99,10 +96,10 @@
                     {{ witness.props.maximum_block_size }}
                   </td>
                   <td>
-                    {{ witness.last_confirmed_block_num }}
+                    {{ witness.running_version }}
                   </td>
                   <td>
-                    {{ witness.running_version }}
+                    {{ partial("_elements/vesting_shares", ['current': witness.account[0]]) }}
                   </td>
                 </tr>
               {% endfor %}
