@@ -5,6 +5,7 @@ use MongoDB\BSON\UTCDateTime;
 
 use SteemDB\Models\Account;
 use SteemDB\Models\AccountHistory;
+use SteemDB\Models\AuthorReward;
 use SteemDB\Models\Block;
 use SteemDB\Models\Comment;
 use SteemDB\Models\CurationReward;
@@ -296,6 +297,26 @@ class AccountController extends ControllerBase
         ]
       ]
     ])->toArray();
+    $this->view->pages = ceil(CurationReward::count(array(
+      array('curator' => $account)
+    )) / $limit);
+    $this->view->chart = true;
+    $this->view->pick("account/view");
+  }
+
+  public function authoringAction()
+  {
+    $account = $this->getAccount();
+    $this->view->page = $page = (int) $this->request->get("page") ?: 1;
+    $limit = 200;
+    $this->view->authoring = AuthorReward::find(array(
+      array(
+        'author' => $account
+      ),
+      'sort' => array('_ts' => -1),
+      'skip' => $limit * ($page - 1),
+      'limit' => $limit,
+    ));
     $this->view->pages = ceil(CurationReward::count(array(
       array('curator' => $account)
     )) / $limit);
