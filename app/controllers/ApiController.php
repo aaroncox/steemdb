@@ -6,6 +6,7 @@ use MongoDB\BSON\UTCDateTime;
 
 use SteemDB\Models\Account;
 use SteemDB\Models\Block;
+use SteemDB\Models\Block30d;
 use SteemDB\Models\Comment;
 use SteemDB\Models\Statistics;
 use SteemDB\Models\Vote;
@@ -480,4 +481,66 @@ class ApiController extends ControllerBase
     echo json_encode($data, JSON_PRETTY_PRINT);
   }
 
+  public function powerupAction() {
+    $transactions = Block30d::aggregate([
+      [
+        '$match' => [
+          'transactions' => [
+            '$elemMatch' => ['operations.0.0' => 'transfer_to_vesting']
+          ]
+        ]
+      ],
+      [
+        '$unwind' => '$transactions'
+      ],
+      [
+        '$unwind' => '$transactions.operations',
+      ],
+      [
+        '$match' => [
+          'transactions.operations.0' => 'transfer_to_vesting'
+        ]
+      ],
+      [
+        '$unwind' => '$transactions.operations',
+      ],
+      [
+        '$match' => [
+          'transactions.operations.to' => ['$exists' => true]
+        ]
+      ],
+      [
+        '$project' => [
+          'target' => '$transactions.operations',
+          'date' => [
+            'doy' => ['$dayOfYear' => '$_ts'],
+            'year' => ['$year' => '$_ts'],
+            'month' => ['$month' => '$_ts'],
+            'day' => ['$dayOfMonth' => '$_ts'],
+          ],
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => '$date',
+          'count' => ['$sum' => 1],
+          'instances' => ['$addToSet' => '$target.amount']
+        ],
+      ],
+      [
+        '$sort' => [
+          '_id.year' => 1,
+          '_id.doy' => 1
+        ]
+      ]
+    ])->toArray();
+    foreach($transactions as $idx => $tx) {
+      $transactions[$idx]['total'] = 0;
+      foreach($tx['instances'] as $powerup) {
+        $transactions[$idx]['total'] += (float) explode(" ", $powerup)[0];
+      }
+      unset($transactions[$idx]['instances']);
+    }
+    echo json_encode($transactions, JSON_PRETTY_PRINT);
+  }
 }
