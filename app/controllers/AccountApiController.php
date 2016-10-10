@@ -347,6 +347,57 @@ class AccountApiController extends ControllerBase
     ])->toArray();
     echo json_encode($data, JSON_PRETTY_PRINT);
   }
+
+  public function curationstatsAction() {
+    $account = $this->dispatcher->getParam("account");
+    $data = CurationReward::aggregate([
+      [
+        '$match' => [
+          'curator' => $account,
+          '_ts' => [
+            '$gte' => new UTCDateTime(strtotime("-30 days") * 1000),
+          ],
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => '$curator',
+          'day' => ['$sum' => ['$cond' => [
+            [
+              '$gte' => [
+                '$_ts',
+                new UTCDateTime(strtotime("-1 days") * 1000)
+              ]
+            ],
+            '$reward',
+            0
+          ]]],
+          'week' => ['$sum' => ['$cond' => [
+            [
+              '$gte' => [
+                '$_ts',
+                new UTCDateTime(strtotime("-7 days") * 1000)
+              ]
+            ],
+            '$reward',
+            0
+          ]]],
+          'month' => ['$sum' => ['$cond' => [
+            [
+              '$gte' => [
+                '$_ts',
+                new UTCDateTime(strtotime("-30 days") * 1000)
+              ]
+            ],
+            '$reward',
+            0
+          ]]],
+        ]
+      ]
+    ])->toArray();
+    echo json_encode($data, JSON_PRETTY_PRINT);
+  }
+
   public function authoringAction() {
     $account = $this->dispatcher->getParam("account");
     $data = AuthorReward::aggregate([
