@@ -125,6 +125,7 @@ class ApiController extends ControllerBase
         '$project' => [
           '_id' => '$_id',
           'created' => '$created',
+          'net_votes' => '$net_votes',
           'total_payout_value' => '$total_payout_value'
         ]
       ],
@@ -139,6 +140,9 @@ class ApiController extends ControllerBase
           ],
           'posts' => [
             '$sum' => 1
+          ],
+          'votes' => [
+            '$sum' => '$net_votes'
           ],
           'total' => [
             '$sum' => '$total_payout_value'
