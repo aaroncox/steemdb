@@ -11,6 +11,7 @@ use SteemDB\Models\AuthorReward;
 use SteemDB\Models\Block30d;
 use SteemDB\Models\Comment;
 use SteemDB\Models\CurationReward;
+use SteemDB\Models\Follow;
 use SteemDB\Models\Pow;
 use SteemDB\Models\Reblog;
 use SteemDB\Models\Statistics;
@@ -367,6 +368,46 @@ class AccountApiController extends ControllerBase
           'steem' => ['$sum' => '$steem_payout'],
           'vest' => ['$sum' => '$vesting_payout'],
           'sbd' => ['$sum' => '$sbd_payout'],
+        ]
+      ],
+      [
+        '$sort' => [
+          '_id.year' => -1,
+          '_id.doy' => 1
+        ]
+      ]
+    ])->toArray();
+    echo json_encode($data, JSON_PRETTY_PRINT);
+  }
+
+  public function followersAction() {
+    $account = $this->dispatcher->getParam("account");
+    $data = Follow::aggregate([
+      [
+        '$match' => [
+          'following' => $account,
+          '_ts' => [
+            '$gte' => new UTCDateTime(strtotime("-30 days") * 1000),
+          ],
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => [
+            'doy' => ['$dayOfYear' => '$_ts'],
+            'year' => ['$year' => '$_ts'],
+            'month' => ['$month' => '$_ts'],
+            'day' => ['$dayOfMonth' => '$_ts'],
+          ],
+          'count' => [
+            '$sum' => [
+              '$cond' => [
+                ['$size' => '$what'],
+                1,
+                -1
+              ]
+            ]
+          ],
         ]
       ],
       [
