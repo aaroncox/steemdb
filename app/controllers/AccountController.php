@@ -13,6 +13,7 @@ use SteemDB\Models\Follow;
 use SteemDB\Models\Reblog;
 use SteemDB\Models\Vote;
 use SteemDB\Models\Statistics;
+use SteemDB\Models\Transfer;
 use SteemDB\Models\VestingDeposit;
 use SteemDB\Models\VestingWithdraw;
 use SteemDB\Models\WitnessMiss;
@@ -347,6 +348,35 @@ class AccountController extends ControllerBase
     $this->view->chart = true;
     $this->view->pick("account/view");
   }
+
+  public function transfersAction()
+  {
+    $account = $this->getAccount();
+    $this->view->page = $page = (int) $this->request->get("page") ?: 1;
+    $limit = 200;
+    $this->view->transfers = Transfer::find(array(
+      array(
+        '$or' => array(
+          array('from' => $account),
+          array('to' => $account),
+        )
+      ),
+      'sort' => array('_ts' => -1),
+      'skip' => $limit * ($page - 1),
+      'limit' => $limit,
+    ));
+    $this->view->pages = ceil(Transfer::count(array(
+      array(
+        '$or' => array(
+          array('from' => $account),
+          array('to' => $account),
+        )
+      ),
+    )) / $limit);
+    $this->view->chart = true;
+    $this->view->pick("account/view");
+  }
+
   public function dataAction()
   {
     $account = $this->getAccount();
