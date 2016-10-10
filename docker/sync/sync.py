@@ -27,28 +27,95 @@ else:
 # where you want some data but don't want to sync the entire blockchain.
 # ------------
 
-# last_block = 5208000
+# last_block = 5534600
 
 def process_block(block, blockid):
     save_block(block, blockid)
-    if "transactions" in block:
-        for tx in block["transactions"]:
-            for opObj in tx["operations"]:
-                opType = opObj[0]
-                op = opObj[1]
-                if opType == "comment":
-                    # Update the comment
-                    update_comment(op['author'], op['permlink'])
-                if opType == "vote":
-                    # Update the comment and vote
-                    update_comment(op['author'], op['permlink'])
-                    save_vote(op, block, blockid)
-                if opType == "custom_json":
-                    save_custom_json(op, block, blockid)
-                if opType == "account_witness_vote":
-                    save_witness_vote(op, block, blockid)
-                if opType == "pow" or opType == "pow2":
-                    save_pow(op, block, blockid)
+    ops = rpc.get_ops_in_block(blockid, False)
+    for opObj in ops:
+      opType = opObj['op'][0]
+      op = opObj['op'][1]
+      if opType == "comment":
+          # Update the comment
+          update_comment(op['author'], op['permlink'])
+      if opType == "vote":
+          # Update the comment and vote
+          update_comment(op['author'], op['permlink'])
+          save_vote(op, block, blockid)
+      if opType == "custom_json":
+          save_custom_json(op, block, blockid)
+      if opType == "account_witness_vote":
+          save_witness_vote(op, block, blockid)
+      if opType == "pow" or opType == "pow2":
+          save_pow(op, block, blockid)
+      if opType == "transfer":
+          save_transfer(op, block, blockid)
+      if opType == "curation_reward":
+          save_curation_reward(op, block, blockid)
+      if opType == "author_reward":
+          save_author_reward(op, block, blockid)
+      if opType == "transfer_to_vesting":
+          save_vesting_deposit(op, block, blockid)
+      if opType == "fill_vesting_withdraw":
+          save_vesting_withdraw(op, block, blockid)
+
+def save_transfer(op, block, blockid):
+    transfer = op.copy()
+    _id = str(blockid) + '/' + op['from'] + '/' + op['to']
+    transfer.update({
+        '_id': _id,
+        '_ts': datetime.strptime(block['timestamp'], "%Y-%m-%dT%H:%M:%S"),
+        'amount': float(transfer['amount'].split()[0]),
+        'type': transfer['amount'].split()[1]
+    })
+
+    db.transfer.update({'_id': _id}, transfer, upsert=True)
+
+def save_curation_reward(op, block, blockid):
+    reward = op.copy()
+    _id = str(blockid) + '/' + op['curator'] + '/' + op['comment_author'] + '/' + op['comment_permlink']
+    reward.update({
+        '_id': _id,
+        '_ts': datetime.strptime(block['timestamp'], "%Y-%m-%dT%H:%M:%S"),
+        'reward': float(reward['reward'].split()[0])
+    })
+
+    db.curation_reward.update({'_id': _id}, reward, upsert=True)
+
+def save_author_reward(op, block, blockid):
+    reward = op.copy()
+    _id = str(blockid) + '/' + op['author'] + '/' + op['permlink']
+    reward.update({
+        '_id': _id,
+        '_ts': datetime.strptime(block['timestamp'], "%Y-%m-%dT%H:%M:%S")
+    })
+    for key in ['sbd_payout', 'steem_payout', 'vesting_payout']:
+        reward[key] = float(reward[key].split()[0])
+
+    db.author_reward.update({'_id': _id}, reward, upsert=True)
+
+def save_vesting_deposit(op, block, blockid):
+    vesting = op.copy()
+    _id = str(blockid) + '/' + op['from'] + '/' + op['to']
+    vesting.update({
+        '_id': _id,
+        '_ts': datetime.strptime(block['timestamp'], "%Y-%m-%dT%H:%M:%S"),
+        'amount': float(vesting['amount'].split()[0])
+    })
+
+    db.vesting_deposit.update({'_id': _id}, vesting, upsert=True)
+
+def save_vesting_withdraw(op, block, blockid):
+    vesting = op.copy()
+    _id = str(blockid) + '/' + op['from_account'] + '/' + op['to_account']
+    vesting.update({
+        '_id': _id,
+        '_ts': datetime.strptime(block['timestamp'], "%Y-%m-%dT%H:%M:%S")
+    })
+    for key in ['deposited', 'withdrawn']:
+        vesting[key] = float(vesting[key].split()[0])
+
+    db.vesting_withdraw.update({'_id': _id}, vesting, upsert=True)
 
 def save_custom_json(op, block, blockid):
     try:
@@ -213,8 +280,10 @@ if __name__ == '__main__':
             process_block(block, last_block)
             # Update our block height
             db.status.update({'_id': 'height'}, {"$set" : {'value': last_block}}, upsert=True)
-            pprint("Processing Block #" + str(last_block))
+            if last_block % 100 == 0:
+                pprint("Processed up to Block #" + str(last_block))
 
         sys.stdout.flush()
+
         # Sleep for one block
         time.sleep(block_interval)
