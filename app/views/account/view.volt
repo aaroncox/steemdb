@@ -141,5 +141,6 @@
         context: '#main-context',
         offset: 90
       });
+    $(".ui.sortable.table").tablesort();
   </script>
 {% endblock %}
