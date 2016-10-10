@@ -1,8 +1,10 @@
 <div class="ui grid">
   <div class="row">
+    {% if hide_count is not defined %}
     <div class="seven wide column">
       Page {{ page }} of {{ pages }}
     </div>
+    {% endif %}
     <div class="right aligned nine wide column">
       <div class="ui pagination menu">
         {% if page <= 1 %}
