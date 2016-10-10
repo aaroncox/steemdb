@@ -1,4 +1,4 @@
-<table class="ui unstackable table">
+<table class="ui unstackable table" id="table-votes">
   <thead>
     <tr>
       <th class="mobile hidden">%</th>
@@ -20,7 +20,7 @@
         </a>
       </td>
       <td class="mobile hidden">
-        {{ voter.time }}
+        <?php echo $voter->time->toDateTime()->format('Y/m/d H:i:s') ?>
       </td>
       <td class="mobile hidden right aligned">
         {% include "_elements/voter_weight.volt" %}

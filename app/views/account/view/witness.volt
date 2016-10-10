@@ -1,11 +1,9 @@
-<h3 class="ui dividing header">
+<h3 class="ui header">
   Witness Voting
   <div class="sub header">
     Snapshot of blockchain information cached <?php echo $this->timeAgo::mongo($account->scanned); ?>
   </div>
 </h3>
-<svg width="100%" height="200px" id="account-witness"></svg>
-
 <div class="ui top attached tabular menu">
   <a class="active item" data-tab="history">History</a>
   <a class="item" data-tab="received">Votes Received</a>

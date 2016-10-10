@@ -1,4 +1,4 @@
-<h3 class="ui dividing header">
+<h3 class="ui header">
   @{{ account.name }}'s content reblogged by others
   <div class="sub header">
     The content that @{{ account.name }} has created, and reblogged by others

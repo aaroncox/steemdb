@@ -1,5 +1,4 @@
-<svg width="100%" height="200px" id="account-history"></svg>
-<div class="ui three small statistics">
+<div class="ui three small secondary statistics">
   <div class="statistic">
     <div class="value">
       {{ account.followers | length }}
@@ -25,6 +24,13 @@
     </div>
   </div>
 </div>
+<h3 class="ui header">
+  Recent History
+  <div class="sub header">
+    All recent activity involving @{{ account.name }}.
+  </div>
+</h3>
+
 <table class="ui stackable definition table">
   <thead></thead>
   <tbody>

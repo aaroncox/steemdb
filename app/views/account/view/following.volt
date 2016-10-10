@@ -1,4 +1,4 @@
-<h3 class="ui dividing header">
+<h3 class="ui header">
   @{{ account.name }} is following
   <div class="sub header">
     Most recently followed accounts displayed first
@@ -33,6 +33,17 @@
             Unfollow
           </div>
         {% endif %}
+      </td>
+    </tr>
+  {% else %}
+    <tr>
+      <td colspan="10">
+        <div class="ui centered header">
+          No accounts found
+          <div class="sub header">
+            SteemDB has no record of this account following others.
+          </div>
+        </div>
       </td>
     </tr>
   {% endfor %}

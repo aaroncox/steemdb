@@ -1,8 +1,6 @@
-<svg width="100%" height="200px" id="account-votes"></svg>
-
-<div class="ui two item menu">
-  <a href="/@{{ account.name }}/votes?type=outgoing" class="{{ filter is not defined or filter is defined and filter == 'outgoing' ? "active" : "" }} item">Outgoing Votes</a>
-  <a href="/@{{ account.name }}/votes?type=incoming" class="{{ filter is defined and filter == "incoming" ? "active" : ""}} item">Incoming Votes</a>
+<div class="ui two item inverted menu">
+  <a href="/@{{ account.name }}/votes?type=outgoing" class="{{ filter is not defined or filter is defined and filter == 'outgoing' ? "active" : "" }} blue item">Outgoing Votes</a>
+  <a href="/@{{ account.name }}/votes?type=incoming" class="{{ filter is defined and filter == "incoming" ? "active" : ""}} blue item">Incoming Votes</a>
 </div>
 <table class="ui striped table">
   <tbody>

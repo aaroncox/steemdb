@@ -1,4 +1,4 @@
-<h3 class="ui dividing header">
+<h3 class="ui header">
   @{{ account.name }}'s followers
   <div class="sub header">
     Newest followers displayed first

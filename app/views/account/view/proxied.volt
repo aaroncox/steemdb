@@ -1,4 +1,9 @@
-
+<h3 class="ui header">
+  Witness Voting Proxies
+  <div class="sub header">
+    The following accounts have their weight proxied to @{{ account.name }} for witness voting.
+  </div>
+</h3>
 <table class="ui attached table">
   <thead>
     <tr>

@@ -1,13 +1,13 @@
 <script>
-  d3.json("/api/account/{{ account.name }}/witness").get(function(error, rows) {
+  d3.json("/api/account/{{ account.name }}/powerdown").get(function(error, rows) {
     var data = rows;
     var dataset = new Plottable.Dataset(data);
     var dayOffset = (24*60*60*1000); // 1 day
     var today = new Date();
     var xScale = new Plottable.Scales.Time()
         .domain([
-          new Date(today.getTime() - dayOffset * 30),
-          new Date(today.getTime() + dayOffset)
+          new Date(today.getTime() - dayOffset * 90),
+          new Date(today.getTime() + dayOffset * 7)
         ]);
 
     var xAxis = new Plottable.Axes.Time(xScale, "bottom");
@@ -18,18 +18,18 @@
       var dateString = d._id.year + "/" + d._id.month + "/" + d._id.day;
       return new Date(dateString);
     };
-    var pVotes = function(d) { return +d.votes; };
+    var pValue = function(d) { return +d.value; };
 
     // Chart Posts
-    var lVotes = new Plottable.Plots.Bar();
-    lVotes.addDataset(dataset);
-    lVotes.x(pDate, xScale)
-            .y(pVotes, yScale)
+    var lValue = new Plottable.Plots.Bar();
+    lValue.addDataset(dataset);
+    lValue.x(pDate, xScale)
+            .y(pValue, yScale)
             .attr("fill", "#2185D0");
 
     var cs = new Plottable.Scales.Color();
     cs.range(["#2185D0"]);
-    cs.domain(["Votes"]);
+    cs.domain(["STEEM"]);
     var legend = new Plottable.Components.Legend(cs);
 
     var squareFactory = Plottable.SymbolFactories.square();
@@ -42,18 +42,17 @@
 
     legend.maxEntriesPerRow(5)
 
-    var yLabelVotes = new Plottable.Components.AxisLabel("Vote Weight", "90");
-    var xLabelTitle = new Plottable.Components.TitleLabel("30-day Witness Votes", "0");
+    var yLabelValue = new Plottable.Components.AxisLabel("STEEM", "90");
+    var xLabelTitle = new Plottable.Components.TitleLabel("90-day Power Downs", "0");
 
-    var plots = new Plottable.Components.Group([lVotes]);
+    var plots = new Plottable.Components.Group([lValue]);
     var table = new Plottable.Components.Table([
       [xLabelTitle, null, null],
       [legend, null, null],
-      [plots, yAxis, yLabelVotes],
+      [plots, yAxis, yLabelValue],
       [xAxis, null, null]
     ]);
 
-    table.renderTo("svg#account-witness");
-    $(".bar-area rect").popup({target: '#account-powerup'});
+    table.renderTo("svg#account-powerdown");
   });
 </script>

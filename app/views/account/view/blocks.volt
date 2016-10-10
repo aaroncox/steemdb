@@ -1,4 +1,9 @@
-<svg width="100%" height="200px" id="account-mining"></svg>
+<h3 class="ui header">
+  Blocks
+  <div class="sub header">
+    Blocks witnessed or mined by @{{ account.name }}.
+  </div>
+</h3>
 <table class="ui table">
   <thead>
     <tr>

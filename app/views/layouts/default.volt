@@ -192,7 +192,7 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.js"></script>
     <script type="text/javascript" src="/bower/d3/d3.min.js"></script>
     <script type="text/javascript" src="/bower/plottable/plottable.min.js"></script>
-    <script type="text/javascript" src="/js/tablesort.js"></script>
+    <script type="text/javascript" src="/js/semantic-tablesort.js"></script>
 
     {% block scripts %}{% endblock %}
     <script>

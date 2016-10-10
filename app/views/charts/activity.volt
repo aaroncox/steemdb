@@ -64,7 +64,7 @@
     var lVotes = new Plottable.Plots.Line();
     lVotes.addDataset(dataset);
     lVotes.x(pDate, xScale)
-             .y(pVotes, yScale2)
+             .y(pVotes, yScale)
              .attr("stroke", "#58DC0A");
 
     var cs = new Plottable.Scales.Color();

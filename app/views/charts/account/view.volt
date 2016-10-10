@@ -76,6 +76,6 @@ d3.json("/api/account/{{ account.name }}/history").get(function(error, rows) {
     [null, null, xAxis, null, null]
   ]);
 
-  table.renderTo("svg#account-history");
+  table.renderTo("svg#account-view");
 });
 </script>

@@ -20,6 +20,7 @@
       return new Date(dateString);
     };
     var pBlocks = function(d) { return +d.blocks; };
+    var pTooltip = function(d) { return +d.blocks + " BLOCKS"; };
 
     var colorScale = new Plottable.Scales.InterpolatedColor();
     colorScale.range(["#BDCEF0", "#5279C7"]);
@@ -29,6 +30,9 @@
     lBlocks.addDataset(dataset2);
     lBlocks.x(pDate, xScale)
             .y(pBlocks, yScale)
+            .attr("data-title", pTooltip)
+            .attr("data-position", "bottom center")
+            .attr("data-variation", "inverted")
             .attr("fill", function(d, i, dataset) { return dataset.metadata(); }, colorScale)
 
     var cs = new Plottable.Scales.Color();
@@ -58,6 +62,7 @@
       [xAxis, null]
     ]);
 
-    table.renderTo("svg#account-mining");
+    table.renderTo("svg#account-blocks");
+    $(".bar-area rect").popup({target: '#account-blocks'});
   });
 </script>

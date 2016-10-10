@@ -75,5 +75,6 @@
 
     })
   ;
+  $("#table-votes").tablesort();
 </script>
 {% endblock %}

@@ -1,4 +1,4 @@
-<h3 class="ui dividing header">
+<h3 class="ui header">
   Missed Blocks
   <div class="sub header">
     Blocks that @{{ account.name }} has missed via witnessing
