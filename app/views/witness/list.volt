@@ -50,7 +50,7 @@
                     </div>
                   </td>
                   <td class="collapsing">
-                    <div class="ui small header">
+                    <div class="ui header">
                       <?php echo $this->largeNumber::format($witness->votes); ?>
                     </div>
                   </td>
@@ -74,11 +74,15 @@
                     </a>
                   </td>
                   <td>
-                    <div class="ui small header">
+                    <div class="ui header">
                       {% if witness.sbd_exchange_rate.base === "0.000 STEEM" or witness.last_sbd_exchange_update_late %}<i class="warning sign icon" data-popup data-title="Outdated Price Feed" data-content="This witness has not submitted a price feed update in over a week."></i>{% endif %}
                       <div class="content">
                         {{ witness.sbd_exchange_rate.base }}
+                        {% if witness.sbd_exchange_rate.quote != "1.000 STEEM" %}
+                        (<?php echo round((1 - 1/explode(" ", $witness->sbd_exchange_rate['quote'])[0]) * 100, 1) ?>%)
+                        {% endif %}
                         <div class="sub header">
+                          {{ witness.sbd_exchange_rate.quote }}<br>
                           {% if "" ~ witness.last_sbd_exchange_update > 0 %}
                             <?php echo $this->timeAgo::mongo($witness->last_sbd_exchange_update); ?>
                           {% else %}
