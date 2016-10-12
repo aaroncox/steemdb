@@ -2,8 +2,10 @@
 namespace SteemDB\Controllers;
 
 use SteemDB\Models\Account;
+use SteemDB\Models\AuthorReward;
 use SteemDB\Models\Block30d;
 use SteemDB\Models\Comment;
+use SteemDB\Models\CurationReward;
 use SteemDB\Models\Vote;
 use MongoDB\BSON\UTCDateTime;
 
@@ -177,6 +179,75 @@ class LabsController extends ControllerBase
       'allowDiskUse' => true,
       'cursor' => [
         'batchSize' => 0
+      ]
+    ])->toArray();
+  }
+
+  public function curationAction() {
+    $this->view->date = $date = strtotime($this->request->get("date") ?: date("Y-m-d"));
+    $dates = [
+      '$gte' => new UTCDateTime($date * 1000),
+      '$lt' => new UTCDateTime(($date + 86400) * 1000),
+    ];
+    $this->view->leaderboard = CurationReward::aggregate([
+      [
+        '$match' => [
+          '_ts' => $dates
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => '$curator',
+          'count' => ['$sum' => 1],
+          'total' => ['$sum' => '$reward'],
+          'authors' => ['$addToSet' => '$comment_author'],
+          'permlinks' => ['$addToSet' => [
+            '$concat' => ['$comment_author','/','$comment_permlink']
+          ]]
+        ]
+      ],
+      [
+        '$sort' => [
+          'total' => -1
+        ]
+      ],
+      [
+        '$limit' => 100
+      ]
+    ])->toArray();
+  }
+
+  public function authorAction() {
+    $this->view->date = $date = strtotime($this->request->get("date") ?: date("Y-m-d"));
+    $dates = [
+      '$gte' => new UTCDateTime($date * 1000),
+      '$lt' => new UTCDateTime(($date + 86400) * 1000),
+    ];
+    $this->view->leaderboard = AuthorReward::aggregate([
+      [
+        '$match' => [
+          '_ts' => $dates
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => '$author',
+          'count' => ['$sum' => 1],
+          'sbd' => ['$sum' => '$sbd_payout'],
+          'steem' => ['$sum' => '$steem_payout'],
+          'vest' => ['$sum' => '$vesting_payout'],
+          'permlinks' => ['$addToSet' => [
+            '$concat' => ['$author','/','$permlink']
+          ]]
+        ]
+      ],
+      [
+        '$sort' => [
+          'vest' => -1
+        ]
+      ],
+      [
+        '$limit' => 100
       ]
     ])->toArray();
   }
