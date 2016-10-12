@@ -26,12 +26,12 @@
         <?php echo $this->timeAgo::mongo($transfer->_ts); ?>
       </td>
       <td>
-        <a href="/@{{ transfer.from_account }}">
+        <a href="/@{{ transfer.from }}">
           {{ transfer.from }}
         </a>
       </td>
       <td>
-        <a href="/@{{ transfer.to_account }}">
+        <a href="/@{{ transfer.to }}">
           {{ transfer.to }}
         </a>
       </td>
