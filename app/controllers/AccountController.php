@@ -248,7 +248,8 @@ class AccountController extends ControllerBase
   {
     $account = $this->getAccount();
     $this->view->page = $page = (int) $this->request->get("page") ?: 1;
-    $limit = 200;
+    $limit = 50;
+    $this->view->date = null;
     $this->view->curation = CurationReward::find(array(
       array('curator' => $account),
       'sort' => array('_ts' => -1),
@@ -311,7 +312,7 @@ class AccountController extends ControllerBase
   {
     $account = $this->getAccount();
     $this->view->page = $page = (int) $this->request->get("page") ?: 1;
-    $limit = 200;
+    $limit = 50;
     $this->view->authoring = AuthorReward::find(array(
       array(
         'author' => $account
@@ -353,7 +354,7 @@ class AccountController extends ControllerBase
   {
     $account = $this->getAccount();
     $this->view->page = $page = (int) $this->request->get("page") ?: 1;
-    $limit = 200;
+    $limit = 50;
     $this->view->transfers = Transfer::find(array(
       array(
         '$or' => array(
