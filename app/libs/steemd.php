@@ -17,6 +17,15 @@ class steemd
     $this->client = new Client($host, false, $httpClient);
   }
 
+  public function getState($path)
+  {
+    try {
+      return $this->client->call(0, 'get_state', [$path]);
+    } catch (Exception $e) {
+      return array();
+    }
+  }
+
   public function getAccount($account)
   {
     try {
