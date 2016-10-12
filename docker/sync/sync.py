@@ -27,37 +27,43 @@ else:
 # where you want some data but don't want to sync the entire blockchain.
 # ------------
 
-# last_block = 5534600
+# last_block = 5298239
+
+def process_op(opObj, block, blockid):
+    opType = opObj[0]
+    op = opObj[1]
+    if opType == "comment":
+        # Update the comment
+        update_comment(op['author'], op['permlink'])
+    if opType == "vote":
+        # Update the comment and vote
+        update_comment(op['author'], op['permlink'])
+        save_vote(op, block, blockid)
+    if opType == "custom_json":
+        save_custom_json(op, block, blockid)
+    if opType == "account_witness_vote":
+        save_witness_vote(op, block, blockid)
+    if opType == "pow" or opType == "pow2":
+        save_pow(op, block, blockid)
+    if opType == "transfer":
+        save_transfer(op, block, blockid)
+    if opType == "curation_reward":
+        save_curation_reward(op, block, blockid)
+    if opType == "author_reward":
+        save_author_reward(op, block, blockid)
+    if opType == "transfer_to_vesting":
+        save_vesting_deposit(op, block, blockid)
+    if opType == "fill_vesting_withdraw":
+        save_vesting_withdraw(op, block, blockid)
 
 def process_block(block, blockid):
     save_block(block, blockid)
     ops = rpc.get_ops_in_block(blockid, False)
+    for tx in block['transactions']:
+      for opObj in tx['operations']:
+        process_op(opObj, block, blockid)
     for opObj in ops:
-      opType = opObj['op'][0]
-      op = opObj['op'][1]
-      if opType == "comment":
-          # Update the comment
-          update_comment(op['author'], op['permlink'])
-      if opType == "vote":
-          # Update the comment and vote
-          update_comment(op['author'], op['permlink'])
-          save_vote(op, block, blockid)
-      if opType == "custom_json":
-          save_custom_json(op, block, blockid)
-      if opType == "account_witness_vote":
-          save_witness_vote(op, block, blockid)
-      if opType == "pow" or opType == "pow2":
-          save_pow(op, block, blockid)
-      if opType == "transfer":
-          save_transfer(op, block, blockid)
-      if opType == "curation_reward":
-          save_curation_reward(op, block, blockid)
-      if opType == "author_reward":
-          save_author_reward(op, block, blockid)
-      if opType == "transfer_to_vesting":
-          save_vesting_deposit(op, block, blockid)
-      if opType == "fill_vesting_withdraw":
-          save_vesting_withdraw(op, block, blockid)
+      process_op(opObj['op'], block, blockid)
 
 def save_transfer(op, block, blockid):
     transfer = op.copy()
