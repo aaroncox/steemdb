@@ -321,7 +321,7 @@ class AccountController extends ControllerBase
       'skip' => $limit * ($page - 1),
       'limit' => $limit,
     ));
-    $this->view->pages = ceil(CurationReward::count(array(
+    $this->view->pages = ceil(AuthorReward::count(array(
       array('curator' => $account)
     )) / $limit);
     $this->view->chart = true;
