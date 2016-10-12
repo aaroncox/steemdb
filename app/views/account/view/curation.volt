@@ -38,44 +38,55 @@
     </div>
   </div>
 </div>
-<table class="ui striped table">
-  <thead>
-    <tr>
-      <th>Content/Author</th>
-      <th class="collapsing right aligned">VEST/SP</th>
-    </tr>
-  </thead>
-  <tbody class="infinite-scroll">
-    {% for reward in curation %}
-    <tr>
-      <td>
-        <a href="/tag/@{{ reward.comment_author }}/{{ reward.comment_permlink }}">
-          {{ reward.comment_permlink }}
-        </a>
-        <br>
-        by <a href="/@{{ reward.comment_author }}">{{ reward.comment_author }}</a>, <?php echo $this->timeAgo::mongo($reward->_ts); ?>
-
-      </td>
-      <td class="collapsing right aligned">
-        <div class="ui small header">
-          <?php echo number_format($reward->reward, 3, ".", ",") ?> VESTS
-          <div class="sub header">
-            ~<?php echo $this->convert::vest2sp($reward->reward, ""); ?> SP*
-          </div>
-        </div>
-      </td>
-    </tr>
-  </tbody>
-  {% else %}
-  <tbody>
-    <tr>
-      <td colspan="10">
-        <div class="ui header">
-          No author rewards found
-        </div>
-      </td>
-    </tr>
-  </tbody>
-  {% endfor %}
-</table>
+{% for reward in curation %}
+  {% if reward._ts.toDateTime().format("Ymd") != date %}
+    {% if date != null %}
+      </tbody>
+    </table>
+    {% endif %}
+    <div class="ui header">
+      {{ reward._ts.toDateTime().format("Y-m-d") }}
+      {% set date = reward._ts.toDateTime().format("Ymd") %}
+    </div>
+    <table class="ui striped table">
+      <thead>
+        <tr>
+          <th>Content/Author</th>
+          <th class="collapsing right aligned">VEST/SP</th>
+        </tr>
+      </thead>
+      <tbody class="infinite-scroll">
+  {% endif %}
+        <tr>
+          <td>
+            <a href="/tag/@{{ reward.comment_author }}/{{ reward.comment_permlink }}">
+              {{ reward.comment_permlink }}
+            </a>
+            <br>
+            by <a href="/@{{ reward.comment_author }}">{{ reward.comment_author }}</a>,
+            <span data-popup data-content="{{ reward._ts.toDateTime().format("Y-m-d H:i:s") }} UTC" data-position="right center" data-variation="inverted">
+              <?php echo $this->timeAgo::mongo($reward->_ts); ?>
+            </span>
+          </td>
+          <td class="collapsing right aligned">
+              <div class="ui <?php echo $this->largeNumber::color($reward->reward)?> label" data-popup data-content="<?php echo number_format($reward->reward, 3, ".", ",") ?> VESTS" data-variation="inverted" data-position="left center">
+                <?php echo $this->largeNumber::format($reward->reward); ?>
+              </div>
+              <br>
+              <small>
+                ~<?php echo $this->convert::vest2sp($reward->reward, ""); ?> SP*
+              </small>
+          </td>
+        </tr>
+{% else %}
+        <tr>
+          <td colspan="10">
+            <div class="ui header">
+              No curation rewards found
+            </div>
+          </td>
+        </tr>
+{% endfor %}
+      </tbody>
+    </table>
 {% include "_elements/paginator.volt" %}
