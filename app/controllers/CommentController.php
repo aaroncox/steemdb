@@ -178,7 +178,7 @@ class CommentController extends ControllerBase
         'total_pending_payout_value' => '$total_pending_payout_value'
       ]],
       ['$sort' => $sortFields],
-      ['$limit' => 10]
+      ['$limit' => 100]
     ]);
   }
 
