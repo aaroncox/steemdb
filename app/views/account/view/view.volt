@@ -41,6 +41,7 @@
         <?php echo $this->opName::string($item[1]['op'], $account) ?>
         <div class="sub header">
           <?php echo $this->timeAgo::string($item[1]['timestamp']); ?>
+          <br><a href="/block/{{ item[1]['block' ]}}"><small style="color: #bbb">Block #{{ item[1]['block' ]}}</small></a>
         </div>
       </div>
     </td>
