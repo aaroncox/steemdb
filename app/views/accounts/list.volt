@@ -18,10 +18,10 @@
                 Vests/SP
               </a>
               <a class="{{ filter == 'sbd' ? 'active' : '' }} item" href="/accounts/sbd">
-                SBD
+                GBG
               </a>
               <a class="{{ filter == 'steem' ? 'active' : '' }} item" href="/accounts/steem">
-                STEEM
+                GOLOS
               </a>
             </div>
           </div>
@@ -86,9 +86,9 @@
               </td>
               <td class="collapsing right aligned">
                 <div class="ui small header">
-                  <?php echo number_format($account->total_sbd_balance, 3, ".", ",") ?> SBD
+                  <?php echo number_format($account->total_sbd_balance, 3, ".", ",") ?> GBG
                   <div class="sub header">
-                    <?php echo number_format($account->total_balance, 3, ".", ",") ?> STEEM
+                    <?php echo number_format($account->total_balance, 3, ".", ",") ?> GOLOS
                   </div>
                 </div>
               </td>

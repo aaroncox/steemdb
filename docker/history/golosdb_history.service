@@ -2,8 +2,8 @@
 Description=SteemDB.com History Service
 
 [Service]
-Environment=steemnode=node.steem.ws
-WorkingDirectory=/var/www/com_steemdb/docker/history
+Environment=steemnode=golos.steem.ws
+WorkingDirectory=/var/www/com_steemdb_golos/docker/history
 ExecStart=/usr/bin/python3 history.py
 Restart=always
 

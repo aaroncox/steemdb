@@ -45,7 +45,7 @@
 
     var cs = new Plottable.Scales.Color();
     cs.range(["#A333C8", "#2185D0", "#21BA45"]);
-    cs.domain(["Steem", "VESTS", "SBD"]);
+    cs.domain(["Steem", "VESTS", "GBG"]);
     var legend = new Plottable.Components.Legend(cs);
 
     var squareFactory = Plottable.SymbolFactories.square();
@@ -58,7 +58,7 @@
 
     legend.maxEntriesPerRow(5)
 
-    var yLabelValue = new Plottable.Components.AxisLabel("SBD/STEEM", "90");
+    var yLabelValue = new Plottable.Components.AxisLabel("GBG/GOLOS", "90");
     var xLabelTitle = new Plottable.Components.TitleLabel("90-day Author Rewards", "0");
     var yLabelVest = new Plottable.Components.AxisLabel("VESTS", "270");
 

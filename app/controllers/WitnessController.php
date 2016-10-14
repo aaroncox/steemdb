@@ -62,7 +62,7 @@ class WitnessController extends ControllerBase
         $witness->row_status = "positive";
       }
       // Highlight Red is no price feed exists
-      if($witness->sbd_exchange_rate->base === "0.000 STEEM") {
+      if($witness->sbd_exchange_rate->base === "0.000 GOLOS") {
         $witness->row_status = "warning";
       }
       // Highlight Red is price feed older than 24 hrs

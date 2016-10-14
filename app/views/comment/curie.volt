@@ -82,7 +82,7 @@
                 </div>
                 <div class="three wide center mobile hidden aligned column">
                   <div class="ui green header">
-                    <?php echo $this->largeNumber::format($comment->total_pending_payout_value); ?> SBD
+                    <?php echo $this->largeNumber::format($comment->total_pending_payout_value); ?> GBG
                   </div>
                 </div>
               </div>

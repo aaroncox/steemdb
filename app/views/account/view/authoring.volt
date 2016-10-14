@@ -22,9 +22,9 @@
       <thead>
         <tr>
           <th>Content</th>
-          <th class="collapsing right aligned">STEEM</th>
+          <th class="collapsing right aligned">GOLOS</th>
           <th class="collapsing right aligned">VEST/SP</th>
-          <th class="collapsing right aligned">SBD</th>
+          <th class="collapsing right aligned">GBG</th>
         </tr>
       </thead>
       <tbody class="infinite-scroll">
@@ -39,7 +39,7 @@
           </td>
           <td class="collapsing right aligned">
             <div class="ui small header">
-              <?php echo $this->largeNumber::format($reward->steem_payout); ?> STEEM
+              <?php echo $this->largeNumber::format($reward->steem_payout); ?> GOLOS
             </div>
           </td>
           <td class="collapsing right aligned">
@@ -53,7 +53,7 @@
           </td>
           <td class="collapsing right aligned">
             <div class="ui small header">
-              <?php echo $this->largeNumber::format($reward->sbd_payout); ?> SBD
+              <?php echo $this->largeNumber::format($reward->sbd_payout); ?> GBG
             </div>
           </td>
         </tr>

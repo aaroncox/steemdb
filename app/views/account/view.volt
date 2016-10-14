@@ -62,15 +62,9 @@
           </div>
           <div class="ui list">
             <div class="item">
-              <a href="https://steemit.com/@{{ account.name }}" class="ui fluid primary icon small basic button" target="_blank">
+              <a href="https://golos.io/@{{ account.name }}" class="ui fluid primary icon small basic button" target="_blank">
                 <i class="external icon"></i>
-                View Account on steemit.com
-              </a>
-            </div>
-            <div class="item">
-              <a href="https://steemd.com/@{{ account.name }}" class="ui fluid teal icon small basic button" target="_blank">
-                <i class="external icon"></i>
-                View Account on steemd.com
+                View Account on golos.io
               </a>
             </div>
           </div>
@@ -90,8 +84,8 @@
                   </div>
                 </td>
               </tr>
-              <tr data-popup data-html="<table class='ui small definition table'><tr><td>Balance</td><td><?php echo number_format($account->balance, 3, '.', ','); ?></td></tr><tr><td>Savings Balance</td><td><?php echo number_format($account->savings_balance, 3, '.', ','); ?></td></tr>{% if account.vesting_withdraw_rate and account.vesting_withdraw_rate > 1 and not account.withdraw_routes %}<tr><td>Power Down - Rate</td><td>+<?php echo $this->convert::vest2sp($current->vesting_withdraw_rate, " STEEM"); ?></td></tr><tr><td>Power Down - Datetime</td><td><?php echo gmdate("Y-m-d H:i:s e", (string) $account->next_vesting_withdrawal / 1000) ?></td></tr>{% endif %}</table>" data-position="left center" data-variation="very wide">
-                <td>STEEM</td>
+              <tr data-popup data-html="<table class='ui small definition table'><tr><td>Balance</td><td><?php echo number_format($account->balance, 3, '.', ','); ?></td></tr><tr><td>Savings Balance</td><td><?php echo number_format($account->savings_balance, 3, '.', ','); ?></td></tr>{% if account.vesting_withdraw_rate and account.vesting_withdraw_rate > 1 and not account.withdraw_routes %}<tr><td>Power Down - Rate</td><td>+<?php echo $this->convert::vest2sp($current->vesting_withdraw_rate, " GOLOS"); ?></td></tr><tr><td>Power Down - Datetime</td><td><?php echo gmdate("Y-m-d H:i:s e", (string) $account->next_vesting_withdrawal / 1000) ?></td></tr>{% endif %}</table>" data-position="left center" data-variation="very wide">
+                <td>GOLOS</td>
                 <td>
                   <div class="ui tiny header">
                     <?php echo number_format($account->total_balance, 3, '.', ','); ?>
@@ -99,7 +93,7 @@
                 </td>
               </tr>
               <tr data-popup data-html="<table class='ui small definition table'><tr><td>Balance</td><td><?php echo number_format($account->sbd_balance, 3, '.', ','); ?></td></tr><tr><td>Savings Balance</td><td><?php echo number_format($account->savings_sbd_balance, 3, '.', ','); ?></td></tr><tr><td>Next Interest (10% APY)</td><td><?php echo gmdate("Y-m-d H:i:s e", strtotime("+30 days", (string) $account->sbd_last_interest_payment / 1000)); ?></td></tr></table>" data-position="left center" data-variation="very wide">
-                <td>SBD</td>
+                <td>GBG</td>
                 <td>
                   <div class="ui tiny header">
                     <?php echo number_format($account->total_sbd_balance, 3, '.', ','); ?>

@@ -12,7 +12,7 @@ import os
 
 rpc = SteemNodeRPC("ws://" + os.environ['steemnode'], "", "", apis=["follow", "database"])
 mongo = MongoClient("mongodb://mongo")
-db = mongo.steemdb
+db = mongo.golosdb
 
 misses = {}
 

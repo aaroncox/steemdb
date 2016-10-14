@@ -111,7 +111,7 @@
         <a href="/labs" class="{{ (router.getControllerName() == 'labs') ? 'active' : '' }} item">labs</a>
         <div class="right menu">
           <div class="item">
-            <a href="https://steemit.com/?r=jesta">
+            <a href="https://golos.io/?r=jesta">
               <small>Create Account</small>
             </a>
           </div>
@@ -179,9 +179,9 @@
               <h4 class="ui inverted header">
                 <a href="https://steemdb.com">steemdb</a>
                 created by
-                <a href="https://steemit.com/@jesta">@jesta</a>
+                <a href="https://golos.io/@jesta">@jesta</a>
               </h4>
-              <p>If you'd like to support this project, <a href="https://steemit.com/~witnesses">vote <strong>jesta</strong> as witness.</a></p>
+              <p>If you'd like to support this project, <a href="https://golos.io/~witnesses">vote <strong>jesta</strong> as witness.</a></p>
             </div>
           </div>
         </div>

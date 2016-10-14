@@ -33,7 +33,7 @@
           </p>
         </div>
         <div class="actions">
-          <a class="reply" href="https://steemit.com/tag/@{{ comment.author }}/{{ comment.permlink }}" target="_blank">
+          <a class="reply" href="https://golos.io/tag/@{{ comment.author }}/{{ comment.permlink }}" target="_blank">
             View on Steemit / Reply
           </a>
         </div>

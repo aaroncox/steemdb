@@ -29,9 +29,9 @@ class Convert extends Tag
     return $cached;
   }
 
-  static public function vest2sp($value, $label = ' SP')
+  static public function vest2sp($value, $label = ' GP')
   {
-    $values = static::getConversionRate('convert_vest2sp');
+    $values = static::getConversionRate('convert_vest2gp');
     $return = $values['total_vest_steem'] * ($value / $values['total_vests']);
     if($label === false) {
       return round($return, 3);
@@ -41,7 +41,7 @@ class Convert extends Tag
 
   static public function sp2vest($value, $label = ' VEST')
   {
-    $values = static::getConversionRate('convert_vest2sp');
+    $values = static::getConversionRate('convert_vest2gp');
     return number_format((($value * 1000) / $values['total_vest_steem']) * $values['total_vests'], 3, '.', ',') . $label;
   }
 }

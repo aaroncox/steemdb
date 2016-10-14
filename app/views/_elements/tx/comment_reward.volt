@@ -3,7 +3,7 @@
 </span>
 <span class="ui green label">
   +<?php echo $this->largeNumber::format($item[1]['op'][1]['sbd_payout']); ?>
-  SBD
+  GBG
 </span>
 for
 <a href="/tag/@{{ item[1]['op'][1]['author'] }}/{{ item[1]['op'][1]['permlink'] }}">

@@ -14,7 +14,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 
 rpc = SteemNodeRPC("ws://" + os.environ['steemnode'], "", "", apis=["follow", "database"])
 mongo = MongoClient("mongodb://mongo")
-db = mongo.steemdb
+db = mongo.golosdb
 
 mvest_per_account = {}
 

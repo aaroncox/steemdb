@@ -2,8 +2,8 @@
 Description=SteemDB.com Sync Service
 
 [Service]
-Environment=steemnode=node.steem.ws
-WorkingDirectory=/var/www/com_steemdb/docker/sync
+Environment=steemnode=golos.steem.ws
+WorkingDirectory=/var/www/com_steemdb_golos/docker/sync
 ExecStart=/usr/bin/python3 sync.py
 Restart=always
 

@@ -21,7 +21,7 @@ class OpName extends Tag
     "feed_publish" => "Feed Publish",
     "fill_order" => "Fill Order",
     "fill_vesting_withdraw" => "Power Down",
-    "interest" => "SBD Interest",
+    "interest" => "GBG Interest",
     "limit_order_create" => "Limit Order Create",
     "limit_order_cancel" => "Limit Order Cancel",
     "pow" => "Mining",

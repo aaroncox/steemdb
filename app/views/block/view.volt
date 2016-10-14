@@ -21,7 +21,15 @@
         </div>
         {% for tx in current.transactions %}
           {% include '_elements/definition_table' with ['data': tx] %}
+        {% else %}
+        <div class="ui message">
+          No transactions
+        </div>
         {% endfor %}
+        <div class="ui horizontal header divider">
+          Raw Data
+        </div>
+        {% include "_elements/definition_table" with ['data': current.toArray()] %}
       </div>
     </div>
   </div>

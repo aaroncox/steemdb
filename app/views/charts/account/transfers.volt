@@ -19,7 +19,7 @@
       return new Date(dateString);
     };
     var pValue = function(d) { return +d.value; };
-    var pTooltip = function(d) { return +d.value + " STEEM/SBD"; };
+    var pTooltip = function(d) { return +d.value + " GOLOS/GBG"; };
 
     // Chart Posts
     var lValue = new Plottable.Plots.Bar();
@@ -33,7 +33,7 @@
 
     var cs = new Plottable.Scales.Color();
     cs.range(["#2185D0"]);
-    cs.domain(["STEEM/SBD"]);
+    cs.domain(["GOLOS/GBG"]);
     var legend = new Plottable.Components.Legend(cs);
 
     var squareFactory = Plottable.SymbolFactories.square();
@@ -46,7 +46,7 @@
 
     legend.maxEntriesPerRow(5)
 
-    var yLabelValue = new Plottable.Components.AxisLabel("STEEM/SBD", "90");
+    var yLabelValue = new Plottable.Components.AxisLabel("GOLOS/GBG", "90");
     var xLabelTitle = new Plottable.Components.TitleLabel("90-day Transfers", "0");
 
     var plots = new Plottable.Components.Group([lValue]);

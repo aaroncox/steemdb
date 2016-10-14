@@ -29,7 +29,7 @@
 
     var cs = new Plottable.Scales.Color();
     cs.range(["#2185D0"]);
-    cs.domain(["STEEM"]);
+    cs.domain(["GOLOS"]);
     var legend = new Plottable.Components.Legend(cs);
 
     var squareFactory = Plottable.SymbolFactories.square();
@@ -42,7 +42,7 @@
 
     legend.maxEntriesPerRow(5)
 
-    var yLabelValue = new Plottable.Components.AxisLabel("STEEM", "90");
+    var yLabelValue = new Plottable.Components.AxisLabel("GOLOS", "90");
     var xLabelTitle = new Plottable.Components.TitleLabel("90-day Power Downs", "0");
 
     var plots = new Plottable.Components.Group([lValue]);

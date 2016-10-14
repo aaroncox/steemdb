@@ -47,9 +47,9 @@
         {% include '_elements/cards/account' with ['account': author] %}
         <div class="ui list">
           <div class="item">
-            <a href="https://steemit.com{{ comment.url }}" class="ui fluid primary icon basic small button" target="_blank">
+            <a href="https://golos.io{{ comment.url }}" class="ui fluid primary icon basic small button" target="_blank">
               <i class="external icon"></i>
-              View Post on steemit.com
+              View Post on golos.io
             </a>
           </div>
           <div class="item">

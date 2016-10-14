@@ -10,13 +10,13 @@ import os
 
 rpc = SteemNodeRPC("ws://" + os.environ['steemnode'], "", "")
 mongo = MongoClient("mongodb://mongo")
-db = mongo.steemdb
+db = mongo.golosdb
 
 init = db.status.find_one({'_id': 'height'})
 if(init):
   last_block = init['value']
 else:
-  last_block = 1
+  last_block = 0
 
 # ------------
 # For development:
@@ -58,12 +58,12 @@ def process_op(opObj, block, blockid):
 
 def process_block(block, blockid):
     save_block(block, blockid)
-    ops = rpc.get_ops_in_block(blockid, False)
+    # ops = rpc.get_ops_in_block(blockid, False)
     for tx in block['transactions']:
       for opObj in tx['operations']:
         process_op(opObj, block, blockid)
-    for opObj in ops:
-      process_op(opObj['op'], block, blockid)
+    # for opObj in ops:
+    #   process_op(opObj['op'], block, blockid)
 
 def save_transfer(op, block, blockid):
     transfer = op.copy()
@@ -237,7 +237,7 @@ def update_comment(author, permlink):
 if __name__ == '__main__':
     # Let's find out how often blocks are generated!
     config = rpc.get_config()
-    block_interval = config["STEEMIT_BLOCK_INTERVAL"]
+    block_interval = config["GOLOSIT_BLOCK_INTERVAL"]
 
     # We are going to loop indefinitely
     while True:
@@ -286,8 +286,8 @@ if __name__ == '__main__':
             process_block(block, last_block)
             # Update our block height
             db.status.update({'_id': 'height'}, {"$set" : {'value': last_block}}, upsert=True)
-            if last_block % 100 == 0:
-                pprint("Processed up to Block #" + str(last_block))
+            # if last_block % 100 == 0:
+            pprint("Processed up to Block #" + str(last_block))
 
         sys.stdout.flush()
 

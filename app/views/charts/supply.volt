@@ -21,23 +21,23 @@
       return new Date(dateString);
     };
 
-    var pSBD = function(d) { return +d.sbd; };
-    var pSTEEM = function(d) { return +d.steem; };
+    var pGBG = function(d) { return +d.sbd; };
+    var pGOLOS = function(d) { return +d.steem; };
     var pSP = function(d) { return +d.sp; };
 
-    // Chart SBD
-    var lSBD = new Plottable.Plots.Line();
-    lSBD.addDataset(dataset);
-    lSBD.x(pDate, xScale)
-         .y(pSBD, yScale)
+    // Chart GBG
+    var lGBG = new Plottable.Plots.Line();
+    lGBG.addDataset(dataset);
+    lGBG.x(pDate, xScale)
+         .y(pGBG, yScale)
          .attr("stroke", "#EF320B")
          ;
 
     // Chart Replies
-    var lSTEEM = new Plottable.Plots.Line();
-    lSTEEM.addDataset(dataset);
-    lSTEEM.x(pDate, xScale)
-             .y(pSTEEM, yScale)
+    var lGOLOS = new Plottable.Plots.Line();
+    lGOLOS.addDataset(dataset);
+    lGOLOS.x(pDate, xScale)
+             .y(pGOLOS, yScale)
              .attr("stroke", "#0A46D6")
              ;
 
@@ -50,7 +50,7 @@
 
     var cs = new Plottable.Scales.Color();
     cs.range(["#EF320B", "#0A46D6", "#58DC0A", "#58DC0A"]);
-    cs.domain(["SBD","STEEM","STEEM POWER"]);
+    cs.domain(["GBG","GOLOS","GOLOS POWER"]);
     var legend = new Plottable.Components.Legend(cs);
     legend.maxEntriesPerRow(3);
 
@@ -67,7 +67,7 @@
     var yLabel = new Plottable.Components.AxisLabel("", "270");
     var xLabel = new Plottable.Components.TitleLabel("Supply History", "0");
 
-    var plots = new Plottable.Components.Group([lSBD, lSTEEM, lSP]);
+    var plots = new Plottable.Components.Group([lGBG, lGOLOS, lSP]);
     var table = new Plottable.Components.Table([
       [null, null, xLabel, null, null],
       [null, null, legend, null, null],

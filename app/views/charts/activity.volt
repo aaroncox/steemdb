@@ -83,7 +83,7 @@
 
     legend.maxEntriesPerRow(5)
 
-    var yLabelVotes = new Plottable.Components.AxisLabel("SBD Value", "270");
+    var yLabelVotes = new Plottable.Components.AxisLabel("GBG Value", "270");
     var yLabelPosts = new Plottable.Components.AxisLabel("Posts/Votes", "90");
     var xLabelTitle = new Plottable.Components.TitleLabel("45-day Network Activity", "0");
 

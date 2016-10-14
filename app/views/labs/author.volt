@@ -42,8 +42,8 @@
                 <th class="collapsing">#</th>
                 <th>Account</th>
                 <th class="collapsing">VESTS/SP</th>
-                <th class="collapsing">STEEM</th>
-                <th class="collapsing">SBD</th>
+                <th class="collapsing">GOLOS</th>
+                <th class="collapsing">GBG</th>
                 <th class="collapsing">Posts</th>
               </tr>
             </thead>
