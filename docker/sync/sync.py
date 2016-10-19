@@ -237,7 +237,7 @@ def update_comment(author, permlink):
 if __name__ == '__main__':
     # Let's find out how often blocks are generated!
     config = rpc.get_config()
-    block_interval = config["GOLOSIT_BLOCK_INTERVAL"]
+    block_interval = config["STEEMIT_BLOCK_INTERVAL"]
 
     # We are going to loop indefinitely
     while True:
@@ -254,7 +254,7 @@ if __name__ == '__main__':
             'created': {'$gt': max_date},
             'scanned': {'$lt': scan_ignore},
         }).sort([('scanned', 1)]).limit(queue_length)
-        pprint("Processing Queue - " + str(queue_length) + " of " + str(queue.count()))
+        # pprint("Processing Queue - " + str(queue_length) + " of " + str(queue.count()))
         for item in queue:
             update_comment(item['author'], item['permlink'])
 
@@ -271,13 +271,15 @@ if __name__ == '__main__':
               '$gt': 0
             }
         }).limit(queue_length)
-        pprint("Processing Payout Queue - " + str(queue_length) + " of " + str(queue.count()))
+        # pprint("Processing Payout Queue - " + str(queue_length) + " of " + str(queue.count()))
         for item in queue:
             update_comment(item['author'], item['permlink'])
 
         # Process New Blocks
         props = rpc.get_dynamic_global_properties()
         block_number = props['last_irreversible_block_num']
+        if block_number == 0:
+            pprint("[GOLOS] Waiting for Genesis Block...")
         while (block_number - last_block) > 0:
             last_block += 1
             # Get full block
@@ -287,7 +289,7 @@ if __name__ == '__main__':
             # Update our block height
             db.status.update({'_id': 'height'}, {"$set" : {'value': last_block}}, upsert=True)
             # if last_block % 100 == 0:
-            pprint("Processed up to Block #" + str(last_block))
+            pprint("[GOLOS] Processed up to Block #" + str(last_block))
 
         sys.stdout.flush()
 
