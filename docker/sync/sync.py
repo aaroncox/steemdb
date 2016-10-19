@@ -3,12 +3,13 @@ from steemapi.steemnoderpc import SteemNodeRPC
 from piston.steem import Post
 from pymongo import MongoClient
 from pprint import pprint
+import collections
 import json
 import time
 import sys
 import os
 
-rpc = SteemNodeRPC("ws://" + os.environ['steemnode'], "", "")
+rpc = SteemNodeRPC("ws://" + os.environ['steemnode'], "", "", apis=["follow", "database"])
 mongo = MongoClient("mongodb://mongo")
 db = mongo.golosdb
 
@@ -74,8 +75,10 @@ def save_transfer(op, block, blockid):
         'amount': float(transfer['amount'].split()[0]),
         'type': transfer['amount'].split()[1]
     })
-
     db.transfer.update({'_id': _id}, transfer, upsert=True)
+    update_account(op['from'])
+    if op['from'] != op['to']:
+        update_account(op['to'])
 
 def save_curation_reward(op, block, blockid):
     reward = op.copy()
@@ -85,8 +88,8 @@ def save_curation_reward(op, block, blockid):
         '_ts': datetime.strptime(block['timestamp'], "%Y-%m-%dT%H:%M:%S"),
         'reward': float(reward['reward'].split()[0])
     })
-
     db.curation_reward.update({'_id': _id}, reward, upsert=True)
+    update_account(op['curator'])
 
 def save_author_reward(op, block, blockid):
     reward = op.copy()
@@ -97,8 +100,8 @@ def save_author_reward(op, block, blockid):
     })
     for key in ['sbd_payout', 'steem_payout', 'vesting_payout']:
         reward[key] = float(reward[key].split()[0])
-
     db.author_reward.update({'_id': _id}, reward, upsert=True)
+    update_account(op['author'])
 
 def save_vesting_deposit(op, block, blockid):
     vesting = op.copy()
@@ -108,8 +111,10 @@ def save_vesting_deposit(op, block, blockid):
         '_ts': datetime.strptime(block['timestamp'], "%Y-%m-%dT%H:%M:%S"),
         'amount': float(vesting['amount'].split()[0])
     })
-
     db.vesting_deposit.update({'_id': _id}, vesting, upsert=True)
+    update_account(op['from'])
+    if op['from'] != op['to']:
+        update_account(op['to'])
 
 def save_vesting_withdraw(op, block, blockid):
     vesting = op.copy()
@@ -120,8 +125,10 @@ def save_vesting_withdraw(op, block, blockid):
     })
     for key in ['deposited', 'withdrawn']:
         vesting[key] = float(vesting[key].split()[0])
-
     db.vesting_withdraw.update({'_id': _id}, vesting, upsert=True)
+    update_account(op['from_account'])
+    if op['from_account'] != op['to_account']:
+        update_account(op['to_account'])
 
 def save_custom_json(op, block, blockid):
     try:
@@ -148,6 +155,9 @@ def save_follow(data, op, block, blockid):
         '_ts': datetime.strptime(block['timestamp'], "%Y-%m-%dT%H:%M:%S"),
     })
     db.follow.update(query, doc, upsert=True)
+    update_account(doc['follower'])
+    if doc['follower'] != doc['following']:
+        update_account(doc['following'])
 
 def save_reblog(data, op, block, blockid):
     doc = data[1].copy()
@@ -201,6 +211,9 @@ def save_witness_vote(op, block, blockid):
         '_ts': datetime.strptime(block['timestamp'], "%Y-%m-%dT%H:%M:%S")
     })
     db.witness_vote.update(query, witness_vote, upsert=True)
+    update_account(witness_vote['account'])
+    if witness_vote['account'] != witness_vote['witness']:
+        update_account(witness_vote['witness'])
 
 def update_comment(author, permlink):
     _id = author + '/' + permlink
@@ -234,11 +247,71 @@ def update_comment(author, permlink):
     comment['scanned'] = datetime.now()
     db.comment.update({'_id': _id}, comment, upsert=True)
 
+mvest_per_account = {}
+
+def load_accounts():
+    pprint("Loading all accounts")
+    for account in db.account.find():
+        mvest_per_account.update({account['name']: account['vesting_shares']})
+
+def update_account(account_name):
+    pprint("Updating account: " + account_name)
+    # Load State
+    state = rpc.get_accounts([account_name])
+    # Get Account Data
+    account = collections.OrderedDict(sorted(state[0].items()))
+    # Get followers
+    account['followers'] = []
+    account['followers_count'] = 0
+    account['followers_mvest'] = 0
+    followers_results = rpc.get_followers(account_name, "", "blog", 100, api="follow")
+    while len(followers_results) > 1:
+      results = followers_results
+      last_account = ""
+      for follower in followers_results:
+        last_account = follower['follower']
+        if 'blog' in follower['what'] or 'posts' in follower['what']:
+          account['followers'].append(follower['follower'])
+          account['followers_count'] += 1
+          if follower['follower'] in mvest_per_account.keys():
+            account['followers_mvest'] += float(mvest_per_account[follower['follower']])
+      followers_results = rpc.get_followers(account_name, last_account, "blog", 100, api="follow")
+    # Get following
+    account['following'] = []
+    account['following_count'] = 0
+    following_results = rpc.get_following(account_name, -1, "blog", 100, api="follow")
+    while len(following_results) > 1:
+      results = following_results
+      last_account = ""
+      for following in following_results:
+        last_account = following['following']
+        if 'blog' in following['what'] or 'posts' in following['what']:
+          account['following'].append(following['following'])
+          account['following_count'] += 1
+      following_results = rpc.get_following(account_name, last_account, "blog", 100, api="follow")
+    # Convert to Numbers
+    account['proxy_witness'] = float(account['proxied_vsf_votes'][0]) / 1000000
+    for key in ['lifetime_bandwidth', 'reputation', 'to_withdraw']:
+        account[key] = float(account[key])
+    for key in ['balance', 'sbd_balance', 'sbd_seconds', 'savings_balance', 'savings_sbd_balance', 'vesting_balance', 'vesting_shares', 'vesting_withdraw_rate']:
+        account[key] = float(account[key].split()[0])
+    # Convert to Date
+    for key in ['created', 'last_account_recovery', 'last_account_update', 'last_active_proved', 'savings_sbd_last_interest_payment', 'savings_sbd_seconds_last_update', 'reset_request_time', 'last_bandwidth_update', 'last_market_bandwidth_update', 'last_owner_proved', 'last_owner_update', 'last_post', 'last_root_post', 'last_vote_time', 'next_vesting_withdrawal', 'sbd_last_interest_payment', 'sbd_seconds_last_update']:
+        account[key] = datetime.strptime(account[key], "%Y-%m-%dT%H:%M:%S")
+    # Combine Savings + Balance
+    account['total_balance'] = account['balance'] + account['savings_balance']
+    account['total_sbd_balance'] = account['sbd_balance'] + account['savings_sbd_balance']
+    # Update our current info about the account
+    mvest_per_account.update({account['name']: account['vesting_shares']})
+    # Save current state of account
+    account['scanned'] = datetime.now()
+    db.account.update({'_id': account_name}, account, upsert=True)
+
 if __name__ == '__main__':
     # Let's find out how often blocks are generated!
     config = rpc.get_config()
     block_interval = config["STEEMIT_BLOCK_INTERVAL"]
-
+    load_accounts()
     # We are going to loop indefinitely
     while True:
 
