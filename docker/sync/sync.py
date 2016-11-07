@@ -262,6 +262,8 @@ def update_account(account_name):
     pprint("Updating account: " + account_name)
     # Load State
     state = rpc.get_accounts([account_name])
+    if not state:
+        return
     # Get Account Data
     account = collections.OrderedDict(sorted(state[0].items()))
     # Get followers
