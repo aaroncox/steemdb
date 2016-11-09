@@ -23,15 +23,18 @@
     {% for transfer in transfers %}
     <tr>
       <td>
-        <?php echo $this->timeAgo::mongo($transfer->_ts); ?>
+        <div class="sub header">
+          <?php echo $this->timeAgo::mongo($transfer->_ts); ?>
+          <br><a href="/block/<?= explode("/", (string) $transfer->_id)[0] ?>"><small style="color: #bbb">Block #<?= explode("/", (string) $transfer->_id)[0] ?></small></a>
+        </div>
       </td>
       <td>
-        <a href="/@{{ transfer.from }}">
+        <a href="/@{{ transfer.from }}/transfers">
           {{ transfer.from }}
         </a>
       </td>
       <td>
-        <a href="/@{{ transfer.to }}">
+        <a href="/@{{ transfer.to }}/transfers">
           {{ transfer.to }}
         </a>
       </td>
