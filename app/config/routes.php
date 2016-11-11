@@ -59,6 +59,11 @@ $router->add('/witnesses', [
   'action' => 'list'
 ]);
 
+$router->add('/witnesses/history', [
+  'controller' => 'witness',
+  'action' => 'history'
+]);
+
 $router->add('/api/tags/{tag}', [
   'controller' => 'api',
   'action' => 'tags'

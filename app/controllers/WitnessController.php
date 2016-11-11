@@ -6,6 +6,7 @@ use MongoDB\BSON\ObjectID;
 
 use SteemDB\Models\Witness;
 use SteemDB\Models\WitnessMiss;
+use SteemDB\Models\WitnessVote;
 use SteemDB\Models\Statistics;
 
 class WitnessController extends ControllerBase
@@ -79,5 +80,57 @@ class WitnessController extends ControllerBase
       $witness->misses_7day = (isset($misses[$witness->owner]) ? $misses[$witness->owner] : 0);
     }
     $this->view->witnesses = $witnesses;
+  }
+  public function historyAction() {
+    $this->view->votes = $votes = WitnessVote::aggregate([
+      [
+        '$sort' => ['_ts' => -1]
+      ],
+      [
+        '$limit' => 100
+      ],
+      [
+        '$lookup' => [
+          'from' => 'account',
+          'localField' => 'account',
+          'foreignField' => 'name',
+          'as' => '_account',
+        ]
+      ],
+      [
+        '$unwind' => '$_account'
+      ],
+      [
+        '$project' => [
+          '_id' => '$_id',
+          'weight' => ['$sum' => ['$_account.vesting_shares', '$_account.proxy_witness']],
+          'witness' => '$witness',
+          'account' => '$account',
+          'approve' => '$approve',
+          '_ts' => '$_ts',
+        ]
+      ]
+    ])->toArray();
+    // var_dump($votes[2]->_account[0]->proxied_vsf_votes); exit;
+    $this->view->misses = $misses = WitnessMiss::aggregate([
+      [
+        '$match' => [
+          'date' => [
+            '$gte' => new UTCDateTime(strtotime("-7 days") * 1000)
+          ]
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => '$witness',
+          'total' => [
+            '$sum' => '$increase'
+          ]
+        ]
+      ],
+      [
+        '$sort' => ['total' => -1]
+      ]
+    ])->toArray();
   }
 }
