@@ -358,6 +358,21 @@ class ApiController extends ControllerBase
     echo json_encode($data, JSON_PRETTY_PRINT);
   }
 
+  public function debtloadAction()
+  {
+    $results = PropsHistory::find([
+      [],
+      'sort' => array('date' => -1),
+      'limit' => 500
+    ]);
+    $data = [];
+    foreach($results as $doc) {
+      $key = $doc->time->toDateTime()->format("U");
+      $data[$key] = 1 - ($doc->current_supply / $doc->virtual_supply);
+    }
+    echo json_encode($data, JSON_PRETTY_PRINT);
+  }
+
   public function rsharesAction() {
     $data = Comment::rsharesAllocation()->toArray();
     echo json_encode($data, JSON_PRETTY_PRINT);
