@@ -9,4 +9,9 @@ class ChartsController extends ControllerBase
 
   }
 
+  public function rewardsAction()
+  {
+
+  }
+
 }
