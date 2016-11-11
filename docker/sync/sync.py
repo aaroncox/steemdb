@@ -172,7 +172,11 @@ def save_block(block, blockid):
     db.block_30d.update({'_id': blockid}, doc, upsert=True)
 
 def save_pow(op, block, blockid):
-    _id = str(blockid) + '-' + op['work'][1]['input']['worker_account']
+    _id = "unknown"
+    if isinstance(op['work'], list):
+        _id = str(blockid) + '-' + op['work'][1]['input']['worker_account']
+    else:
+        _id = str(blockid) + '-' + op['worker_account']
     doc = op.copy()
     doc.update({
         '_id': _id,
