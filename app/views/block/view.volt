@@ -32,14 +32,33 @@
         </a>
       </div>
     </div>
+    {% if current.transactions | length %}
     <div class="row">
       <div class="column">
-      <div class="ui header">
-        Transactions
+        <div class="ui header">
+          Transactions
+        </div>
+        <table class="ui definition table" style="table-layout: fixed">
+          <tbody>
+          {% for tx in current.transactions %}
+          <tr>
+            <td class="collapsing">
+              {{ loop.index0 }}
+            </td>
+            <td>{% include '_elements/definition_table' with ['data': tx] %}</td>
+          </tr>
+          {% endfor %}
+          </tbody>
+        </table>
       </div>
-        {% for tx in current.transactions %}
-          {% include '_elements/definition_table' with ['data': tx] %}
-        {% endfor %}
+    </div>
+    {% endif %}
+    <div class="row">
+      <div class="column">
+        <div class="ui header">
+          Block Details
+        </div>
+        {% include '_elements/definition_table' with ['data': current] %}
       </div>
     </div>
   </div>
