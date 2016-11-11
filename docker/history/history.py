@@ -96,7 +96,7 @@ def update_history():
               account['following_count'] += 1
           following_results = rpc.get_following(user, last_account, "blog", 100, api="follow")
         # Convert to Numbers
-        account['proxy_witness'] = float(sum(i for i in account['proxied_vsf_votes'])) / 1000000
+        account['proxy_witness'] = sum(float(i) for i in account['proxied_vsf_votes']) / 1000000
         for key in ['lifetime_bandwidth', 'reputation', 'to_withdraw']:
             account[key] = float(account[key])
         for key in ['balance', 'sbd_balance', 'sbd_seconds', 'savings_balance', 'savings_sbd_balance', 'vesting_balance', 'vesting_shares', 'vesting_withdraw_rate']:
