@@ -363,7 +363,7 @@ class ApiController extends ControllerBase
   {
     $results = PropsHistory::find([
       [],
-      'sort' => array('date' => -1),
+      'sort' => array('time' => -1),
       'limit' => 500
     ]);
     $data = [];
