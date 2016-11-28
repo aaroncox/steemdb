@@ -41,7 +41,7 @@
         <div class="ui centered header">
           No accounts found
           <div class="sub header">
-            SteemDB has no record of any accounts following this user.
+            golosdb has no record of any accounts following this user.
           </div>
         </div>
       </td>

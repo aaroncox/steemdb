@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no,minimal-ui' />
-    <title>steemdb</title>
+    <title>golosdb</title>
     <style>
       .ui.top.fixed.massive.menu .item {
         padding: 1.25em;
@@ -177,7 +177,7 @@
             </div> -->
             <div class="sixteen wide center aligned column">
               <h4 class="ui inverted header">
-                <a href="https://steemdb.com">steemdb</a>
+                <a href="https://golosdb.com">golosdb</a>
                 created by
                 <a href="https://golos.io/@jesta">@jesta</a>
               </h4>
