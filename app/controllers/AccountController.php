@@ -157,11 +157,22 @@ class AccountController extends ControllerBase
   public function witnessAction()
   {
     $account = $this->getAccount();
-    $this->view->votes = WitnessVote::find([
-      ["witness" => $account],
-      "sort" => ['_ts' => -1]
+    $this->view->votes = WitnessVote::aggregate([
+      ['$match' => [
+        'witness' => $account
+      ]],
+      ['$sort' => [
+        '_ts' => -1
+      ]],
+      ['$limit' => 100],
+      ['$lookup' => [
+        'from' => 'account',
+        'localField' => 'account',
+        'foreignField' => 'name',
+        'as' => 'voter'
+      ]],
     ]);
-    $this->view->witnessing = Account::aggregate(array(
+    $this->view->witnessing = Account::aggregate([
       ['$match' => [
           'witness_votes' => $account,
       ]],
@@ -170,7 +181,7 @@ class AccountController extends ControllerBase
         'weight' => ['$sum' => ['$vesting_shares', '$proxy_witness']]
       ]],
       ['$sort' => ['weight' => -1]]
-    ))->toArray();
+    ])->toArray();
     $this->view->witness_votes = array_sum(array_map(function($item) {
       return $item['weight'];
     }, $this->view->witnessing));

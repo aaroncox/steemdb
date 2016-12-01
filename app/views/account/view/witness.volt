@@ -23,6 +23,7 @@
           <th class="three wide">When</th>
           <th class="two wide"></th>
           <th>Account</th>
+          <th class="right aligned">Weight</th>
         </tr>
       </thead>
       <tbody>
@@ -46,6 +47,9 @@
             <a href="/@{{ vote.account }}">
               {{ vote.account }}
             </a>
+          </td>
+          <td class="right aligned">
+            {{ partial("_elements/witness_vesting_shares", ['weight': vote['voter'][0].vesting_shares]) }}
           </td>
         </tr>
       {% endfor %}
