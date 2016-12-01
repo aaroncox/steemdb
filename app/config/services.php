@@ -159,7 +159,7 @@ $di->set('logger', function ($filename = null, $format = null) {
 
 $di->set('steemd', function() {
   require_once(APP_PATH . '/libs/steemd.php');
-  return new Steemd('http://golos.steem.ws');
+  return new Steemd('http://node.golos.ws');
 });
 
 $di->set('memcached', function() {
