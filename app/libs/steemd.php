@@ -43,7 +43,7 @@ class steemd
     }
   }
 
-  public function getProps($username, $limit = 100, $skip = -1)
+  public function getProps()
   {
     try {
       return $this->client->call(0, 'get_dynamic_global_properties', []);
