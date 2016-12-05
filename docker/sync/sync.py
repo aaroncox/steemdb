@@ -300,7 +300,7 @@ def update_account(account_name):
     for key in ['balance', 'sbd_balance', 'sbd_seconds', 'savings_balance', 'savings_sbd_balance', 'vesting_balance', 'vesting_shares', 'vesting_withdraw_rate']:
         account[key] = float(account[key].split()[0])
     # Convert to Date
-    for key in ['created', 'last_account_recovery', 'last_account_update', 'last_active_proved', 'savings_sbd_last_interest_payment', 'savings_sbd_seconds_last_update', 'reset_request_time', 'last_bandwidth_update', 'last_market_bandwidth_update', 'last_owner_proved', 'last_owner_update', 'last_post', 'last_root_post', 'last_vote_time', 'next_vesting_withdrawal', 'sbd_last_interest_payment', 'sbd_seconds_last_update']:
+    for key in ['created','last_account_recovery','last_account_update','last_active_proved','last_bandwidth_update','last_market_bandwidth_update','last_owner_proved','last_owner_update','last_post','last_root_post','last_vote_time','next_vesting_withdrawal','savings_sbd_last_interest_payment','savings_sbd_seconds_last_update','sbd_last_interest_payment','sbd_seconds_last_update']:
         account[key] = datetime.strptime(account[key], "%Y-%m-%dT%H:%M:%S")
     # Combine Savings + Balance
     account['total_balance'] = account['balance'] + account['savings_balance']
