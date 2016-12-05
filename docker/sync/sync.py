@@ -267,8 +267,7 @@ def update_account(account_name):
     account['followers_count'] = 0
     account['followers_mvest'] = 0
     followers_results = rpc.get_followers(account_name, "", "blog", 100, api="follow")
-    while len(followers_results) > 1:
-      results = followers_results
+    while followers_results:
       last_account = ""
       for follower in followers_results:
         last_account = follower['follower']
@@ -277,20 +276,19 @@ def update_account(account_name):
           account['followers_count'] += 1
           if follower['follower'] in mvest_per_account.keys():
             account['followers_mvest'] += float(mvest_per_account[follower['follower']])
-      followers_results = rpc.get_followers(account_name, last_account, "blog", 100, api="follow")
+      followers_results = rpc.get_followers(account_name, last_account, "blog", 100, api="follow")[1:]
     # Get following
     account['following'] = []
     account['following_count'] = 0
     following_results = rpc.get_following(account_name, -1, "blog", 100, api="follow")
-    while len(following_results) > 1:
-      results = following_results
+    while following_results:
       last_account = ""
       for following in following_results:
         last_account = following['following']
         if 'blog' in following['what'] or 'posts' in following['what']:
           account['following'].append(following['following'])
           account['following_count'] += 1
-      following_results = rpc.get_following(account_name, last_account, "blog", 100, api="follow")
+      following_results = rpc.get_following(account_name, last_account, "blog", 100, api="follow")[1:]
     # Convert to Numbers
     account['proxy_witness'] = float(account['proxied_vsf_votes'][0]) / 1000000
     for key in ['lifetime_bandwidth', 'reputation', 'to_withdraw']:
