@@ -4,6 +4,9 @@
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no,minimal-ui' />
     <title>golosdb</title>
     <style>
+      .ui.blue.inverted.top.menu {
+        background-color: #1a5099 !important;
+      }
       .ui.vertical.sidebar.menu {
         padding-top: 3em !important;
       }
@@ -97,7 +100,7 @@
     <!-- Following Menu -->
     <div class="ui blue inverted top fixed mobile hidden menu">
       <div class="ui container">
-        <span class="header item">SteemDB</span>
+        <span class="header item">GolosDB</span>
         <a href="/" class="{{ (router.getControllerName() == 'comment') ? 'active' : '' }} item">posts</a>
         <a href="/accounts" class="{{ (router.getControllerName() == 'account' or router.getControllerName() == 'accounts') ? 'active' : '' }} item">accounts</a>
         <a href="/witnesses" class="{{ (router.getControllerName() == 'witness') ? 'active' : '' }} item">witnesses</a>
@@ -117,7 +120,7 @@
             <div class="results"></div>
           </div>
           <div class="ui dropdown item">
-            steem <i class="dropdown icon"></i>
+            golos <i class="dropdown icon"></i>
             <div class="menu">
               <a class="item" href="https://steemdb.com{{ router.getRewriteUri() }}">steem</a>
               <a class="item" href="https://golosdb.com{{ router.getRewriteUri() }}">golos</a>
@@ -184,11 +187,7 @@
                 created by
                 <a href="https://golos.io/@jesta">@jesta</a>
               </h4>
-<<<<<<< HEAD
-              <p>If you'd like to support this project, <a href="https://golos.io/~witnesses">vote <strong>jesta</strong> as witness.</a></p>
-=======
-              <!-- <p>If you'd like to support this project, <a href="https://steemit.com/~witnesses">vote <strong>jesta</strong> as witness.</a></p> -->
->>>>>>> f8ad47e... Some menu work
+              <p>If you'd like to support this project, <a href="https://steemit.com/~witnesses">vote <strong>jesta</strong> as witness.</a></p>
             </div>
           </div>
         </div>
