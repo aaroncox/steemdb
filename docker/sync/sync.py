@@ -76,9 +76,9 @@ def save_transfer(op, block, blockid):
         'type': transfer['amount'].split()[1]
     })
     db.transfer.update({'_id': _id}, transfer, upsert=True)
-    update_account(op['from'])
+    queue_update_account(op['from'])
     if op['from'] != op['to']:
-        update_account(op['to'])
+        queue_update_account(op['to'])
 
 def save_curation_reward(op, block, blockid):
     reward = op.copy()
@@ -89,7 +89,7 @@ def save_curation_reward(op, block, blockid):
         'reward': float(reward['reward'].split()[0])
     })
     db.curation_reward.update({'_id': _id}, reward, upsert=True)
-    update_account(op['curator'])
+    queue_update_account(op['curator'])
 
 def save_author_reward(op, block, blockid):
     reward = op.copy()
@@ -101,7 +101,7 @@ def save_author_reward(op, block, blockid):
     for key in ['sbd_payout', 'steem_payout', 'vesting_payout']:
         reward[key] = float(reward[key].split()[0])
     db.author_reward.update({'_id': _id}, reward, upsert=True)
-    update_account(op['author'])
+    queue_update_account(op['author'])
 
 def save_vesting_deposit(op, block, blockid):
     vesting = op.copy()
@@ -112,9 +112,9 @@ def save_vesting_deposit(op, block, blockid):
         'amount': float(vesting['amount'].split()[0])
     })
     db.vesting_deposit.update({'_id': _id}, vesting, upsert=True)
-    update_account(op['from'])
+    queue_update_account(op['from'])
     if op['from'] != op['to']:
-        update_account(op['to'])
+        queue_update_account(op['to'])
 
 def save_vesting_withdraw(op, block, blockid):
     vesting = op.copy()
@@ -126,9 +126,9 @@ def save_vesting_withdraw(op, block, blockid):
     for key in ['deposited', 'withdrawn']:
         vesting[key] = float(vesting[key].split()[0])
     db.vesting_withdraw.update({'_id': _id}, vesting, upsert=True)
-    update_account(op['from_account'])
+    queue_update_account(op['from_account'])
     if op['from_account'] != op['to_account']:
-        update_account(op['to_account'])
+        queue_update_account(op['to_account'])
 
 def save_custom_json(op, block, blockid):
     try:
@@ -155,9 +155,9 @@ def save_follow(data, op, block, blockid):
         '_ts': datetime.strptime(block['timestamp'], "%Y-%m-%dT%H:%M:%S"),
     })
     db.follow.update(query, doc, upsert=True)
-    update_account(doc['follower'])
+    queue_update_account(doc['follower'])
     if doc['follower'] != doc['following']:
-        update_account(doc['following'])
+        queue_update_account(doc['following'])
 
 def save_reblog(data, op, block, blockid):
     doc = data[1].copy()
@@ -215,9 +215,9 @@ def save_witness_vote(op, block, blockid):
         '_ts': datetime.strptime(block['timestamp'], "%Y-%m-%dT%H:%M:%S")
     })
     db.witness_vote.update(query, witness_vote, upsert=True)
-    update_account(witness_vote['account'])
+    queue_update_account(witness_vote['account'])
     if witness_vote['account'] != witness_vote['witness']:
-        update_account(witness_vote['witness'])
+        queue_update_account(witness_vote['witness'])
 
 def update_comment(author, permlink):
     _id = author + '/' + permlink
@@ -256,14 +256,19 @@ mvest_per_account = {}
 def load_accounts():
     pprint("Loading all accounts")
     for account in db.account.find():
-        mvest_per_account.update({account['name']: account['vesting_shares']})
+        if 'vesting_shares' in account:
+            mvest_per_account.update({account['name']: account['vesting_shares']})
+
+def queue_update_account(account_name):
+    # pprint("Queue Update: " + account_name)
+    db.account.update({'_id': account_name}, {'$set': {'_dirty': True}}, upsert=True)
 
 def update_account(account_name):
-    pprint("Updating account: " + account_name)
+    # pprint("Update Account: " + account_name)
     # Load State
     state = rpc.get_accounts([account_name])
     if not state:
-        return
+      return
     # Get Account Data
     account = collections.OrderedDict(sorted(state[0].items()))
     # Get followers
@@ -309,6 +314,8 @@ def update_account(account_name):
     mvest_per_account.update({account['name']: account['vesting_shares']})
     # Save current state of account
     account['scanned'] = datetime.now()
+    if '_dirty' in account:
+        del account['_dirty']
     db.account.update({'_id': account_name}, account, upsert=True)
 
 if __name__ == '__main__':
@@ -326,16 +333,16 @@ if __name__ == '__main__':
         # Don't update if it's been scanned within the six hours
         scan_ignore = datetime.now() - timedelta(hours=6)
 
-        # Find 100 previous comments to update
+        # -- Process Queue - Find 100 previous comments to update
         queue = db.comment.find({
             'created': {'$gt': max_date},
             'scanned': {'$lt': scan_ignore},
         }).sort([('scanned', 1)]).limit(queue_length)
-        pprint("Processing Queue - " + str(queue_length) + " of " + str(queue.count()))
+        pprint("[Queue] Comments - " + str(queue_length) + " of " + str(queue.count()))
         for item in queue:
             update_comment(item['author'], item['permlink'])
 
-        # Find 100 comments that have past the last payout and need an update
+        # -- Process Queue - Find 100 comments that have past the last payout and need an update
         queue = db.comment.find({
             'cashout_time': {
               '$lt': datetime.now()
@@ -348,9 +355,18 @@ if __name__ == '__main__':
               '$gt': 0
             }
         }).limit(queue_length)
-        pprint("Processing Payout Queue - " + str(queue_length) + " of " + str(queue.count()))
+        pprint("[Queue] Past Payouts - " + str(queue_length) + " of " + str(queue.count()))
         for item in queue:
             update_comment(item['author'], item['permlink'])
+
+        # -- Process Queue - Dirty Accounts
+        queue_length = 20
+        queue = db.account.find({
+            '_dirty': True
+        }).limit(queue_length)
+        pprint("[Queue] Updating Accounts - " + str(queue_length) + " of " + str(queue.count()))
+        for item in queue:
+            update_account(item['_id'])
 
         # Process New Blocks
         props = rpc.get_dynamic_global_properties()
