@@ -4,8 +4,8 @@
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no,minimal-ui' />
     <title>steemdb</title>
     <style>
-      .ui.top.fixed.massive.menu .item {
-        padding: 1.25em;
+      .ui.vertical.sidebar.menu {
+        padding-top: 3em !important;
       }
       body.pushable>.pusher {
         background: #efefef;
@@ -77,37 +77,30 @@
   </head>
   <body>
 
-    <div class="ui fixed inverted main menu">
+    <div class="ui fixed inverted blue main menu">
       <div class="ui container">
         <a class="launch icon item">
           <i class="content icon"></i>
         </a>
 
-          <div class="item">
-            Menu
-          </div>
-
         <div class="right menu">
-          <!--
-          <div class="item">
-            <div class="ui hidden right aligned search input" id="search">
-              <div class="ui transparent icon input">
-                <input class="prompt" type="text" placeholder="Search...">
-                <i class="inverted search link icon" data-content="Search UI"></i>
-              </div>
-              <div class="results"></div>
+          <div class="ui category search item">
+            <div class="ui icon input">
+              <input class="prompt" type="text" placeholder="Search accounts...">
+              <i class="search icon"></i>
             </div>
+            <div class="results"></div>
           </div>
-          -->
         </div>
       </div>
     </div>
     <!-- Following Menu -->
-    <div class="ui large blue inverted top fixed massive menu">
+    <div class="ui blue inverted top fixed mobile hidden menu">
       <div class="ui container">
         <a href="/" class="{{ (router.getControllerName() == 'comment') ? 'active' : '' }} item">posts</a>
         <a href="/accounts" class="{{ (router.getControllerName() == 'account' or router.getControllerName() == 'accounts') ? 'active' : '' }} item">accounts</a>
         <a href="/witnesses" class="{{ (router.getControllerName() == 'witness') ? 'active' : '' }} item">witnesses</a>
+        <!-- <a href="//blog.steemdb.com" class="item">updates</a> -->
         <a href="/labs" class="{{ (router.getControllerName() == 'labs') ? 'active' : '' }} item">labs</a>
         <div class="right menu">
           <div class="item">
@@ -122,6 +115,13 @@
             </div>
             <div class="results"></div>
           </div>
+          <div class="ui dropdown item">
+            steem <i class="dropdown icon"></i>
+            <div class="menu">
+              <a class="item" href="https://steemdb.com{{ router.getRewriteUri() }}">steem</a>
+              <a class="item" href="https://golosdb.com{{ router.getRewriteUri() }}">golos</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -129,12 +129,14 @@
     <!-- Sidebar Menu -->
     <div class="ui vertical inverted sidebar menu">
       <a href="/" class="{{ (router.getControllerName() == 'comment') ? 'active' : '' }} item">posts</a>
-      <a href="/accounts" class="{{ (router.getControllerName() == 'account') ? 'active' : '' }} item">accounts</a>
+      <a href="/accounts" class="{{ (router.getControllerName() == 'account' or router.getControllerName() == 'accounts') ? 'active' : '' }} item">accounts</a>
       <a href="/witnesses" class="{{ (router.getControllerName() == 'witness') ? 'active' : '' }} item">witnesses</a>
+      <!-- <a href="//blog.steemdb.com" class="item">updates</a> -->
+      <a href="/labs" class="{{ (router.getControllerName() == 'labs') ? 'active' : '' }} item">labs</a>
     </div>
 
     <!-- Page Contents -->
-    <div class="pusher" style="padding-top: 5em">
+    <div class="pusher" style="padding-top: 3em">
       {% block header %}{% endblock %}
 
       {% if this.flashSession.has() %}
@@ -181,7 +183,7 @@
                 created by
                 <a href="https://steemit.com/@jesta">@jesta</a>
               </h4>
-              <p>If you'd like to support this project, <a href="https://steemit.com/~witnesses">vote <strong>jesta</strong> as witness.</a></p>
+              <!-- <p>If you'd like to support this project, <a href="https://steemit.com/~witnesses">vote <strong>jesta</strong> as witness.</a></p> -->
             </div>
           </div>
         </div>
@@ -212,9 +214,9 @@
         $('.ui.sortable.table').tablesort();
 
         // create sidebar and attach to menu open
-        // $('.ui.sidebar')
-        //   .sidebar('attach events', '.toc.item')
-        // ;
+        $('.ui.sidebar')
+          .sidebar('attach events', '.launch.item')
+        ;
 
         $('.ui.dropdown')
           .dropdown({
