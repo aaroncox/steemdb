@@ -7,6 +7,7 @@ use SteemDB\Models\Block30d;
 use SteemDB\Models\Comment;
 use SteemDB\Models\CurationReward;
 use SteemDB\Models\Vote;
+use SteemDB\Models\VestingWithdraw;
 use MongoDB\BSON\UTCDateTime;
 
 class LabsController extends ControllerBase
@@ -23,6 +24,45 @@ class LabsController extends ControllerBase
     ];
     $this->view->data = Comment::rsharesAllocation($dates)->toArray();
   }
+
+  public function powerdownAction() {
+    $transactions = VestingWithdraw::aggregate([
+      [
+        '$match' => [
+          '_ts' => [
+            '$gte' => new UTCDateTime(strtotime("-30 days") * 1000),
+            '$lte' => new UTCDateTime(strtotime("midnight") * 1000),
+          ],
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => [
+            'user' => '$from_account',
+          ],
+          'count' => ['$sum' => 1],
+          'withdrawn' => ['$sum' => '$withdrawn'],
+          'deposited' => ['$sum' => '$deposited'],
+          'deposited_to' => ['$addToSet' => '$to_account'],
+        ],
+      ],
+      [
+        '$lookup' => [
+          'from' => 'account',
+          'localField' => '_id.user',
+          'foreignField' => 'name',
+          'as' => 'account'
+        ]
+      ],
+      [
+        '$sort' => [
+          'withdrawn' => -1
+        ]
+      ]
+    ])->toArray();
+    $this->view->powerdowns = $transactions;
+  }
+
   public function powerupAction() {
     // {transactions: {$elemMatch: {'operations.0.0': 'transfer_to_vesting'}}
     $transactions = Block30d::aggregate([
