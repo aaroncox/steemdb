@@ -97,6 +97,7 @@
     <!-- Following Menu -->
     <div class="ui blue inverted top fixed mobile hidden menu">
       <div class="ui container">
+        <span class="header item">SteemDB</span>
         <a href="/" class="{{ (router.getControllerName() == 'comment') ? 'active' : '' }} item">posts</a>
         <a href="/accounts" class="{{ (router.getControllerName() == 'account' or router.getControllerName() == 'accounts') ? 'active' : '' }} item">accounts</a>
         <a href="/witnesses" class="{{ (router.getControllerName() == 'witness') ? 'active' : '' }} item">witnesses</a>
