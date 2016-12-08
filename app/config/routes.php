@@ -16,6 +16,13 @@ $router->add('/@([-a-z0-9.]+)/([-a-z0-9]+)', [
   'action' => 2
 ])->setName("account-view-section");
 
+$router->add('/@([-a-z0-9.]+)/curation/([-0-9]+)', [
+  'controller' => 'account',
+  'account' => 1,
+  'date' => 2,
+  'action' => 'curationDate'
+])->setName("account-view-curation-date");
+
 $router->add('/block/([a-z0-9]+)', [
   'controller' => 'block',
   'action' => 'view',

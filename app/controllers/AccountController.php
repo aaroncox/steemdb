@@ -258,14 +258,25 @@ class AccountController extends ControllerBase
   public function curationAction()
   {
     $account = $this->getAccount();
-    $this->view->page = $page = (int) $this->request->get("page") ?: 1;
-    $limit = 50;
-    $this->view->date = null;
-    $this->view->curation = CurationReward::find(array(
-      array('curator' => $account),
-      'sort' => array('_ts' => -1),
-      'skip' => $limit * ($page - 1),
-      'limit' => $limit,
+    $this->view->curation = CurationReward::aggregate(array(
+      ['$match' => [
+        'curator' => $account,
+        ]],
+      ['$group' => [
+        '_id' => [
+          'doy' => ['$dayOfYear' => '$_ts'],
+          'year' => ['$year' => '$_ts'],
+          'month' => ['$month' => '$_ts'],
+          'week' => ['$week' => '$_ts'],
+          'day' => ['$dayOfMonth' => '$_ts']
+        ],
+        '_ts' => ['$first' => '$_ts'],
+        'reward' => ['$sum' => '$reward'],
+        'votes' => ['$sum' => 1],
+        ]],
+      ['$sort' => [
+        '_ts' => -1,
+        ]],
     ));
     $this->view->stats = CurationReward::aggregate([
       [
@@ -312,10 +323,25 @@ class AccountController extends ControllerBase
         ]
       ]
     ])->toArray();
-    $this->view->pages = ceil(CurationReward::count(array(
-      array('curator' => $account)
-    )) / $limit);
     $this->view->chart = true;
+    $this->view->pick("account/view");
+  }
+
+  public function curationDateAction() {
+    $account = $this->getAccount();
+    $this->view->date = $this->dispatcher->getParam("date");
+    $this->view->curation = CurationReward::find(array(
+      array(
+        'curator' => $account,
+        '_ts' => [
+          '$gte' => new UTCDateTime(strtotime($this->view->date) * 1000),
+          '$lte' => new UTCDateTime((strtotime($this->view->date) + 86400) * 1000),
+        ]
+      ),
+      'sort' => array('_ts' => -1),
+      'skip' => $limit * ($page - 1),
+      'limit' => $limit,
+    ));
     $this->view->pick("account/view");
   }
 

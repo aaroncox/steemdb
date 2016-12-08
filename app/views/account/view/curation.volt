@@ -16,7 +16,7 @@
       <div class="ui segment">
         <div class="ui header">
         +<?php echo $this->largeNumber::format($stats[0]->day); ?>
-        <div class="sub header">1-Day</div>
+        <div class="sub header">Last 24 hrs</div>
       </div>
       </div>
     </div>
@@ -24,7 +24,7 @@
       <div class="ui segment">
         <div class="ui header">
         +<?php echo $this->largeNumber::format($stats[0]->week); ?>
-        <div class="sub header">7-Day</div>
+        <div class="sub header">Last 7 Days</div>
       </div>
       </div>
     </div>
@@ -32,53 +32,59 @@
       <div class="ui segment">
         <div class="ui header">
         +<?php echo $this->largeNumber::format($stats[0]->month); ?>
-        <div class="sub header">30-day</div>
+        <div class="sub header">Last 30 days</div>
       </div>
       </div>
     </div>
   </div>
 </div>
-{% for reward in curation %}
-  {% if reward._ts.toDateTime().format("Ymd") != date %}
-    {% if date != null %}
-      </tbody>
-    </table>
-    {% endif %}
-    <div class="ui header">
-      {{ reward._ts.toDateTime().format("Y-m-d") }}
-      {% set date = reward._ts.toDateTime().format("Ymd") %}
-    </div>
-    <table class="ui striped table">
-      <thead>
+<table class="ui striped sortable table">
+  <thead>
+    <tr>
+      <th class="right aligned">Date</th>
+      <th class="right aligned">Count</th>
+      <th class="right aligned">VESTS Gained</th>
+      <th>Estimated SP</th>
+      <th class="right aligned">Acct % Increase</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for reward in curation %}
         <tr>
-          <th>Content/Author</th>
-          <th class="collapsing right aligned">VEST/SP</th>
-        </tr>
-      </thead>
-      <tbody class="infinite-scroll">
-  {% endif %}
-        <tr>
-          <td>
-            <a href="/tag/@{{ reward.comment_author }}/{{ reward.comment_permlink }}">
-              {{ reward.comment_permlink }}
+          <td class="collapsing right aligned">
+            <a href="/@{{ account.name }}/curation/{{ reward._ts.toDateTime().format("Y-m-d") }}">
+              {{ reward._ts.toDateTime().format("Y-m-d") }}
             </a>
-            <br>
-            by <a href="/@{{ reward.comment_author }}">{{ reward.comment_author }}</a>,
-            <span data-popup data-content="{{ reward._ts.toDateTime().format("Y-m-d H:i:s") }} UTC" data-position="right center" data-variation="inverted">
-              <?php echo $this->timeAgo::mongo($reward->_ts); ?>
-            </span>
           </td>
           <td class="collapsing right aligned">
-              <div class="ui <?php echo $this->largeNumber::color($reward->reward)?> label" data-popup data-content="<?php echo number_format($reward->reward, 3, ".", ",") ?> VESTS" data-variation="inverted" data-position="left center">
-                <?php echo $this->largeNumber::format($reward->reward); ?>
-              </div>
-              <br>
-              <small>
-                ~<?php echo $this->convert::vest2sp($reward->reward, ""); ?> SP*
-              </small>
+            {{ reward.votes }}
+          </td>
+          <td class="collapsing right aligned">
+            <div style="display: none"><?php echo number_format($reward->reward, 0, "", "") ?></div>
+            <div class="ui <?php echo $this->largeNumber::color($reward->reward)?> label" data-popup data-content="<?php echo number_format($reward->reward, 3, ".", ",") ?> VESTS" data-variation="inverted" data-position="left center">
+              <?php echo $this->largeNumber::format($reward->reward); ?>
+            </div>
+          </td>
+          <td>
+            ~<?php echo $this->convert::vest2sp($reward->reward, ""); ?> SP*
+          </td>
+          <td class="right aligned">
+            <span style="color: #ccc">
+              +<?php
+                $percentage = (string) number_format($reward->reward / $account->vesting_shares * 100, 8, ".", "");
+                $percentage_start = false;
+                for($i = 0; $i <= strlen($percentage); $i++) {
+                  if(is_numeric($percentage[$i]) && !in_array($percentage[$i], ['0']) && !$percentage_start) {
+                    echo "<span style='color: #000'>";
+                    $percentage_start = true;
+                  }
+                  echo $percentage[$i];
+                }
+              ?></span>%
+            </span>
           </td>
         </tr>
-{% else %}
+    {% else %}
         <tr>
           <td colspan="10">
             <div class="ui header">
@@ -86,7 +92,6 @@
             </div>
           </td>
         </tr>
-{% endfor %}
-      </tbody>
-    </table>
-{% include "_elements/paginator.volt" %}
+    {% endfor %}
+  </tbody>
+</table>
