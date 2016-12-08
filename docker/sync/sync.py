@@ -40,6 +40,8 @@ def process_op(opObj, block, blockid):
         # Update the comment and vote
         update_comment(op['author'], op['permlink'])
         save_vote(op, block, blockid)
+    if opType =="convert":
+        save_convert(op, block, blockid)
     if opType == "custom_json":
         save_custom_json(op, block, blockid)
     if opType == "account_witness_vote":
@@ -65,6 +67,18 @@ def process_block(block, blockid):
         process_op(opObj, block, blockid)
     for opObj in ops:
       process_op(opObj['op'], block, blockid)
+
+def save_convert(op, block, blockid):
+    convert = op.copy()
+    _id = str(blockid) + '/' + str(op['requestid'])
+    convert.update({
+        '_id': _id,
+        '_ts': datetime.strptime(block['timestamp'], "%Y-%m-%dT%H:%M:%S"),
+        'amount': float(convert['amount'].split()[0]),
+        'type': convert['amount'].split()[1]
+    })
+    queue_update_account(op['owner'])
+    db.convert.update({'_id': _id}, convert, upsert=True)
 
 def save_transfer(op, block, blockid):
     transfer = op.copy()
