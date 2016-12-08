@@ -23,6 +23,9 @@
               <a class="{{ filter == 'steem' ? 'active' : '' }} item" href="/accounts/steem">
                 STEEM
               </a>
+              <a class="{{ filter == 'powerdown' ? 'active' : '' }} item" href="/accounts/powerdown">
+                Power Down
+              </a>
             </div>
           </div>
           <a class="{{ filter == 'posts' ? 'active' : '' }} item" href="/accounts/posts">
@@ -56,6 +59,7 @@
               <th class="center aligned">Followers</th>
               <th class="center aligned">Posts</th>
               <th class="right aligned">Vests</th>
+              <th class="right aligned">Powerdown</th>
               <th class="right aligned">Balances</th>
             </tr>
           </thead>
@@ -83,6 +87,14 @@
               </td>
               <td class="collapsing right aligned">
                 {{ partial("_elements/vesting_shares", ['current': account]) }}
+              </td>
+              <td class="collapsing right aligned">
+                <?php if(is_numeric($account->vesting_withdraw_rate) && $account->vesting_withdraw_rate > 0.01): ?>
+                  <div data-popup data-content="<?php echo number_format($current->vesting_withdraw_rate, 3, ".", ",") ?> VESTS" data-variation="inverted" data-position="left center">
+                    <?php echo $this->largeNumber::format($current->vesting_withdraw_rate); ?> (<?php echo round($current->vesting_withdraw_rate / $current->vesting_shares * 100, 2) ?>%)
+                  </div>
+                  +<?php echo $this->convert::vest2sp($current->vesting_withdraw_rate); ?>/Week
+                <?php endif; ?>
               </td>
               <td class="collapsing right aligned">
                 <div class="ui small header">

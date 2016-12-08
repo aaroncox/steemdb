@@ -17,6 +17,11 @@ class AccountsController extends ControllerBase
     );
     if($filter) {
       switch($filter) {
+        case "powerdown":
+          $sort = array(
+            "vesting_withdraw_rate" => -1
+          );
+          break;
         case "followers_mvest":
           $sort = array(
             "followers_mvest" => -1,
