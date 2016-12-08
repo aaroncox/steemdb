@@ -21,7 +21,8 @@ mvest_per_account = {}
 def load_accounts():
     pprint("SteemDB - Loading mvest per account")
     for account in db.account.find():
-        mvest_per_account.update({account['name']: account['vesting_shares']})
+        if "name" in account.keys():
+            mvest_per_account.update({account['name']: account['vesting_shares']})
 
 def update_history():
 
