@@ -80,11 +80,11 @@ def update_history():
               account['followers_count'] += 1
               if follower['follower'] in mvest_per_account.keys():
                 account['followers_mvest'] += float(mvest_per_account[follower['follower']])
-          followers_results = rpc.get_followers(account_name, last_account, "blog", 100, api="follow")[1:]
+          followers_results = rpc.get_followers(user, last_account, "blog", 100, api="follow")[1:]
         # Get following
         account['following'] = []
         account['following_count'] = 0
-        following_results = rpc.get_following(account_name, -1, "blog", 100, api="follow")
+        following_results = rpc.get_following(user, -1, "blog", 100, api="follow")
         while following_results:
           last_account = ""
           for following in following_results:
@@ -92,7 +92,7 @@ def update_history():
             if 'blog' in following['what'] or 'posts' in following['what']:
               account['following'].append(following['following'])
               account['following_count'] += 1
-          following_results = rpc.get_following(account_name, last_account, "blog", 100, api="follow")[1:]
+          following_results = rpc.get_following(user, last_account, "blog", 100, api="follow")[1:]
         # Convert to Numbers
         account['proxy_witness'] = sum(float(i) for i in account['proxied_vsf_votes']) / 1000000
         for key in ['lifetime_bandwidth', 'reputation', 'to_withdraw']:
