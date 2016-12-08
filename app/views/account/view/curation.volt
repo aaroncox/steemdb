@@ -71,7 +71,7 @@
           <td class="right aligned">
             <span style="color: #ccc">
               +<?php
-                $percentage = (string) number_format($reward->reward / $account->vesting_shares * 100, 8, ".", "");
+                $percentage = (string) number_format($reward->reward / $account->vesting_shares * 100, 6, ".", "");
                 $percentage_start = false;
                 for($i = 0; $i <= strlen($percentage); $i++) {
                   if(is_numeric($percentage[$i]) && !in_array($percentage[$i], ['0']) && !$percentage_start) {
