@@ -27,7 +27,7 @@ $router->add('/@([-a-z0-9.]+)/followers/whales', [
   'controller' => 'account',
   'account' => 1,
   'action' => 'followersWhales'
-])->setName("account-view-curation-date");
+]);
 
 $router->add('/block/([a-z0-9]+)', [
   'controller' => 'block',
