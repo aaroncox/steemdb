@@ -4,32 +4,32 @@
  */
 $router = new Phalcon\Mvc\Router();
 
-$router->add('/@([-a-z0-9.]+)', [
+$router->add('/@([-a-zA-Z0-9.]+)', [
   'controller' => 'account',
   'action' => 'view',
   'account' => 1
 ])->setName("account-view");
 
-$router->add('/@([-a-z0-9.]+)/([-a-z0-9]+)', [
+$router->add('/@([-a-zA-Z0-9.]+)/([-a-zA-Z0-9]+)', [
   'controller' => 'account',
   'account' => 1,
   'action' => 2
 ])->setName("account-view-section");
 
-$router->add('/@([-a-z0-9.]+)/curation/([-0-9]+)', [
+$router->add('/@([-a-zA-Z0-9.]+)/curation/([-0-9]+)', [
   'controller' => 'account',
   'account' => 1,
   'date' => 2,
   'action' => 'curationDate'
 ])->setName("account-view-curation-date");
 
-$router->add('/@([-a-z0-9.]+)/followers/whales', [
+$router->add('/@([-a-zA-Z0-9.]+)/followers/whales', [
   'controller' => 'account',
   'account' => 1,
   'action' => 'followersWhales'
 ]);
 
-$router->add('/block/([a-z0-9]+)', [
+$router->add('/block/([a-zA-Z0-9]+)', [
   'controller' => 'block',
   'action' => 'view',
   'height' => 1

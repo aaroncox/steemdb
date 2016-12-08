@@ -24,7 +24,7 @@ class AccountController extends ControllerBase
 
   private function getAccount()
   {
-    $account = $this->dispatcher->getParam("account");
+    $account = strtolower($this->dispatcher->getParam("account"));
     $cacheKey = 'account-'.$account;
     // Load account from the database
     $this->view->account = Account::findFirst(array(
