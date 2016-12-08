@@ -15,7 +15,7 @@
       <th>When</th>
       <th>From</th>
       <th>To</th>
-      <th>STEEM</th>
+      <th class="right aligned">STEEM</th>
     </tr>
   </thead>
   <tbody>
@@ -34,7 +34,7 @@
           {{ power.to }}
         </a>
       </td>
-      <td>
+      <td class="right aligned">
         {{ power.amount }} STEEM
       </td>
     </tr>
