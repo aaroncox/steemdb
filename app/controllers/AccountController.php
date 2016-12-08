@@ -144,6 +144,16 @@ class AccountController extends ControllerBase
     $this->view->pick("account/view");
   }
 
+  public function followersWhalesAction()
+  {
+    $account = $this->getAccount();
+    $this->view->followers = Account::find([
+      ['name' => ['$in' => $this->view->account->followers]],
+      'sort' => ['vesting_shares' => -1],
+    ]);
+    $this->view->pick("account/view");
+  }
+
   public function followingAction()
   {
     $account = $this->getAccount();

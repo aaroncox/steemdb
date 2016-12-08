@@ -4,6 +4,7 @@
     Newest followers displayed first
   </div>
 </h3>
+{% include 'account/_elements/followers_navigation' with ['active': 'recent'] %}
 <table class="ui table">
   <thead>
     <tr>

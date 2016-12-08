@@ -23,6 +23,12 @@ $router->add('/@([-a-z0-9.]+)/curation/([-0-9]+)', [
   'action' => 'curationDate'
 ])->setName("account-view-curation-date");
 
+$router->add('/@([-a-z0-9.]+)/followers/whales', [
+  'controller' => 'account',
+  'account' => 1,
+  'action' => 'followersWhales'
+])->setName("account-view-curation-date");
+
 $router->add('/block/([a-z0-9]+)', [
   'controller' => 'block',
   'action' => 'view',
@@ -44,7 +50,6 @@ $router->add('/powerup', [
   'controller' => 'labs',
   'action' => 'powerup'
 ]);
-
 
 $router->add('/posts', [
   'controller' => 'comment',
