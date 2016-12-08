@@ -22,9 +22,10 @@
       <thead>
         <tr>
           <th>Content</th>
-          <th class="collapsing right aligned">STEEM</th>
-          <th class="collapsing right aligned">VEST/SP</th>
           <th class="collapsing right aligned">SBD</th>
+          <th class="collapsing right aligned">STEEM</th>
+          <th class="collapsing right aligned">SP</th>
+          <th class="collapsing right aligned">VEST</th>
         </tr>
       </thead>
       <tbody class="infinite-scroll">
@@ -38,22 +39,17 @@
             <?php echo $this->timeAgo::mongo($reward->_ts); ?>
           </td>
           <td class="collapsing right aligned">
-            <div class="ui small header">
-              <?php echo $this->largeNumber::format($reward->steem_payout); ?> STEEM
-            </div>
+            <?php echo $this->largeNumber::format($reward->sbd_payout); ?> SBD
+          </td>
+          <td class="collapsing right aligned">
+            <?php echo $this->largeNumber::format($reward->steem_payout); ?> STEEM
+          </td>
+          <td class="collapsing right aligned">
+            ~<?php echo $this->convert::vest2sp($reward->vesting_payout, ""); ?> SP*
           </td>
           <td class="collapsing right aligned">
             <div class="ui <?php echo $this->largeNumber::color($reward->vesting_payout)?> label" data-popup data-content="<?php echo number_format($reward->vesting_payout, 3, ".", ",") ?> VESTS" data-variation="inverted" data-position="left center">
               <?php echo $this->largeNumber::format($reward->vesting_payout); ?>
-            </div>
-            <br>
-            <small>
-              ~<?php echo $this->convert::vest2sp($reward->vesting_payout, ""); ?> SP*
-            </small>
-          </td>
-          <td class="collapsing right aligned">
-            <div class="ui small header">
-              <?php echo $this->largeNumber::format($reward->sbd_payout); ?> SBD
             </div>
           </td>
         </tr>
