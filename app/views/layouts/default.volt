@@ -101,7 +101,7 @@
         <a href="/" class="{{ (router.getControllerName() == 'comment') ? 'active' : '' }} item">posts</a>
         <a href="/accounts" class="{{ (router.getControllerName() == 'account' or router.getControllerName() == 'accounts') ? 'active' : '' }} item">accounts</a>
         <a href="/witnesses" class="{{ (router.getControllerName() == 'witness') ? 'active' : '' }} item">witnesses</a>
-        <!-- <a href="//blog.steemdb.com" class="item">updates</a> -->
+        <a href="https://blog.steemdb.com" class="item">updates</a>
         <a href="/labs" class="{{ (router.getControllerName() == 'labs') ? 'active' : '' }} item">labs</a>
         <div class="right menu">
           <div class="item">
@@ -132,7 +132,7 @@
       <a href="/" class="{{ (router.getControllerName() == 'comment') ? 'active' : '' }} item">posts</a>
       <a href="/accounts" class="{{ (router.getControllerName() == 'account' or router.getControllerName() == 'accounts') ? 'active' : '' }} item">accounts</a>
       <a href="/witnesses" class="{{ (router.getControllerName() == 'witness') ? 'active' : '' }} item">witnesses</a>
-      <!-- <a href="//blog.steemdb.com" class="item">updates</a> -->
+      <a href="https://blog.steemdb.com" class="item">updates</a>
       <a href="/labs" class="{{ (router.getControllerName() == 'labs') ? 'active' : '' }} item">labs</a>
     </div>
 
