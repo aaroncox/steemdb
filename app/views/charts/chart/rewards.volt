@@ -59,7 +59,7 @@
     legend.maxEntriesPerRow(5)
 
     var yLabelValue = new Plottable.Components.AxisLabel("SBD/STEEM", "90");
-    var xLabelTitle = new Plottable.Components.TitleLabel("90-day Author Rewards", "0");
+    var xLabelTitle = new Plottable.Components.TitleLabel("Author Reward History", "0");
     var yLabelVest = new Plottable.Components.AxisLabel("VESTS", "270");
 
 
