@@ -29,7 +29,15 @@ class steemd
   public function getAccount($account)
   {
     try {
-      return $this->client->call(0, 'get_accounts', [[$account]]);
+      $return = $this->client->call(0, 'get_accounts', [[$account]]);
+      try {
+        foreach($return as $index => $account) {
+          $return[$index]['profile'] = json_decode($account['json_metadata'], true)['profile'];
+        }
+      } catch (Exception $e) {
+
+      }
+      return $return;
     } catch (Exception $e) {
       return array();
     }
