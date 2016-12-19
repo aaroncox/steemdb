@@ -9,6 +9,7 @@ use SteemDB\Models\AuthorReward;
 use SteemDB\Models\Block;
 use SteemDB\Models\Block30d;
 use SteemDB\Models\Comment;
+use SteemDB\Models\CurationReward;
 use SteemDB\Models\Statistics;
 use SteemDB\Models\Vote;
 use SteemDB\Models\AccountHistory;
@@ -635,6 +636,39 @@ class ApiController extends ControllerBase
           'sbd' => ['$sum' => '$sbd_payout'],
           'steem' => ['$sum' => '$steem_payout'],
           'vest' => ['$sum' => '$vesting_payout']
+        ]
+      ],
+      [
+        '$sort' => [
+          '_id.year' => 1,
+          '_id.doy' => 1
+        ]
+      ]
+    ])->toArray();
+    echo json_encode($rewards, JSON_PRETTY_PRINT);
+  }
+
+  public function curationAction() {
+    $rewards = CurationReward::aggregate([
+      [
+        '$match' => [
+          '_ts' => [
+            '$gte' => new UTCDateTime(strtotime("-90 days") * 1000),
+            '$lte' => new UTCDateTime(strtotime("midnight") * 1000),
+          ]
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => [
+            'doy' => ['$dayOfYear' => '$_ts'],
+            'year' => ['$year' => '$_ts'],
+            'month' => ['$month' => '$_ts'],
+            'week' => ['$week' => '$_ts'],
+            'day' => ['$dayOfMonth' => '$_ts']
+          ],
+          'count' => ['$sum' => 1],
+          'vest' => ['$sum' => '$reward'],
         ]
       ],
       [
