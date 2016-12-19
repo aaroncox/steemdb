@@ -17,6 +17,7 @@ use SteemDB\Models\Transfer;
 use SteemDB\Models\VestingDeposit;
 use SteemDB\Models\VestingWithdraw;
 use SteemDB\Models\WitnessMiss;
+use SteemDB\Models\WitnessHistory;
 use SteemDB\Models\WitnessVote;
 
 class AccountController extends ControllerBase
@@ -66,6 +67,17 @@ class AccountController extends ControllerBase
       'limit' => 100
     ));
     $this->view->chart = true;
+    $this->view->pick("account/view");
+  }
+
+  public function propsAction()
+  {
+    $account = $this->getAccount();
+    $this->view->history = WitnessHistory::find(array(
+      ['owner' => $account],
+      'sort' => array('created' => -1),
+      'limit' => 100
+    ));
     $this->view->pick("account/view");
   }
 

@@ -35,6 +35,7 @@
               {{ link_to(["for": "account-view-section", "account": account.name, "action": "witness"], "Voting", "class": "item" ~ (router.getActionName() == "witness" ? " active" : "")) }}
               {{ link_to(["for": "account-view-section", "account": account.name, "action": "blocks"], "Blocks", "class": "item" ~ (router.getActionName() == "blocks" ? " active" : "")) }}
               {{ link_to(["for": "account-view-section", "account": account.name, "action": "missed"], "Missed", "class": "item" ~ (router.getActionName() == "missed" ? " active" : "")) }}
+              {{ link_to(["for": "account-view-section", "account": account.name, "action": "props"], "Props", "class": "item" ~ (router.getActionName() == "props" ? " active" : "")) }}
               {{ link_to(["for": "account-view-section", "account": account.name, "action": "proxied"], "Proxied", "class": "item" ~ (router.getActionName() == "proxied" ? " active" : "")) }}
             </div>
           </div>
@@ -74,7 +75,7 @@
               </a>
             </div>
           </div>
-          <table class="ui definition table">
+          <table class="ui small definition table">
             <tbody>
               <tr>
                 <td>VESTS</td>
