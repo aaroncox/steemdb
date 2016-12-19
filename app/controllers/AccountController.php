@@ -54,11 +54,6 @@ class AccountController extends ControllerBase
     } catch (Exception $e) {
       $this->view->activity = false;
     }
-    if(!$this->view->account) {
-      $this->flashSession->error('The account "'.$account.'" does not exist on SteemDB currently.');
-      $this->response->redirect();
-      return;
-    }
     $this->view->mining = Block::find(array(
       array(
         'witness' => $account,
