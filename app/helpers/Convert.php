@@ -29,14 +29,14 @@ class Convert extends Tag
     return $cached;
   }
 
-  static public function vest2sp($value, $label = ' SP')
+  static public function vest2sp($value, $label = ' SP', $round = 3)
   {
     $values = static::getConversionRate('convert_vest2sp');
     $return = $values['total_vest_steem'] * ($value / $values['total_vests']);
     if($label === false) {
-      return round($return, 3);
+      return round($return, $round);
     }
-    return number_format($return, 3, '.', ',') . $label;
+    return number_format($return, $round, '.', ',') . $label;
   }
 
   static public function sp2vest($value, $label = ' VEST')
