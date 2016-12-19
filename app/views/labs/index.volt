@@ -76,6 +76,19 @@
                 </div>
               </div>
             </div>
+            <div class="item">
+              <div class="ui header">
+                <i class="list icon"></i>
+                <div class="content">
+                  <a href="/labs/powerdown">
+                    power down statistics
+                  </a>
+                  <div class="sub header">
+                    Shows the largest accounts powering down as well as a week over week overview
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="ui segment">
