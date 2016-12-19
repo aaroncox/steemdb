@@ -37,7 +37,7 @@ class AccountController extends ControllerBase
     $cached = $this->memcached->get($cacheKey);
     // No cache, let's load
     if($cached === null) {
-      $this->view->live = $this->steemd->getAccount($this->view->account->name);
+      $this->view->live = $this->steemd->getAccount($account);
       $this->memcached->save($cacheKey, $this->view->live, 60);
     } else {
       // Use cache
@@ -49,8 +49,9 @@ class AccountController extends ControllerBase
   public function viewAction()
   {
     $account = $this->getAccount();
+    $this->view->props = $this->steemd->getProps();
     try {
-      $this->view->activity = array_reverse($this->steemd->getAccountHistory($this->view->account->name));
+      $this->view->activity = array_reverse($this->steemd->getAccountHistory($account));
     } catch (Exception $e) {
       $this->view->activity = false;
     }
