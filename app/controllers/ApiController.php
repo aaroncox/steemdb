@@ -681,4 +681,20 @@ class ApiController extends ControllerBase
     echo json_encode($rewards, JSON_PRETTY_PRINT);
   }
 
+  public function powerdown1000Action() {
+    $accounts = Account::aggregate([
+      ['$sort' => [
+        'vesting_shares' => -1
+        ]],
+      ['$limit' => 1000]
+    ])->toArray();
+    $count = 0;
+    foreach($accounts as $account) {
+      if($account->next_vesting_withdrawal->toDateTime()->getTimestamp() > 0) {
+        $count++;
+      }
+    }
+    echo $count . " / 1000"; exit;
+  }
+
 }
