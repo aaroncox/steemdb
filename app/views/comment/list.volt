@@ -5,14 +5,5 @@
 {% endblock %}
 
 {% block content %}
-{% include "_elements/comment_list.volt" %}
-<div class="ui vertical stripe segment">
-  <div class="ui middle aligned stackable grid container">
-    <div class="row">
-      <div class="center aligned column">
-
-      </div>
-    </div>
-  </div>
-</div>
+  {% include "_elements/comment_list.volt" %}
 {% endblock %}

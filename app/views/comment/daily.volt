@@ -40,7 +40,7 @@
         </div>
         <input type="hidden" id="selectedDate" value="{{ date('Y-m-d', date)}}">
         <input type="hidden" id="selectedSort" value="{{ sort ? sort : 'earnings' }}">
-        <div class="ui top attached menu">
+        <div class="ui menu">
           <a href="/posts/{{ tag ? tag : 'all' }}/{{ sort ? sort : 'earnings' }}/{{ date('Y-m-d', date - 86400)}}" class="item">
             <i class="left arrow icon"></i>
             <span class="mobile hidden">{{ date('Y-m-d', date - 86400)}}</span>
@@ -78,11 +78,9 @@
             <?php endif ?>
           </div>
         </div>
-        <div class="ui bottom attached segment" style="padding-top: 0">
-          {% include "_elements/comment_list.volt" %}
-        </div>
       </div>
     </div>
+    {% include "_elements/comment_list.volt" %}
   </div>
 </div>
 {#
