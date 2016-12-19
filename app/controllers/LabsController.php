@@ -26,6 +26,83 @@ class LabsController extends ControllerBase
   }
 
   public function powerdownAction() {
+    $props = $this->steemd->getProps();
+    $converted = array(
+      'current' => (float) explode(" ", $props['current_supply'])[0],
+      'vesting' => (float) explode(" ", $props['total_vesting_fund_steem'])[0],
+    );
+    $converted['liquid'] = $converted['current'] - $converted['vesting'];
+    $this->view->props = $converted;
+    $this->view->dow = array('', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
+    $transactions = Account::aggregate([
+      [
+        '$match' => [
+          'next_vesting_withdrawal' => [
+            '$gte' => new UTCDateTime(strtotime(date("Y-m-d")) * 1000)
+          ],
+          'vesting_withdraw_rate' => ['$gt' => 0]
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => [
+            'doy' => ['$dayOfYear' => '$next_vesting_withdrawal'],
+            'year' => ['$year' => '$next_vesting_withdrawal'],
+            'month' => ['$month' => '$next_vesting_withdrawal'],
+            'day' => ['$dayOfMonth' => '$next_vesting_withdrawal'],
+            'dow' => ['$dayOfWeek' => '$next_vesting_withdrawal'],
+          ],
+          'count' => ['$sum' => 1],
+          'withdrawn' => ['$sum' => '$vesting_withdraw_rate'],
+        ],
+      ],
+      [
+        '$sort' => [
+          '_id.year' => 1,
+          '_id.doy' => 1
+        ]
+      ],
+      [
+        '$limit' => 7
+      ]
+    ])->toArray();
+    $this->view->upcoming_total = array_sum(array_column($transactions, 'withdrawn'));
+    $this->view->upcoming = $transactions;
+    $transactions = VestingWithdraw::aggregate([
+      [
+        '$match' => [
+          '_ts' => [
+            '$gte' => new UTCDateTime((strtotime(date("Y-m-d")) - (86400 * 7)) * 1000),
+          ],
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => [
+            'doy' => ['$dayOfYear' => '$_ts'],
+            'year' => ['$year' => '$_ts'],
+            'month' => ['$month' => '$_ts'],
+            'day' => ['$dayOfMonth' => '$_ts'],
+            'dow' => ['$dayOfWeek' => '$_ts'],
+          ],
+          'count' => ['$sum' => 1],
+          'withdrawn' => ['$sum' => '$withdrawn'],
+          'deposited' => ['$sum' => '$deposited'],
+        ],
+      ],
+      [
+        '$sort' => [
+          '_id.year' => 1,
+          '_id.doy' => 1
+        ]
+      ],
+      [
+        '$limit' => 8
+      ]
+    ])->toArray();
+    $this->view->previous_total = array_sum(array_column($transactions, 'withdrawn'));
+    $this->view->previous = $transactions;
+
     $transactions = VestingWithdraw::aggregate([
       [
         '$match' => [
@@ -58,6 +135,9 @@ class LabsController extends ControllerBase
         '$sort' => [
           'withdrawn' => -1
         ]
+      ],
+      [
+        '$limit' => 100
       ]
     ])->toArray();
     $this->view->powerdowns = $transactions;
