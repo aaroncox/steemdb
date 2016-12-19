@@ -175,7 +175,8 @@ class CommentController extends ControllerBase
         'net_votes' => '$net_votes',
         'combined_payout' => ['$add' => ['$total_payout_value', '$total_pending_payout_value']],
         'total_payout_value' => '$total_payout_value',
-        'total_pending_payout_value' => '$total_pending_payout_value'
+        'total_pending_payout_value' => '$total_pending_payout_value',
+        'children' => '$children',
       ]],
       ['$sort' => $sortFields],
       ['$limit' => 100]
