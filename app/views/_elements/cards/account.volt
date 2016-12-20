@@ -9,7 +9,7 @@
       </a>
     </div>
     <div class="meta">
-      joined <?php echo $this->timeAgo::mongo(date("Y",$account->created) < 2016 ? "2016-10-18" : $account->created); ?>
+      joined <?php echo (date("Y", $account->created / 1000) < 2016) ? "2016-10-18" : $this->timeAgo::mongo($account->created); ?>
       </a>
     </div>
 <!--
