@@ -8,7 +8,7 @@ replied to
 </a>
 {% else %}
 posted
-<a href="/tag/@{{ item[1]['op'][1]['author'] }}/{{ item[1]['op'][1]['permlink'] }}">
+<a href="/{{ item[1]['op'][1]['parent_permlink'] }}/@{{ item[1]['op'][1]['author'] }}/{{ item[1]['op'][1]['permlink'] }}">
   <?= substr($item[1]['op'][1]['title'], 0, 75) ?>
 </a>
 {% endif %}
