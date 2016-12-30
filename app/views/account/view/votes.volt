@@ -20,15 +20,24 @@
         <?php echo $this->timeAgo::mongo($vote->_ts); ?>
       </td>
       <td class="">
-        <div class="ui small header">
+        {% if vote.type = "incoming" %}
+        on
+        {% endif %}
+          <div class="ui small header">
           <a href="/tag/@{{ vote.author }}/{{ vote.permlink }}">
             {{ vote.permlink }}
           </a>
           <div class="sub header">
             by
+        {% if vote.type = "outgoing" %}
             <a href="/@{{ vote.author }}">
               {{ vote.author }}
             </a>
+        {% else %}
+            <a href="/@{{ vote.voter }}">
+              {{ vote.voter }}
+            </a>
+        {% endif %}
           </div>
         </div>
       </td>
