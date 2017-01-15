@@ -145,9 +145,22 @@ class LabsController extends ControllerBase
 
   public function powerupAction() {
     // {transactions: {$elemMatch: {'operations.0.0': 'transfer_to_vesting'}}
+    $days = 30;
+    $this->view->filter = $filter = $this->request->get('filter');
+    switch($filter) {
+      case "week":
+        $days = 7;
+        break;
+      case "day":
+        $days = 1;
+        break;
+    }
     $transactions = Block30d::aggregate([
       [
         '$match' => [
+          '_ts' => [
+            '$gte' => new UTCDateTime(strtotime("-".$days." days") * 1000),
+          ],
           'transactions' => [
             '$elemMatch' => ['operations.0.0' => 'transfer_to_vesting']
           ]

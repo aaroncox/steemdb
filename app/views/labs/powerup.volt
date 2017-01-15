@@ -10,10 +10,15 @@
     <div class="row">
       <div class="column">
         <div class="ui large header">
-          Biggest Account Power Up
+          Biggest Account Power Ups
           <div class="sub header">
-            Over the last 30 days
+            Largest total steem powered up per account
           </div>
+        </div>
+        <div class="ui menu">
+          <a href="?filter=month" class="{{ (filter == 'month' or filter == '') ? 'active' : '' }} item">30 Days</a>
+          <a href="?filter=week" class="{{ (filter == 'week') ? 'active' : '' }} item">7 Days</a>
+          <a href="?filter=day" class="{{ (filter == 'day') ? 'active' : '' }} item">24 Hours</a>
         </div>
         <table class="ui attached table">
           <thead>
