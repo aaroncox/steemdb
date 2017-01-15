@@ -7,6 +7,10 @@ class IndexController extends ControllerBase
   {
 
   }
+  public function liveAction()
+  {
+    
+  }
   public function show404Action() {
 
   }
