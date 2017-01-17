@@ -54,7 +54,7 @@ class ApiController extends ControllerBase
       ],
       [
         '$sort' => [
-          '_id.year' => -1,
+          '_id.year' => 1,
           '_id.doy' => 1
         ]
       ]
@@ -102,7 +102,7 @@ class ApiController extends ControllerBase
       ],
       [
         '$sort' => [
-          '_id.year' => -1,
+          '_id.year' => 1,
           '_id.doy' => 1
         ]
       ]
@@ -159,7 +159,7 @@ class ApiController extends ControllerBase
       ],
       [
         '$sort' => [
-          '_id.year' => -1,
+          '_id.year' => 1,
           '_id.doy' => 1
         ]
       ],
@@ -219,7 +219,7 @@ class ApiController extends ControllerBase
       ],
       [
         '$sort' => [
-          '_id.year' => -1,
+          '_id.year' => 1,
           '_id.doy' => 1
         ]
       ],
@@ -318,7 +318,7 @@ class ApiController extends ControllerBase
       ],
       [
         '$sort' => [
-          '_id.year' => -1,
+          '_id.year' => 1,
           '_id.doy' => 1
         ]
       ],
