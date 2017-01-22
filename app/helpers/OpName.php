@@ -34,13 +34,13 @@ class OpName extends Tag
     "witness_update" => "Witness Update",
   );
 
-  public static function string($op, $account) {
+  public static function string($op, $account = null) {
     $name = $op[0];
     if(isset(static::$index[$op[0]])) {
       $name = static::$index[$op[0]];
     }
     // This should be more robust logic as more situations occur
-    if($op[0] === "comment" && $op[1]['author'] !== $account->name) {
+    if($op[0] === "comment" && is_array($op[1]) && $op[1]['author'] !== $account->name) {
       $name = "Reply";
     }
     return $name;
