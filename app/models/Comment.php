@@ -18,8 +18,12 @@ class Comment extends Document
     }
     // If we have a string of json, decode and return
     $metadata = json_decode($this->json_metadata, true);
-    if($key && isset($metadata[$key])) {
-      $metadata = $metadata[$key];
+    if($key) {
+      if(isset($metadata[$key])) {
+        $metadata = $metadata[$key];
+      } else {
+        return null;
+      }
     }
     return $metadata;
   }
