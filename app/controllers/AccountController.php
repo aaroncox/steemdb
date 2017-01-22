@@ -13,6 +13,7 @@ use SteemDB\Models\Follow;
 use SteemDB\Models\Reblog;
 use SteemDB\Models\Vote;
 use SteemDB\Models\Statistics;
+use SteemDB\Models\Pow;
 use SteemDB\Models\Transfer;
 use SteemDB\Models\VestingDeposit;
 use SteemDB\Models\VestingWithdraw;
@@ -55,7 +56,7 @@ class AccountController extends ControllerBase
     } catch (Exception $e) {
       $this->view->activity = false;
     }
-    $this->view->mining = Block::find(array(
+    $this->view->mining = Pow::find(array(
       array(
         'witness' => $account,
       ),
@@ -210,9 +211,9 @@ class AccountController extends ControllerBase
   public function blocksAction()
   {
     $account = $this->getAccount();
-    $this->view->mining = Block::find(array(
+    $this->view->mining = Pow::find(array(
       array(
-        'witness' => $account,
+        'work.1.input.worker_account' => $account,
       ),
       'sort' => array('_ts' => -1),
       'limit' => 100
