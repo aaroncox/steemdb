@@ -24,6 +24,16 @@ class Comment extends Document
     return $metadata;
   }
 
+  public function origin() {
+    $app = $this->metadata('app');
+    if(!is_string($app)) return null;    
+    $parts = explode("/", $app);
+    if(sizeof($parts) > 1) {
+      return $parts[0];
+    }
+    return $app;
+  }
+
   public function getChildren() {
     $query = array(
       'parent_permlink' => $this->permlink
