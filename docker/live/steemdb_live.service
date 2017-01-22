@@ -1,0 +1,11 @@
+[Unit]
+Description=SteemDB.com Live Service
+
+[Service]
+Environment=steemnode=node.steem.ws
+WorkingDirectory=/var/www/com_steemdb/docker/live
+ExecStart=/usr/bin/python3 live.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
