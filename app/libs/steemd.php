@@ -17,7 +17,7 @@ class steemd
     $this->client = new Client($host, false, $httpClient);
   }
 
-  public function getState($path)
+  public function getState($path = "")
   {
     try {
       return $this->client->call(0, 'get_state', [$path]);
