@@ -7,8 +7,10 @@ from piston.steem import Post
 from pprint import pprint
 from twisted.internet import reactor
 from twisted.python import log
+from collections import Counter
 
 import json
+import math
 import sys
 import os
 import re
@@ -53,15 +55,46 @@ class BroadcastServerFactory(WebSocketServerFactory):
 
         if props['head_block_number'] != self.last_block:
             self.last_block = props['head_block_number']
-            print("new block {}".format(self.last_block))
+            # print("new block {}".format(self.last_block))
+            self.publishProps(props)
 
         while (irreversible - self.last_block_processed) > 0:
             self.last_block_processed += 1
             # publish operation events to subscribers
-            print("processing block {} [{}/{}/{}]".format(self.last_block_processed, len(self.clients), len(self.channels), sum(len(v) for v in self.channels.values())))
-            self.publishOps(self.last_block_processed)
+            # print("processing block {} [{}/{}/{}]".format(self.last_block_processed, len(self.clients), len(self.channels), sum(len(v) for v in self.channels.values())))
+            self.publishBlock(self.last_block_processed)
+            # self.publishOps(self.last_block_processed)
 
         reactor.callLater(1, self.tick)
+
+    def publishProps(self, props):
+        total_vesting_fund_steem = float(props['total_vesting_fund_steem'].split(" ")[0])
+        total_vesting_shares = float(props['total_vesting_shares'].split(" ")[0])
+        props['steem_per_mvests'] = math.floor(total_vesting_fund_steem / total_vesting_shares * 1000000 * 1000) / 1000
+        props['reversible_blocks'] = props['head_block_number'] - props['last_irreversible_block_num']
+        self.publish("props", "props", props)
+
+    def publishBlock(self, height):
+        block = rpc.get_block(height)
+        data = {
+            'height': height,
+            'accounts': set([]),
+            'opCount': 0,
+            'opCount': 0,
+            'opTypes': [],
+            'ts': block['timestamp'],
+        }
+        if block['transactions']:
+            for tx in block['transactions']:
+                for op in tx['operations']:
+                    data['opCount'] += 1
+                    data['opTypes'].append(op[0])
+                    for account in self.getRelatedAccounts(op[0], op[1]):
+                        data['accounts'].add(account)
+
+        data['opCounts'] = Counter(data['opTypes'])
+        data['accounts'] = list(data['accounts'])
+        self.publish("blocks", "block", data)
 
     def publishOps(self, block):
         ops = rpc.get_ops_in_block(block, False)
@@ -71,7 +104,7 @@ class BroadcastServerFactory(WebSocketServerFactory):
             # notify anyone subscribed to an account channel (e.g. @username)
             for account in self.getRelatedAccounts(opType, opData):
                 channel = "@{}".format(account)
-                self.publish(channel, opType, json.dumps(op))
+                self.publish(channel, opType, op)
             # NYI - notify anyone subscribed to a related event channel (e.g. OnVote, OnComment, etc)
             # for channel in self.getRelatedEvents(opType):
             #     self.publish(event, opType, json.dumps(op))
@@ -120,6 +153,8 @@ class BroadcastServerFactory(WebSocketServerFactory):
     def register(self, client):
         if client not in self.clients:
             # print("registered client [{}]".format(client.peer))
+            self.subscribe(client, "blocks")
+            self.subscribe(client, "props")
             self.clients.append(client)
 
     def unregister(self, client):
@@ -144,8 +179,9 @@ class BroadcastServerFactory(WebSocketServerFactory):
     def publish(self, channel, opType, opData):
         if channel in self.channels:
             for c in self.channels[channel]:
-                # print("publishing op '{}' [{}] to subscriber [{}] based on channel subscription [{}]".format(opType, opData, c.peer, channel))
-                c.sendMessage(opData.encode('utf8'))
+                data = json.dumps({opType: opData})
+                # print("publishing op '{}' [{}] to subscriber [{}] based on channel subscription [{}]".format(opType, data, c.peer, channel))
+                c.sendMessage(data.encode('utf8'))
 
 if __name__ == '__main__':
 
