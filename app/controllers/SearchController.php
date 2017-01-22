@@ -11,7 +11,7 @@ class SearchController extends ControllerBase
 {
   public function indexAction()
   {
-    $query = $this->request->get("q");
+    $query = $this->request->get("q", "string");
     $accounts = Account::find(array(
       array(
         'name' => new Regex('^'.$query, 'i')
