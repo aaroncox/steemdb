@@ -42,4 +42,17 @@ class SearchController extends ControllerBase
     $this->response->setJsonContent($data);
     return $this->response;
   }
+  public function pageAction()
+  {
+    $this->view->q = $q = $this->request->get("q");
+    if($q) {
+      $this->view->results = $results = Comment::aggregate(array(
+        [ '$match' => [ '$text' => [ '$search' => $q ] ] ],
+        [ '$sort' => [ 'score' => [ '$meta' => "textScore" ] ] ],
+        [ '$limit' => 100 ],
+        // [ '$project' => [ 'title' => 1, '_id' => 0 , '_ts' => 1] ],
+      ));
+    }
+
+  }
 }
