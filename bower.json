@@ -16,7 +16,7 @@
     "tests"
   ],
   "dependencies": {
-    "plottable": "^2.2.0",
+    "plottable": "^2.6.0",
     "d3": "^4.2.1",
     "glidejs": "^2.0.9"
   }
