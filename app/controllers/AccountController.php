@@ -122,7 +122,7 @@ class AccountController extends ControllerBase
     $this->view->votes = Vote::find(array(
       $query,
       'sort' => array('_ts' => -1),
-      'limit' => 100
+      'limit' => 200
     ));
     $this->view->chart = true;
     $this->view->pick("account/view");
