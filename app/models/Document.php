@@ -8,6 +8,7 @@ class Document extends MongoCollection
 {
 
   public function toArray() {
+    if($this instanceOf Document) return parent::toArray();
     foreach($this as $key => $data) {
       if(get_class($data) == 'MongoDB\BSON\UTCDateTime') {
         $this->$key = (int) (string) $data;
