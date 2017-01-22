@@ -262,8 +262,25 @@ def update_comment(author, permlink):
           comment[key] = json.loads(comment[key])
         except ValueError:
           comment[key] = comment[key]
+
     comment['scanned'] = datetime.now()
-    db.comment.update({'_id': _id}, comment, upsert=True)
+    results = db.comment.update({'_id': _id}, {'$set': comment}, upsert=True)
+
+    if comment['depth'] > 0 and not results['updatedExisting'] and comment['url'] != '':
+        url = comment['url'].split('#')[0]
+        parts = url.split('/')
+        original_id = parts[2].replace('@', '') + '/' + parts[3]
+        db.comment.update(
+            {
+                '_id': original_id
+            },
+            {
+                '$set': {
+                    'last_reply': comment['created'],
+                    'last_reply_by': comment['author']
+                }
+            }
+        )
 
 mvest_per_account = {}
 
