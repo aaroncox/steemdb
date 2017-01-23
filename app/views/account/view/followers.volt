@@ -25,7 +25,7 @@
         </a>
       </td>
       <td>
-        {% if current.what[0] %}
+        {% if current.what[0] !== "ignore" %}
           <div class="ui green label">
             Follow
           </div>
