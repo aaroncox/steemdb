@@ -16,14 +16,14 @@
     {% for b in mining %}
     <tr>
       <td class="collapsing">
-        <a href="/block/{{ b._id }}">
-          {{ b._id }}
+        <a href="/block/<?php echo $b->block ?>">
+          <?php echo $b->block ?>
         </a>
       </td>
       <td class="collapsing">
-        <?php echo $this->timeAgo::mongo($b->_ts); ?>
+        <?php echo gmdate("Y-m-d H:i:s e", (string) $b->_ts / 1000) ?>
       </td>
-      <td>{{ b.witness }}</td>
+      <td>{{ b.work[1].input.worker_account }}</td>
     </tr>
   </tbody>
   {% endfor %}
