@@ -21,9 +21,15 @@
       </td>
       <td class="">
         <div class="ui small header">
-          <a href="/tag/@{{ vote.author }}/{{ vote.permlink }}">
-            {{ vote.permlink }}
-          </a>
+            <a href="/@voter">
+              @{{ vote.voter }}
+            </a>
+            voted on
+          <div class="sub header">
+            <a href="/tag/@{{ vote.author }}/{{ vote.permlink }}">
+              {{ vote.permlink }}
+            </a>
+          </div>
           <div class="sub header">
             by
             <a href="/@{{ vote.author }}">
