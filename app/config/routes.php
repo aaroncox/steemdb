@@ -90,14 +90,28 @@ $router->add('/api/account/{account}/{action}', [
   'controller' => 'account_api'
 ]);
 
-// $router->add('/api/mining/{account}', [
-//   'controller' => 'api',
-//   'action' => 'mining'
-// ]);
+/*
+  forum routes
+*/
 
-// $router->add('/api/history/{account}', [
-//   'controller' => 'api',
-//   'action' => 'history'
-// ]);
+$router->add('/forums/{forum}', [
+  'controller' => 'forums',
+  'action' => 'board'
+]);
+
+$router->add('/forums/{forum}/post', [
+  'controller' => 'forums',
+  'action' => 'post'
+]);
+
+$router->add('/forums/tag/{tag}', [
+  'controller' => 'forums',
+  'action' => 'board'
+]);
+
+$router->add('/forums/{tag}/@{author}/{permlink}', [
+  'controller' => 'forums',
+  'action' => 'view'
+]);
 
 return $router;

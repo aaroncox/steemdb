@@ -28,6 +28,19 @@
               <div class="ui header">
                 <i class="list icon"></i>
                 <div class="content">
+                  <a href="/forums">
+                    Steem Forum View
+                  </a>
+                  <div class="sub header">
+                    A prototype viewing the STEEM blockchain as a forum.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="item">
+              <div class="ui header">
+                <i class="list icon"></i>
+                <div class="content">
                   <a href="/labs/author">
                     Author Reward Leaderboard
                   </a>
