@@ -5,6 +5,10 @@
 $router = new Phalcon\Mvc\Router();
 $router->removeExtraSlashes(true);
 
+/*
+  account view routes
+*/
+
 $router->add('/@([-a-zA-Z0-9.]+)', [
   'controller' => 'account',
   'action' => 'view',
@@ -30,42 +34,81 @@ $router->add('/@([-a-zA-Z0-9.]+)/followers/whales', [
   'action' => 'followersWhales'
 ]);
 
-$router->add('/block/([a-zA-Z0-9]+)', [
-  'controller' => 'block',
-  'action' => 'view',
-  'height' => 1
-])->setName("block-view");
-
-
-$router->add('/{tag}/@{author}/{permlink}', [
-  'controller' => 'comment',
-  'action' => 'view'
-]);
+/*
+  accounts aggregation
+*/
 
 $router->add('/accounts[/]?{filter}?', [
   'controller' => 'accounts',
   'action' => 'list'
 ]);
 
+/*
+  block routes
+*/
+
+$router->add('/block/([a-zA-Z0-9]+)', [
+  'controller' => 'block',
+  'action' => 'view',
+  'height' => 1
+])->setName("block-view");
+
+/*
+  comment viewing routes
+*/
+
+$router->add('/([-a-zA-Z0-9.]+)/@([-a-zA-Z0-9.]+)/([-a-zA-Z0-9.]+)', [
+  'controller' => 'comment',
+  'action' => 'view',
+  'category' => 1,
+  'author' => 2,
+  'permlink' => 3,
+])->setName("comment-view");
+
+$router->add('/([-a-zA-Z0-9.]+)/@([-a-zA-Z0-9.]+)/([-a-zA-Z0-9.]+)/{action}', [
+  'controller' => 'comment',
+  'category' => 1,
+  'author' => 2,
+  'permlink' => 3,
+  'action' => 4,
+])->setName("comment-view-section");
+
+/*
+  lab routes
+*/
+
 $router->add('/powerup', [
   'controller' => 'labs',
   'action' => 'powerup'
 ]);
 
+$router->add('/powerdown', [
+  'controller' => 'labs',
+  'action' => 'powerdown'
+]);
+
+/*
+  comment aggregation routes
+*/
+
 $router->add('/posts', [
-  'controller' => 'comment',
+  'controller' => 'comments',
   'action' => 'list'
 ]);
 
 $router->add('/', [
-  'controller' => 'comment',
+  'controller' => 'comments',
   'action' => 'daily'
 ]);
 
 $router->add('/posts/{tag}/{sort}/{date}', [
-  'controller' => 'comment',
+  'controller' => 'comments',
   'action' => 'daily'
 ]);
+
+/*
+  witness routes
+*/
 
 $router->add('/witnesses', [
   'controller' => 'witness',
@@ -76,6 +119,10 @@ $router->add('/witnesses/history', [
   'controller' => 'witness',
   'action' => 'history'
 ]);
+
+/*
+  API routes
+*/
 
 $router->add('/api/tags/{tag}', [
   'controller' => 'api',
