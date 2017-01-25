@@ -50,3 +50,6 @@ db.account_history.createIndex({date: 1, name: 1});
 
 # Follows
 db.follow.createIndex({follower: 1, following: 1, _block: 1});
+
+# Forum Indexes
+db.comment.createIndex({depth: 1, category: 1, last_reply: 1}, {sparse: true});
