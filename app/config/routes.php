@@ -3,6 +3,7 @@
  * Define custom routes. File gets included in the router service definition.
  */
 $router = new Phalcon\Mvc\Router();
+$router->removeExtraSlashes(true);
 
 $router->add('/@([-a-zA-Z0-9.]+)', [
   'controller' => 'account',
