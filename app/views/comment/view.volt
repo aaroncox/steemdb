@@ -15,14 +15,20 @@
           </div>
         </div>
         <div class="ui top attached tabular menu">
-          <a class="active item" data-tab="post">Content</a>
-          <a class="item" data-tab="tags">Tags ({{ comment.metadata('tags') | length }})</a>
-          <a class="item" data-tab="replies">Replies ({{ comment.children }})</a>
-          <a class="item" data-tab="reblogs">Reblogs ({{ reblogs | length }})</a>
-          <a class="item" data-tab="votes">Votes ({{ comment.net_votes }})</a>
-          <a class="item" data-tab="data">Raw Data</a>
+          {{ link_to(["for": "comment-view", "category": comment.category, "author": comment.author, "permlink": comment.permlink], "Content", "class": "item" ~ (router.getActionName() == "view" ? " active" : "")) }}
+          {{ link_to(["for": "comment-view-section", "category": comment.category, "author": comment.author, "permlink": comment.permlink, "action": "tags"], "Tags", "class": "item" ~ (router.getActionName() == "tags" ? " active" : "")) }}
+          {{ link_to(["for": "comment-view-section", "category": comment.category, "author": comment.author, "permlink": comment.permlink, "action": "replies"], "Replies", "class": "item" ~ (router.getActionName() == "replies" ? " active" : "")) }}
+          {{ link_to(["for": "comment-view-section", "category": comment.category, "author": comment.author, "permlink": comment.permlink, "action": "reblogs"], "Reblogs", "class": "item" ~ (router.getActionName() == "reblogs" ? " active" : "")) }}
+          {{ link_to(["for": "comment-view-section", "category": comment.category, "author": comment.author, "permlink": comment.permlink, "action": "votes"], "Votes", "class": "item" ~ (router.getActionName() == "votes" ? " active" : "")) }}
+          {{ link_to(["for": "comment-view-section", "category": comment.category, "author": comment.author, "permlink": comment.permlink, "action": "data"], "Data", "class": "item" ~ (router.getActionName() == "data" ? " active" : "")) }}
         </div>
         <div class="ui bottom attached padded segment">
+          <div class="ui active tab">
+            {% include "comment/view/" ~ router.getActionName() %}
+          </div>
+        </div>
+
+        {#<div class="ui bottom attached padded segment">
           <div class="ui active tab" data-tab="post">
             {% include "comment/view/content.volt" %}
           </div>
@@ -41,7 +47,7 @@
           <div class="ui tab" data-tab="data">
             {% include "comment/view/data.volt" %}
           </div>
-        </div>
+        /div>#}
       </div>
       <div class="four wide column">
         {% include '_elements/cards/account' with ['account': author] %}
