@@ -59,7 +59,7 @@ class ApiController extends ControllerBase
         ]
       ]
     ];
-    $data = Vote::aggregate($pipeline)->toArray();
+    $data = Vote::agg($pipeline)->toArray();
     echo json_encode($data, JSON_PRETTY_PRINT);
   }
 
@@ -107,13 +107,13 @@ class ApiController extends ControllerBase
         ]
       ]
     ];
-    $data = Vote::aggregate($pipeline)->toArray();
+    $data = Vote::agg($pipeline)->toArray();
     echo json_encode($data, JSON_PRETTY_PRINT);
   }
 
   public function activityAction()
   {
-    $data = Comment::aggregate([
+    $data = Comment::agg([
       [
         '$match' => [
           'created' => [
@@ -175,7 +175,7 @@ class ApiController extends ControllerBase
         'date' => ['$gt' => new UTCDateTime(strtotime("-90 days") * 1000)],
       ],
     ]);
-    $data = Comment::aggregate([
+    $data = Comment::agg([
       [
         '$match' => [
           'created' => [
@@ -244,7 +244,7 @@ class ApiController extends ControllerBase
 
   public function newbiesAction()
   {
-    $data = AccountHistory::aggregate([
+    $data = AccountHistory::agg([
       [
         '$match' => [
           'date' => [
@@ -282,7 +282,7 @@ class ApiController extends ControllerBase
 
   public function supplyAction()
   {
-    $data = AccountHistory::aggregate([
+    $data = AccountHistory::agg([
       [
         '$match' => [
           'date' => [
@@ -381,7 +381,7 @@ class ApiController extends ControllerBase
   }
 
   public function downvotesAction() {
-    $data = Comment::aggregate([
+    $data = Comment::agg([
       [
         '$match' => [
           'created' => [
@@ -484,7 +484,7 @@ class ApiController extends ControllerBase
     ));
     $data = array();
     foreach($witnesses as $witness) {
-      $data[$witness->owner] = Account::aggregate(array(
+      $data[$witness->owner] = Account::agg(array(
         ['$match' => [
             'witness_votes' => $witness->owner,
         ]],
@@ -551,7 +551,7 @@ class ApiController extends ControllerBase
   }
 
   public function powerupAction() {
-    $transactions = Block30d::aggregate([
+    $transactions = Block30d::agg([
       [
         '$match' => [
           'transactions' => [
@@ -614,7 +614,7 @@ class ApiController extends ControllerBase
   }
 
   public function rewardsAction() {
-    $rewards = AuthorReward::aggregate([
+    $rewards = AuthorReward::agg([
       [
         '$match' => [
           '_ts' => [
@@ -649,7 +649,7 @@ class ApiController extends ControllerBase
   }
 
   public function curationAction() {
-    $rewards = CurationReward::aggregate([
+    $rewards = CurationReward::agg([
       [
         '$match' => [
           '_ts' => [
@@ -682,7 +682,7 @@ class ApiController extends ControllerBase
   }
 
   public function powerdown1000Action() {
-    $accounts = Account::aggregate([
+    $accounts = Account::agg([
       ['$sort' => [
         'vesting_shares' => -1
         ]],

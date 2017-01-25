@@ -34,7 +34,7 @@ class LabsController extends ControllerBase
     $converted['liquid'] = $converted['current'] - $converted['vesting'];
     $this->view->props = $converted;
     $this->view->dow = array('', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
-    $transactions = Account::aggregate([
+    $transactions = Account::agg([
       [
         '$match' => [
           'next_vesting_withdrawal' => [
@@ -68,7 +68,7 @@ class LabsController extends ControllerBase
     ])->toArray();
     $this->view->upcoming_total = array_sum(array_column($transactions, 'withdrawn'));
     $this->view->upcoming = $transactions;
-    $transactions = VestingWithdraw::aggregate([
+    $transactions = VestingWithdraw::agg([
       [
         '$match' => [
           '_ts' => [
@@ -103,7 +103,7 @@ class LabsController extends ControllerBase
     $this->view->previous_total = array_sum(array_column($transactions, 'withdrawn'));
     $this->view->previous = $transactions;
 
-    $transactions = VestingWithdraw::aggregate([
+    $transactions = VestingWithdraw::agg([
       [
         '$match' => [
           '_ts' => [
@@ -155,7 +155,7 @@ class LabsController extends ControllerBase
         $days = 1;
         break;
     }
-    $transactions = Block30d::aggregate([
+    $transactions = Block30d::agg([
       [
         '$match' => [
           '_ts' => [
@@ -248,7 +248,7 @@ class LabsController extends ControllerBase
     }
   }
   public function votefocusingAction() {
-    $this->view->focus = Vote::Aggregate([
+    $this->view->focus = Vote::agg([
       [
         '$match' => [
           '_ts' => [
@@ -322,7 +322,7 @@ class LabsController extends ControllerBase
       '$gte' => new UTCDateTime($date * 1000),
       '$lt' => new UTCDateTime(($date + 86400) * 1000),
     ];
-    $this->view->leaderboard = CurationReward::aggregate([
+    $this->view->leaderboard = CurationReward::agg([
       [
         '$match' => [
           '_ts' => $dates
@@ -356,7 +356,7 @@ class LabsController extends ControllerBase
       '$gte' => new UTCDateTime($date * 1000),
       '$lt' => new UTCDateTime(($date + 86400) * 1000),
     ];
-    $this->view->leaderboard = AuthorReward::aggregate([
+    $this->view->leaderboard = AuthorReward::agg([
       [
         '$match' => [
           '_ts' => $dates

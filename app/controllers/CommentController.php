@@ -50,7 +50,7 @@ class CommentController extends ControllerBase
         break;
     }
     $splimit = (float) str_replace(',', '', explode(' ', $this->convert->sp2vest(3000))[0]);
-    $this->view->comments = Comment::aggregate([
+    $this->view->comments = Comment::agg([
       [
         '$match' => [
           'depth' => 0,
@@ -162,7 +162,7 @@ class CommentController extends ControllerBase
       ],
     ];
     if($tag !== 'all') $query['category'] = $tag;
-    $this->view->comments = Comment::aggregate([
+    $this->view->comments = Comment::agg([
       ['$match' => $query],
       ['$project' => [
         '_id' => '$_id',

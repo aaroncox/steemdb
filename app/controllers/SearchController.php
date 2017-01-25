@@ -46,7 +46,7 @@ class SearchController extends ControllerBase
   {
     $this->view->q = $q = $this->request->get("q");
     if($q) {
-      $this->view->results = $results = Comment::aggregate(array(
+      $this->view->results = $results = Comment::agg(array(
         [ '$match' => [ '$text' => [ '$search' => $q ] ] ],
         [ '$sort' => [ 'score' => [ '$meta' => "textScore" ] ] ],
         [ '$limit' => 100 ],

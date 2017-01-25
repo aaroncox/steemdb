@@ -23,7 +23,7 @@ class Document extends MongoCollection
     return $data;
   }
 
-  public static function aggregate($pipeline, $options = []) {
+  public static function agg($pipeline, $options = []) {
     $className = get_called_class();
     $collection = new $className();
     $connection = $collection->getConnection();

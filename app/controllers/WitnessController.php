@@ -18,7 +18,7 @@ class WitnessController extends ControllerBase
         "key" => "miner_queue"
       )
     ));
-    $witnesses = Witness::aggregate(array(
+    $witnesses = Witness::agg(array(
       [
         '$sort' => [
           'votes' => -1
@@ -53,8 +53,8 @@ class WitnessController extends ControllerBase
         ]
       ]
     ];
-    $aggregate = WitnessMiss::aggregate($pipeline)->toArray();
-    foreach($aggregate as $data) {
+    $agg = WitnessMiss::agg($pipeline)->toArray();
+    foreach($agg as $data) {
       $misses[$data['_id']] = $data['total'];
     }
     foreach($witnesses as $index => $witness) {
@@ -82,7 +82,7 @@ class WitnessController extends ControllerBase
     $this->view->witnesses = $witnesses;
   }
   public function historyAction() {
-    $this->view->votes = $votes = WitnessVote::aggregate([
+    $this->view->votes = $votes = WitnessVote::agg([
       [
         '$sort' => ['_ts' => -1]
       ],
@@ -112,7 +112,7 @@ class WitnessController extends ControllerBase
       ]
     ])->toArray();
     // var_dump($votes[2]->_account[0]->proxied_vsf_votes); exit;
-    $this->view->misses = $misses = WitnessMiss::aggregate([
+    $this->view->misses = $misses = WitnessMiss::agg([
       [
         '$match' => [
           'date' => [

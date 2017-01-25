@@ -176,7 +176,7 @@ class AccountController extends ControllerBase
   public function witnessAction()
   {
     $account = $this->getAccount();
-    $this->view->votes = WitnessVote::aggregate([
+    $this->view->votes = WitnessVote::agg([
       ['$match' => [
         'witness' => $account
       ]],
@@ -191,7 +191,7 @@ class AccountController extends ControllerBase
         'as' => 'voter'
       ]],
     ]);
-    $this->view->witnessing = Account::aggregate([
+    $this->view->witnessing = Account::agg([
       ['$match' => [
           'witness_votes' => $account,
       ]],
@@ -277,7 +277,7 @@ class AccountController extends ControllerBase
   public function curationAction()
   {
     $account = $this->getAccount();
-    $this->view->curation = CurationReward::aggregate(array(
+    $this->view->curation = CurationReward::agg(array(
       ['$match' => [
         'curator' => $account,
         ]],
@@ -297,7 +297,7 @@ class AccountController extends ControllerBase
         '_ts' => -1,
         ]],
     ));
-    $this->view->stats = CurationReward::aggregate([
+    $this->view->stats = CurationReward::agg([
       [
         '$match' => [
           'curator' => $account,

@@ -41,7 +41,7 @@ class AccountApiController extends ControllerBase
 
   public function witnessvotesAction() {
     $account = $this->dispatcher->getParam("account");
-    $data = Account::aggregate(array(
+    $data = Account::agg(array(
       ['$match' => [
           'witness_votes' => $account,
       ]],
@@ -69,7 +69,7 @@ class AccountApiController extends ControllerBase
 
   public function historyAction() {
     $account = $this->dispatcher->getParam("account");
-    $data = AccountHistory::aggregate([
+    $data = AccountHistory::agg([
       [
         '$match' => [
           'name' => $account
@@ -101,7 +101,7 @@ class AccountApiController extends ControllerBase
 
   public function miningAction() {
     $account = $this->dispatcher->getParam("account");
-    $witness = Block30d::aggregate([
+    $witness = Block30d::agg([
       [
         '$match' => [
           'witness' => $account,
@@ -136,7 +136,7 @@ class AccountApiController extends ControllerBase
         'batchSize' => 0
       ]
     ])->toArray();
-    $pow = Pow::aggregate([
+    $pow = Pow::agg([
       [
         '$match' => [
           'work.input.worker_account' => $account,
@@ -180,7 +180,7 @@ class AccountApiController extends ControllerBase
 
   public function votesAction() {
     $account = $this->dispatcher->getParam("account");
-    $data = Vote::aggregate([
+    $data = Vote::agg([
       [
         '$match' => [
           '$or' => [
@@ -237,7 +237,7 @@ class AccountApiController extends ControllerBase
 
   public function postsAction() {
     $account = $this->dispatcher->getParam("account");
-    $data = Comment::aggregate([
+    $data = Comment::agg([
       [
         '$match' => [
           'author' => $account,
@@ -288,7 +288,7 @@ class AccountApiController extends ControllerBase
 
   public function witnessAction() {
     $account = $this->dispatcher->getParam("account");
-    $data = WitnessHistory::aggregate([
+    $data = WitnessHistory::agg([
       [
         '$match' => [
           'owner' => $account
@@ -317,7 +317,7 @@ class AccountApiController extends ControllerBase
 
   public function curationAction() {
     $account = $this->dispatcher->getParam("account");
-    $data = CurationReward::aggregate([
+    $data = CurationReward::agg([
       [
         '$match' => [
           'curator' => $account,
@@ -350,7 +350,7 @@ class AccountApiController extends ControllerBase
 
   public function curationstatsAction() {
     $account = $this->dispatcher->getParam("account");
-    $data = CurationReward::aggregate([
+    $data = CurationReward::agg([
       [
         '$match' => [
           'curator' => $account,
@@ -400,7 +400,7 @@ class AccountApiController extends ControllerBase
 
   public function authoringAction() {
     $account = $this->dispatcher->getParam("account");
-    $data = AuthorReward::aggregate([
+    $data = AuthorReward::agg([
       [
         '$match' => [
           'author' => $account,
@@ -435,7 +435,7 @@ class AccountApiController extends ControllerBase
 
   public function followersAction() {
     $account = $this->dispatcher->getParam("account");
-    $data = Follow::aggregate([
+    $data = Follow::agg([
       [
         '$match' => [
           'following' => $account,
@@ -475,7 +475,7 @@ class AccountApiController extends ControllerBase
 
   public function powerupAction() {
     $account = $this->dispatcher->getParam("account");
-    $data = VestingDeposit::aggregate([
+    $data = VestingDeposit::agg([
       [
         '$match' => [
           'to' => $account,
@@ -507,7 +507,7 @@ class AccountApiController extends ControllerBase
 
   public function powerdownAction() {
     $account = $this->dispatcher->getParam("account");
-    $data = VestingWithdraw::aggregate([
+    $data = VestingWithdraw::agg([
       [
         '$match' => [
           'from_account' => $account,
@@ -539,7 +539,7 @@ class AccountApiController extends ControllerBase
 
   public function transfersAction() {
     $account = $this->dispatcher->getParam("account");
-    $data = Transfer::aggregate([
+    $data = Transfer::agg([
       [
         '$match' => [
           '$or' => [
@@ -578,7 +578,7 @@ class AccountApiController extends ControllerBase
 
   public function contentvoteAction() {
     $account = $this->dispatcher->getParam("account");
-    $data = Vote::aggregate([
+    $data = Vote::agg([
       [
         '$match' => [
           'voter' => $account,
@@ -625,7 +625,7 @@ class AccountApiController extends ControllerBase
   }
   public function contentreblogAction() {
     $account = $this->dispatcher->getParam("account");
-    $data = Reblog::aggregate([
+    $data = Reblog::agg([
       [
         '$match' => [
           'account' => $account,

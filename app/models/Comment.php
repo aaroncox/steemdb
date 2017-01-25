@@ -30,7 +30,7 @@ class Comment extends Document
 
   public function origin() {
     $app = $this->metadata('app');
-    if(!is_string($app)) return null;    
+    if(!is_string($app)) return null;
     $parts = explode("/", $app);
     if(sizeof($parts) > 1) {
       return $parts[0];
@@ -55,7 +55,7 @@ class Comment extends Document
         '$lte' => new UTCDateTime(strtotime("midnight") * 1000),
       ];
     }
-    return Comment::aggregate([
+    return Comment::agg([
       [
         '$match' => [
           'created' => $dates
@@ -150,4 +150,3 @@ class Comment extends Document
     ]);
   }
 }
-
