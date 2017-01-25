@@ -36,6 +36,9 @@
           <a class="reply" href="https://steemit.com/tag/@{{ comment.author }}/{{ comment.permlink }}" target="_blank">
             View on Steemit / Reply
           </a>
+          <a class="reply" href="https://steemdb.com/tag/@{{ comment.author }}/{{ comment.permlink }}" target="_blank">
+            View on SteemDB 
+          </a>
         </div>
       </div>
     </div>
