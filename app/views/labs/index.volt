@@ -102,6 +102,19 @@
                 </div>
               </div>
             </div>
+            <div class="item">
+              <div class="ui header">
+                <i class="list icon"></i>
+                <div class="content">
+                  <a href="/labs/powerdown">
+                    Account List by Flags Received
+                  </a>
+                  <div class="sub header">
+                    Displays the top 200 most-flagged accounts
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="ui segment">

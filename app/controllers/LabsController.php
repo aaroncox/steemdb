@@ -143,6 +143,28 @@ class LabsController extends ControllerBase
     $this->view->powerdowns = $transactions;
   }
 
+  public function flagsAction() {
+    $accounts = Vote::aggregate([
+      ['$match' => [
+        'weight' => ['$lt' => 0]
+      ]],
+      ['$group' => [
+        '_id' => '$author',
+        'count' => ['$sum' => 1],
+        'flaggers' => ['$push' => '$voter'],
+        'posts' => ['$addToSet' => '$permlink']
+      ]],
+      ['$sort' => ['count' => -1]],
+      ['$limit' => 200]
+    ])->toArray();
+    foreach($accounts as $idx => $account) {
+      $voters = array_count_values((array)$account['flaggers']);
+      arsort($voters);
+      $accounts[$idx]['voters'] = array_slice($voters, 0, 10);
+    }
+    $this->view->accounts = $accounts;
+  }
+
   public function powerupAction() {
     // {transactions: {$elemMatch: {'operations.0.0': 'transfer_to_vesting'}}
     $days = 30;
