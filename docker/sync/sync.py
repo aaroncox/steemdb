@@ -36,6 +36,8 @@ def process_op(opObj, block, blockid):
     if opType == "comment":
         # Update the comment
         update_comment(op['author'], op['permlink'], op, block, blockid)
+    if opType == "comment_options":
+        update_comment_options(op, block, blockid)
     if opType == "vote":
         # Update the comment and vote
         update_comment(op['author'], op['permlink'])
@@ -316,6 +318,13 @@ def update_comment(author, permlink, op=None, block=None, blockid=None):
                 }
             }
         )
+
+def update_comment_options(op, block, blockid):
+    _id = op['author'] + '/' + op['permlink']
+    data = {
+      'options': op.copy()
+    }
+    db.comment.update({'_id': _id}, {'$set': data}, upsert=True)
 
 mvest_per_account = {}
 
