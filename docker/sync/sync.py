@@ -155,7 +155,7 @@ def save_custom_json(op, block, blockid):
             if data[0] == 'follow':
                 save_follow(data, op, block, blockid)
     except ValueError:
-        pprint("Processing failure")
+        pprint("[STEEM] - Processing failure")
         pprint(blockid)
         pprint(op['json'])
 
@@ -303,7 +303,7 @@ def update_comment(author, permlink):
 mvest_per_account = {}
 
 def load_accounts():
-    pprint("Loading all accounts")
+    pprint("[STEEM] - Loading all accounts")
     for account in db.account.find():
         if 'vesting_shares' in account:
             mvest_per_account.update({account['name']: account['vesting_shares']})
@@ -368,6 +368,8 @@ def update_account(account_name):
     db.account.update({'_id': account_name}, account, upsert=True)
 
 if __name__ == '__main__':
+    pprint("[STEEM] - Starting SteemDB Sync Service")
+    sys.stdout.flush()
     # Let's find out how often blocks are generated!
     config = rpc.get_config()
     block_interval = config["STEEMIT_BLOCK_INTERVAL"]
@@ -429,7 +431,7 @@ if __name__ == '__main__':
             # Update our block height
             db.status.update({'_id': 'height'}, {"$set" : {'value': last_block}}, upsert=True)
             if last_block % 100 == 0:
-                pprint("Processed up to Block #" + str(last_block))
+                pprint("[STEEM] - Processed up to Block #" + str(last_block))
 
         sys.stdout.flush()
 
