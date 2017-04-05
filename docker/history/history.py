@@ -133,7 +133,7 @@ if __name__ == '__main__':
     update_history()
     # Schedule it to run every 6 hours
     scheduler = BackgroundScheduler()
-    scheduler.add_job(update_history, 'interval', hours=6, id='update_history')
+    scheduler.add_job(update_history, 'interval', hours=24, id='update_history')
     scheduler.start()
     # Loop
     try:
