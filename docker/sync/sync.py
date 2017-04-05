@@ -44,6 +44,8 @@ def process_op(opObj, block, blockid):
         save_convert(op, block, blockid)
     if opType == "custom_json":
         save_custom_json(op, block, blockid)
+    if opType == "feed_publish":
+        save_feed_publish(op, block, blockid)
     if opType == "account_witness_vote":
         save_witness_vote(op, block, blockid)
     if opType == "pow" or opType == "pow2":
@@ -156,6 +158,22 @@ def save_custom_json(op, block, blockid):
         pprint("Processing failure")
         pprint(blockid)
         pprint(op['json'])
+
+def save_feed_publish(op, block, blockid):
+    doc = op.copy()
+    _id = str(blockid) + '|' + doc['publisher']
+    query = {
+        '_id': _id
+    }
+    doc.update({
+        '_id': _id,
+        '_block': blockid,
+        '_ts': datetime.strptime(block['timestamp'], "%Y-%m-%dT%H:%M:%S"),
+    })
+    for key in ['base', 'quote']:
+        doc['exchange_rate'][key] = float(doc['exchange_rate'][key].split()[0])
+
+    db.feed_publish.update(query, doc, upsert=True)
 
 def save_follow(data, op, block, blockid):
     doc = data[1].copy()
