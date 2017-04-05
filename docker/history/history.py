@@ -12,7 +12,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 
 # rpc = SteemNodeRPC(host, "", "", ['follow_api'])
 
-rpc = SteemNodeRPC("ws://" + os.environ['steemnode'], "", "", apis=["follow", "database"])
+rpc = SteemNodeRPC("wss://" + os.environ['steemnode'], "", "", apis=["follow", "database"])
 mongo = MongoClient("mongodb://mongo")
 db = mongo.steemdb
 

@@ -10,7 +10,7 @@ import time
 import sys
 import os
 
-rpc = SteemNodeRPC("ws://" + os.environ['steemnode'], "", "", apis=["follow", "database"])
+rpc = SteemNodeRPC("wss://" + os.environ['steemnode'], "", "", apis=["follow", "database"])
 mongo = MongoClient("mongodb://mongo")
 db = mongo.steemdb
 
