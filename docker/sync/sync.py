@@ -35,7 +35,7 @@ def process_op(opObj, block, blockid):
     op = opObj[1]
     if opType == "comment":
         # Update the comment
-        update_comment(op['author'], op['permlink'])
+        update_comment(op['author'], op['permlink'], op, block, blockid)
     if opType == "vote":
         # Update the comment and vote
         update_comment(op['author'], op['permlink'])
@@ -251,10 +251,27 @@ def save_witness_vote(op, block, blockid):
     if witness_vote['account'] != witness_vote['witness']:
         queue_update_account(witness_vote['witness'])
 
-def update_comment(author, permlink):
+def update_comment(author, permlink, op=None, block=None, blockid=None):
+    # Generate our unique permlink
     _id = author + '/' + permlink
+
+    # skip this post, since xeroc managed to break processing of it :)
     if(_id == "xeroc/re-piston-20160818t080811"):
       return
+
+    # if this is a diff, save a copy of the diff into the comment_diff collection
+    if op and 'body' in op and op['body'].startswith("@@ "):
+      diffid = str(blockid) + '/' + op['author'] + '/' + op['permlink']
+      diff = op.copy()
+      query = {'_id': diffid}
+      diff.update({
+        '_id': diffid,
+        '_ts': datetime.strptime(block['timestamp'], "%Y-%m-%dT%H:%M:%S"),
+        'block': int(blockid),
+      })
+      db.comment_diff.update(query, diff, upsert=True)
+
+    # get the post as it currently exists
     comment = rpc.get_content(author, permlink).copy()
     comment.update({
         '_id': _id,
