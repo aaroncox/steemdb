@@ -19,14 +19,13 @@ db = mongo.steemdb
 mvest_per_account = {}
 
 def load_accounts():
-    pprint("SteemDB - Loading mvest per account")
+    pprint("[STEEM] - Loading mvest per account")
     for account in db.account.find():
         if "name" in account.keys():
             mvest_per_account.update({account['name']: account['vesting_shares']})
 
-def update_history():
-
-    pprint("SteemDB - Update Global Properties")
+def update_props_history():
+    pprint("[STEEM] - Update Global Properties")
 
     props = rpc.get_dynamic_global_properties()
 
@@ -50,7 +49,8 @@ def update_history():
 
     now = datetime.now().date()
     today = datetime.combine(now, datetime.min.time())
-    pprint("SteemDB - Update History (" + str(len(users)) + " accounts)")
+
+    pprint("[STEEM] - Update History (" + str(len(users)) + " accounts)")
     # Snapshot User Count
     db.statistics.update({
       'key': 'users',
