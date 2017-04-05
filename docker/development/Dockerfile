@@ -29,7 +29,9 @@ RUN apt-get install -y bash \
     php7.0-phar \
     php7.0-dom \
     php7.0-phalcon \
+    php7.0-zip \
     php-xdebug \
+    php7.0-mbstring \
     ca-certificates \
     dialog \
     gcc \
@@ -77,7 +79,7 @@ RUN mkdir -p /run/php &&\
     echo "extension=phalcon.so" > /etc/php/7.0/fpm/conf.d/30-phalcon.ini && \
     echo "extension=phalcon.so" > /etc/php/7.0/cli/conf.d/30-phalcon.ini
 
-RUN apt-get install -y php-pear libcurl4-openssl-dev pkg-config libssl-dev libsslcommon2-dev && \
+RUN apt-get update && apt-get install -y php-pear libcurl4-openssl-dev pkg-config libssl-dev libsslcommon2-dev && \
     pecl install mongodb && \
     echo "extension=mongodb.so" > /etc/php/7.0/fpm/conf.d/30-mongo.ini && \
     echo "extension=mongodb.so" > /etc/php/7.0/cli/conf.d/30-mongo.ini
