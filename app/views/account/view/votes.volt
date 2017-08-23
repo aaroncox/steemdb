@@ -21,7 +21,7 @@
       </td>
       <td class="">
         <div class="ui small header">
-            <a href="/@voter">
+            <a href="/@{{ vote.voter }}">
               @{{ vote.voter }}
             </a>
             voted on
