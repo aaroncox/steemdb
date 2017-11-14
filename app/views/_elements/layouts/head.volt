@@ -95,6 +95,9 @@
     .ui.body.container {
       margin: 3em 0;
     }
+    .ui.table tr td {
+      word-wrap: break-word;
+    }
     @media only screen and (min-width: 768px) {
       body .ui.table:not(.unstackable) tr>td.mobile.visible,
       body .ui.table:not(.unstackable) tr>th.mobile.visible,
