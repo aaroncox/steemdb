@@ -1,8 +1,8 @@
 <?php
-namespace SteemDB\Controllers;
+namespace BexNetwork\Controllers;
 
-use SteemDB\Models\Account;
-use SteemDB\Models\Statistics;
+use BexNetwork\Models\Account;
+use BexNetwork\Models\Statistics;
 
 class AccountsController extends ControllerBase
 {
@@ -27,12 +27,12 @@ class AccountsController extends ControllerBase
             "followers_mvest" => -1,
           );
           break;
-        case "sbd":
+        case "bbd":
           $sort = array(
-            "total_sbd_balance" => -1,
+            "total_bbd_balance" => -1,
           );
           break;
-        case "steem":
+        case "dpay":
           $sort = array(
             "total_balance" => -1,
           );

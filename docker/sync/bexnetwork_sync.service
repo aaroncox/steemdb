@@ -1,0 +1,11 @@
+[Unit]
+Description=BexNetwork.com Sync Service
+
+[Service]
+Environment=dpaynode=d.dpays.io
+WorkingDirectory=/var/www/com_bexnetwork/docker/sync
+ExecStart=/usr/bin/python3 sync.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

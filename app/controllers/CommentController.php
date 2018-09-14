@@ -1,12 +1,12 @@
 <?php
-namespace SteemDB\Controllers;
+namespace BexNetwork\Controllers;
 
 use MongoDB\BSON\UTCDateTime;
 
-use SteemDB\Models\Account;
-use SteemDB\Models\Comment;
-use SteemDB\Models\Reblog;
-use SteemDB\Models\Vote;
+use BexNetwork\Models\Account;
+use BexNetwork\Models\Comment;
+use BexNetwork\Models\Reblog;
+use BexNetwork\Models\Vote;
 
 class CommentController extends ControllerBase
 {

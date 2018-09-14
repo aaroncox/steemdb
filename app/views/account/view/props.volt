@@ -12,7 +12,7 @@
       <th>Base</th>
       <th>Bias</th>
       <th>Creation Fee</th>
-      <th>SBD Interest</th>
+      <th>BBD Interest</th>
       <th>Block Size</th>
     </tr>
   </thead>
@@ -23,21 +23,21 @@
         {{ props.created.toDateTime().format('Y-m-d') }}
       </td>
       <td>
-        {{ props.sbd_exchange_rate.quote }}
+        {{ props.bbd_exchange_rate.quote }}
       </td>
       <td>
-        {{ props.sbd_exchange_rate.base }}
+        {{ props.bbd_exchange_rate.base }}
       </td>
       <td>
-        {% if props.sbd_exchange_rate.quote != "1.000 STEEM" %}
-        <?php echo round((1 - 1/explode(" ", $props->sbd_exchange_rate->quote)[0]) * 100, 1) ?>%
+        {% if props.bbd_exchange_rate.quote != "1.000 BEX" %}
+        <?php echo round((1 - 1/explode(" ", $props->bbd_exchange_rate->quote)[0]) * 100, 1) ?>%
         {% endif %}
       </td>
       <td>
         {{ props.props.account_creation_fee }}
       </td>
       <td>
-        {{ props.props.sbd_interest_rate }}
+        {{ props.props.bbd_interest_rate }}
       </td>
       <td>
         {{ props.props.maximum_block_size }}

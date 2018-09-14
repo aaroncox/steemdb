@@ -3,7 +3,7 @@
 use JsonRPC\Client;
 use JsonRPC\HttpClient;
 
-class steemd
+class dpayd
 {
 
   protected $host;
@@ -55,7 +55,7 @@ class steemd
   {
     try {
       $return = $this->client->call(0, 'get_dynamic_global_properties', []);
-      $return['steem_per_mvests'] = floor($return['total_vesting_fund_steem'] / $return['total_vesting_shares'] * 1000000 * 1000) / 1000;
+      $return['dpay_per_mvests'] = floor($return['total_vesting_fund_dpay'] / $return['total_vesting_shares'] * 1000000 * 1000) / 1000;
       return $return;
     } catch (Exception $e) {
       return array();

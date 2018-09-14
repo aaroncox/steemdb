@@ -1,5 +1,5 @@
 <?php
-namespace SteemDB\Models;
+namespace BexNetwork\Models;
 
 class BSON_Document extends MongoDB\Model\BSONDocument
 {

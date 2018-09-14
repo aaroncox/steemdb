@@ -1,5 +1,5 @@
 <?php
-namespace SteemDB\Models;
+namespace BexNetwork\Models;
 
 class Vote extends Document
 {

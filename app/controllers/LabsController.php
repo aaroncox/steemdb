@@ -1,13 +1,13 @@
 <?php
-namespace SteemDB\Controllers;
+namespace BexNetwork\Controllers;
 
-use SteemDB\Models\Account;
-use SteemDB\Models\AuthorReward;
-use SteemDB\Models\Block30d;
-use SteemDB\Models\Comment;
-use SteemDB\Models\CurationReward;
-use SteemDB\Models\Vote;
-use SteemDB\Models\VestingWithdraw;
+use BexNetwork\Models\Account;
+use BexNetwork\Models\AuthorReward;
+use BexNetwork\Models\Block30d;
+use BexNetwork\Models\Comment;
+use BexNetwork\Models\CurationReward;
+use BexNetwork\Models\Vote;
+use BexNetwork\Models\VestingWithdraw;
 use MongoDB\BSON\UTCDateTime;
 
 class LabsController extends ControllerBase
@@ -26,10 +26,10 @@ class LabsController extends ControllerBase
   }
 
   public function powerdownAction() {
-    $props = $this->steemd->getProps();
+    $props = $this->dpayd->getProps();
     $converted = array(
       'current' => (float) explode(" ", $props['current_supply'])[0],
-      'vesting' => (float) explode(" ", $props['total_vesting_fund_steem'])[0],
+      'vesting' => (float) explode(" ", $props['total_vesting_fund_dpay'])[0],
     );
     $converted['liquid'] = $converted['current'] - $converted['vesting'];
     $this->view->props = $converted;
@@ -228,7 +228,7 @@ class LabsController extends ControllerBase
   public function photochallengeAction() {
     $query = array(
       'depth' => 0,
-      'json_metadata.tags' => 'steemitphotochallenge'
+      'json_metadata.tags' => 'dpayitphotochallenge'
     );
     $sort = array('created' => -1);
     $posts = Comment::find(array(
@@ -366,8 +366,8 @@ class LabsController extends ControllerBase
         '$group' => [
           '_id' => '$author',
           'count' => ['$sum' => 1],
-          'sbd' => ['$sum' => '$sbd_payout'],
-          'steem' => ['$sum' => '$steem_payout'],
+          'bbd' => ['$sum' => '$bbd_payout'],
+          'dpay' => ['$sum' => '$dpay_payout'],
           'vest' => ['$sum' => '$vesting_payout'],
           'permlinks' => ['$addToSet' => [
             '$concat' => ['$author','/','$permlink']

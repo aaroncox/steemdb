@@ -1,6 +1,6 @@
 from datetime import datetime
-from steemapi.steemnoderpc import SteemNodeRPC
-from piston.steem import Post
+from dpaypyapi.dpaynoderpc import DPayNodeRPC
+from dpaypy.dpay import Post
 from pymongo import MongoClient
 from pprint import pprint
 import collections
@@ -10,29 +10,29 @@ import os
 
 from apscheduler.schedulers.background import BackgroundScheduler
 
-# rpc = SteemNodeRPC(host, "", "", ['follow_api'])
+# rpc = DPayNodeRPC(host, "", "", ['follow_api'])
 
-rpc = SteemNodeRPC("ws://" + os.environ['steemnode'], "", "", apis=["follow", "database"])
+rpc = DPayNodeRPC("wss://" + os.environ['dpaynode'], "", "", apis=["follow", "database"])
 mongo = MongoClient("mongodb://mongo")
-db = mongo.steemdb
+db = mongo.bexnetwork
 
 mvest_per_account = {}
 
 def load_accounts():
-    pprint("SteemDB - Loading mvest per account")
+    pprint("BexNetwork - Loading mvest per account")
     for account in db.account.find():
         if "name" in account.keys():
             mvest_per_account.update({account['name']: account['vesting_shares']})
 
 def update_history():
 
-    pprint("SteemDB - Update Global Properties")
+    pprint("BexNetwork - Update Global Properties")
 
     props = rpc.get_dynamic_global_properties()
 
     for key in ['max_virtual_bandwidth', 'recent_slots_filled', 'total_reward_shares2']:
         props[key] = float(props[key])
-    for key in ['confidential_sbd_supply', 'confidential_supply', 'current_sbd_supply', 'current_supply', 'total_reward_fund_steem', 'total_vesting_fund_steem', 'total_vesting_shares', 'virtual_supply']:
+    for key in ['confidential_bbd_supply', 'confidential_supply', 'current_bbd_supply', 'current_supply', 'total_reward_fund_dpay', 'total_vesting_fund_dpay', 'total_vesting_shares', 'virtual_supply']:
         props[key] = float(props[key].split()[0])
     for key in ['time']:
         props[key] = datetime.strptime(props[key], "%Y-%m-%dT%H:%M:%S")
@@ -50,7 +50,7 @@ def update_history():
 
     now = datetime.now().date()
     today = datetime.combine(now, datetime.min.time())
-    pprint("SteemDB - Update History (" + str(len(users)) + " accounts)")
+    pprint("BexNetwork - Update History (" + str(len(users)) + " accounts)")
     # Snapshot User Count
     db.statistics.update({
       'key': 'users',
@@ -98,21 +98,21 @@ def update_history():
         account['proxy_witness'] = sum(float(i) for i in account['proxied_vsf_votes']) / 1000000
         for key in ['lifetime_bandwidth', 'reputation', 'to_withdraw']:
             account[key] = float(account[key])
-        for key in ['balance', 'sbd_balance', 'sbd_seconds', 'savings_balance', 'savings_sbd_balance', 'vesting_balance', 'vesting_shares', 'vesting_withdraw_rate']:
+        for key in ['balance', 'bbd_balance', 'bbd_seconds', 'savings_balance', 'savings_bbd_balance', 'vesting_balance', 'vesting_shares', 'vesting_withdraw_rate']:
             account[key] = float(account[key].split()[0])
         # Convert to Date
-        for key in ['created','last_account_recovery','last_account_update','last_active_proved','last_bandwidth_update','last_market_bandwidth_update','last_owner_proved','last_owner_update','last_post','last_root_post','last_vote_time','next_vesting_withdrawal','savings_sbd_last_interest_payment','savings_sbd_seconds_last_update','sbd_last_interest_payment','sbd_seconds_last_update']:
+        for key in ['created','last_account_recovery','last_account_update','last_active_proved','last_bandwidth_update','last_market_bandwidth_update','last_owner_proved','last_owner_update','last_post','last_root_post','last_vote_time','next_vesting_withdrawal','savings_bbd_last_interest_payment','savings_bbd_seconds_last_update','bbd_last_interest_payment','bbd_seconds_last_update']:
             account[key] = datetime.strptime(account[key], "%Y-%m-%dT%H:%M:%S")
         # Combine Savings + Balance
         account['total_balance'] = account['balance'] + account['savings_balance']
-        account['total_sbd_balance'] = account['sbd_balance'] + account['savings_sbd_balance']
+        account['total_bbd_balance'] = account['bbd_balance'] + account['savings_bbd_balance']
         # Update our current info about the account
         mvest_per_account.update({account['name']: account['vesting_shares']})
         # Save current state of account
         account['scanned'] = datetime.now()
         db.account.update({'_id': user}, account, upsert=True)
         # Create our Snapshot dict
-        wanted_keys = ['name', 'proxy_witness', 'activity_shares', 'average_bandwidth', 'average_market_bandwidth', 'savings_balance', 'balance', 'comment_count', 'curation_rewards', 'lifetime_bandwidth', 'lifetime_vote_count', 'next_vesting_withdrawal', 'reputation', 'post_bandwidth', 'post_count', 'posting_rewards', 'sbd_balance', 'savings_sbd_balance', 'sbd_last_interest_payment', 'sbd_seconds', 'sbd_seconds_last_update', 'to_withdraw', 'vesting_balance', 'vesting_shares', 'vesting_withdraw_rate', 'voting_power', 'withdraw_routes', 'withdrawn', 'witnesses_voted_for']
+        wanted_keys = ['name', 'proxy_witness', 'activity_shares', 'average_bandwidth', 'average_market_bandwidth', 'savings_balance', 'balance', 'comment_count', 'curation_rewards', 'lifetime_bandwidth', 'lifetime_vote_count', 'next_vesting_withdrawal', 'reputation', 'post_bandwidth', 'post_count', 'posting_rewards', 'bbd_balance', 'savings_bbd_balance', 'bbd_last_interest_payment', 'bbd_seconds', 'bbd_seconds_last_update', 'to_withdraw', 'vesting_balance', 'vesting_shares', 'vesting_withdraw_rate', 'voting_power', 'withdraw_routes', 'withdrawn', 'witnesses_voted_for']
         snapshot = dict((k, account[k]) for k in wanted_keys if k in account)
         snapshot.update({
           'account': user,

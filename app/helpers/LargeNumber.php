@@ -1,5 +1,5 @@
 <?php
-namespace SteemDB\Helpers;
+namespace BexNetwork\Helpers;
 
 use Phalcon\Tag;
 

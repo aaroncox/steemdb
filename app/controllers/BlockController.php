@@ -1,7 +1,7 @@
 <?php
-namespace SteemDB\Controllers;
+namespace BexNetwork\Controllers;
 
-use SteemDB\Models\Block;
+use BexNetwork\Models\Block;
 
 class BlockController extends ControllerBase
 {
@@ -15,7 +15,7 @@ class BlockController extends ControllerBase
       )
     ));
     if(!$this->view->current) {
-      $this->flashSession->error('Block "'.$block.'" does not exist on SteemDB currently.');
+      $this->flashSession->error('Block "'.$block.'" does not exist on BexNetwork currently.');
       $this->response->redirect();
       return;
     }

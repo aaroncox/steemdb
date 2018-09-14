@@ -1,0 +1,11 @@
+[Unit]
+Description=BexNetwork.com Witnesses Service
+
+[Service]
+Environment=dpaynode=d.dpays.io
+WorkingDirectory=/var/www/com_bexnetwork/docker/witnesses
+ExecStart=/usr/bin/python3 witnesses.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

@@ -54,7 +54,7 @@ $di->set('view', function () {
         $compiler->addFunction(
           'markdown',
           function ($resolvedArgs, $exprArgs) {
-            return 'SteemDB\Helpers\Markdown::string(' . $resolvedArgs . ')';
+            return 'BexNetwork\Helpers\Markdown::string(' . $resolvedArgs . ')';
           }
         );
         return $volt;
@@ -126,7 +126,7 @@ $di->set('dispatcher', function () {
     }
   });
   $dispatcher = new MvcDispatcher();
-  $dispatcher->setDefaultNamespace('SteemDB\Controllers');
+  $dispatcher->setDefaultNamespace('BexNetwork\Controllers');
   $dispatcher->setEventsManager($eventsManager);
   return $dispatcher;
 });
@@ -157,9 +157,9 @@ $di->set('logger', function ($filename = null, $format = null) {
   return $logger;
 });
 
-$di->set('steemd', function() {
-  require_once(APP_PATH . '/libs/steemd.php');
-  return new Steemd('https://node.steem.ws');
+$di->set('dpayd', function() {
+  require_once(APP_PATH . '/libs/dpayd.php');
+  return new DPayd('https://d.dpays.io');
 });
 
 $di->set('memcached', function() {
@@ -180,8 +180,8 @@ $di->set('memcached', function() {
   return $cache;
 });
 
-$di->set('convert', function () { return new SteemDB\Helpers\Convert(); });
-$di->set('largeNumber', function () { return new SteemDB\Helpers\LargeNumber(); });
-$di->set('reputation', function () { return new SteemDB\Helpers\Reputation(); });
-$di->set('timeAgo', function () { return new SteemDB\Helpers\TimeAgo(); });
-$di->set('opName', function () { return new SteemDB\Helpers\OpName(); });
+$di->set('convert', function () { return new BexNetwork\Helpers\Convert(); });
+$di->set('largeNumber', function () { return new BexNetwork\Helpers\LargeNumber(); });
+$di->set('reputation', function () { return new BexNetwork\Helpers\Reputation(); });
+$di->set('timeAgo', function () { return new BexNetwork\Helpers\TimeAgo(); });
+$di->set('opName', function () { return new BexNetwork\Helpers\OpName(); });

@@ -1,11 +1,11 @@
 <?php
-namespace SteemDB\Controllers;
+namespace BexNetwork\Controllers;
 
 use MongoDB\BSON\Regex;
 
-use SteemDB\Models\Account;
-use SteemDB\Models\Comment;
-use SteemDB\Models\Reblog;
+use BexNetwork\Models\Account;
+use BexNetwork\Models\Comment;
+use BexNetwork\Models\Reblog;
 
 class ForumsController extends ControllerBase
 {
@@ -126,23 +126,23 @@ class ForumsController extends ControllerBase
         ]
       ]
     ],
-    'steem' => [
-      'name' => 'STEEM Discussion',
+    'dpay' => [
+      'name' => 'dPay Discussion',
       'description' => '',
       'boards' => [
         'announcements' => [
           'name' => 'Announcements',
           'description' => '',
           'accounts' => [
-            'steemitblog'
+            'dsiteblog'
           ]
         ],
-        'steem' => [
-          'name' => 'Steem',
+        'dpay' => [
+          'name' => 'dPay',
           'description' => '',
           'tags' => [
-            'steem',
-            'steemit',
+            'dpay',
+            'dsite',
           ]
         ],
         'witnesses' => [
@@ -209,13 +209,13 @@ class ForumsController extends ControllerBase
     //   'explain' => $command,
     //   'verbosity' => 'queryPlanner',
     // ]);
-    // $cursor = $manager->executeCommand('steemdb', $cmd); // retrieve the results
+    // $cursor = $manager->executeCommand('bexnetwork', $cmd); // retrieve the results
     // $output['queryPlanner'] = $cursor->toArray()[0];
     $cmd = new \MongoDB\Driver\Command([
       'explain' => $command,
       'verbosity' => 'allPlansExecution',
     ]);
-    $cursor = $manager->executeCommand('steemdb', $cmd); // retrieve the results
+    $cursor = $manager->executeCommand('bexnetwork', $cmd); // retrieve the results
     // $output['executionStats'] = $cursor->toArray()[0];
     return $cursor->toArray()[0];
     return $output;
@@ -341,8 +341,8 @@ class ForumsController extends ControllerBase
       "sort" => $sort,
     ]);
 
-    // find resteems
-    $this->view->resteems = Reblog::count([
+    // find reposts
+    $this->view->reposts = Reblog::count([
       [
         'author' => $author,
         'permlink' => $permlink,

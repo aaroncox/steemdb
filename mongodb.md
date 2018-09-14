@@ -1,7 +1,7 @@
 # -------------------------
 # MongoDB Initial Commands
 #   To establish some of the collections properly, these commands
-#   should be executed before running steemdb.
+#   should be executed before running bexnetwork.
 # -------------------------
 
 # 30 Day Block Collection

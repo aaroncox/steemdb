@@ -1,0 +1,11 @@
+[Unit]
+Description=BexNetwork.com History Service
+
+[Service]
+Environment=dpaynode=dpayd.dpays.io
+WorkingDirectory=/var/www/com_bexnetwork/docker/history
+ExecStart=/usr/bin/python3 history.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

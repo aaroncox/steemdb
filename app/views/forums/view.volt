@@ -92,7 +92,7 @@ a.anchor {
     <div class="row">
       <div class="three wide center aligned column">
         <div class="mobile hidden">
-          <img src="https://img.steemconnect.com/@{{ post.author }}?size=80" class="ui tiny centered spaced circular bordered image">
+          <img src="https://img.dpayid.com/@{{ post.author }}?size=80" class="ui tiny centered spaced circular bordered image">
           <div class="ui centered header">
             <a href="/@{{ post.author }}">
               @{{ post.author }}
@@ -105,7 +105,7 @@ a.anchor {
           </div>
         </div>
         <div class="mobile visible">
-          <img src="https://img.steemconnect.com/@{{ post.author }}?size=60" class="ui right floated spaced circular bordered image">
+          <img src="https://img.dpayid.com/@{{ post.author }}?size=60" class="ui right floated spaced circular bordered image">
         </div>
       </div>
       <div class="thirteen wide column">
@@ -189,8 +189,8 @@ a.anchor {
                   <svg height="16" style="vertical-align: middle" enable-background="new 0 0 33 33" version="1.1" viewBox="0 0 33 33" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Chevron_Up_Circle"><circle cx="16" cy="16" r="15" stroke="#121313" fill="none"></circle><path d="M16.699,11.293c-0.384-0.38-1.044-0.381-1.429,0l-6.999,6.899c-0.394,0.391-0.394,1.024,0,1.414 c0.395,0.391,1.034,0.391,1.429,0l6.285-6.195l6.285,6.196c0.394,0.391,1.034,0.391,1.429,0c0.394-0.391,0.394-1.024,0-1.414 L16.699,11.293z" fill="#121313"></path></g></svg>
                 </div>
                 <div class="ui center aligned segment">
-                  <div class="ui sub header">resteems</div>
-                  {{ resteems }}
+                  <div class="ui sub header">reposts</div>
+                  {{ reposts }}
                   <svg height="16" style="vertical-align: middle" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve"><path d="M448,192l-128,96v-64H128v128h248c4.4,0,8,3.6,8,8v48c0,4.4-3.6,8-8,8H72c-4.4,0-8-3.6-8-8V168c0-4.4,3.6-8,8-8h248V96 L448,192z"></path></svg>
                 </div>
                 {#<div class="ui center aligned segment">
@@ -205,14 +205,14 @@ a.anchor {
                   <?php echo $this->timeAgo::mongo($post->created); ?>
                   {% if post.origin() %}
                     ( via
-                    {% if post.origin() == 'steemit' %}
-                    <a href="https://steemit.com/">steemit.com</a>
-                    {% elseif post.origin() == 'busy' %}
-                    <a href="https://busy.org/">busy.org</a>
-                    {% elseif post.origin() == 'steemdb' %}
-                    <a href="https://steemdb.com/">steemdb.com</a>
-                    {% elseif post.origin() == 'esteem' %}
-                    <a href="http://esteem.ws/">esteem</a>
+                    {% if post.origin() == 'dsite' %}
+                    <a href="https://dsite.io/">dsite.io</a>
+                    {% elseif post.origin() == 'dsocial' %}
+                    <a href="https://dsocial.io/">dsocial.io</a>
+                    {% elseif post.origin() == 'bexnetwork' %}
+                    <a href="https://bex.network/">bex.network</a>
+                    {% elseif post.origin() == 'dpeeps' %}
+                    <a href="http://dpeeps.com/">dpeeps.com</a>
                     {% else %}
                       Unknown - [{{ post.origin() }}]
                     {% endif %}
@@ -223,8 +223,8 @@ a.anchor {
                 </div>
                 <div class="actions">
                   <a class="reply" data-display="false" data-permlink="{{ post.permlink }}" data-author="{{ post.author }}">Reply to this post</a>
-                  <a href="https://steemit.com{{ post.url }}" target="_blank">steem<strong>it</strong>.com</a>
-                  <a href="https://steemdb.com/tag/@{{ post.author }}/{{ post.permlink }}" target="_blank">steem<strong>db</strong>.com</a>
+                  <a href="https://dsite.io{{ post.url }}" target="_blank">dSite<strong>it</strong>.com</a>
+                  <a href="https://bex.network/tag/@{{ post.author }}/{{ post.permlink }}" target="_blank">BEX Network<strong>db</strong></a>
                 </div>
               </div>
             </div>
@@ -251,11 +251,11 @@ a.anchor {
             </div>
           </div>
         </div>
-        <div class='steemconnect reply'>
-          <form class='ui reply form' action='http://steemjs.com/sign/comment' method='get' target='iframe'>
+        <div class='dpayid reply'>
+          <form class='ui reply form' action='http://dpayid.io/sign/comment' method='get' target='iframe'>
             <input type='hidden' name='parent_permlink' value='{{ posts[0].permlink}}'>
             <input type='hidden' name='parent_author' value='{{ posts[0].author}}'>
-            <input type="hidden" name='json_metadata' value='{"app": "steemdb/0.1", "format": "markdown"}'>
+            <input type="hidden" name='json_metadata' value='{"app": "bexnetwork/0.1", "format": "markdown"}'>
             <div class='field'><textarea name='body'></textarea></div>
             <div class='ui primary submit labeled icon button'><i class='icon edit'></i> Add Reply</div>
           </form>
@@ -271,16 +271,16 @@ a.anchor {
       <div class="content">
         <div class="ui padded basic segment" style="font: 16px">
           <p>
-            Before you continue, please take a moment to understand how leaving a response on SteemDB works.
+            Before you continue, please take a moment to understand how leaving a response on BexNetwork works.
           </p>
           <p>
-            The signing of these transactions uses tools provided by <a href="https://steemconnect.com/" target="_blank">SteemConnect.com</a>. SteemDB is embedding and using these tools to allow your actions to take place.
+            The signing of these transactions uses tools provided by <a href="https://dpayid.com/" target="_blank">dPayID</a>. BexNetwork is embedding and using these tools to allow your actions to take place.
           </p>
           <p>
             <strong>For security reasons, we recommend you use your "posting" key to keep your account safe.</strong>
           </p>
           <p>
-            Once you create a post or reply, it may take up to 1 minute to appear here on SteemDB.
+            Once you create a post or reply, it may take up to 1 minute to appear here on BexNetwork.
           </p>
         </div>
         <div class="actions">
@@ -288,7 +288,7 @@ a.anchor {
         </div>
       </div>
     </div>
-    <div class="ui modal steemconnect">
+    <div class="ui modal dpayid">
       <div class="content">
         <div class="ui embed"></div>
       </div>
@@ -320,16 +320,16 @@ $( document ).ready(function() {
         onSuccess: function(e){
           var form = $(this),
               data = form.serialize()
-              embed = $(".ui.modal.steemconnect .ui.embed")
-                .attr("data-url", "https://steemjs.com/sign/comment?" + data);
+              embed = $(".ui.modal.dpayid .ui.embed")
+                .attr("data-url", "https://dpayid.io/sign/comment?" + data);
           $('.notice.modal')
             .modal('show')
           ;
-          $(".ui.modal.steemconnect")
+          $(".ui.modal.dpayid")
             .modal({
               allowMultiple: false,
               onShow: function() {
-                $(".ui.modal.steemconnect .ui.embed").embed();
+                $(".ui.modal.dpayid .ui.embed").embed();
               },
             })
             .modal('attach events', '.notice.modal .button')
@@ -344,13 +344,13 @@ $( document ).ready(function() {
         author = $(this).attr("data-author"),
         parent_permlink = $("<input type='hidden' name='parent_permlink'>").attr("value", permlink),
         parent_author = $("<input type='hidden' name='parent_author'>").attr("value", author),
-        json_metadata = $("<input type='hidden' name='json_metadata' value='{\"app\": \"steemdb/0.1\", \"format\": \"markdown\"}'>"),
+        json_metadata = $("<input type='hidden' name='json_metadata' value='{\"app\": \"bexnetwork/0.1\", \"format\": \"markdown\"}'>"),
         body = $("<div class='field'><textarea name='body'></textarea></div>"),
         button = $("<div class='ui primary submit labeled icon button'><i class='icon edit'></i> Add Reply</div>"),
-        form = $("<form class='ui reply form' action='http://steemjs.com/sign/comment' method='get' target='iframe'>").append(parent_author, parent_permlink, json_metadata, body, button),
-        container = $("<div class='steemconnect reply' data-author='"+author+"' data-permlink='"+permlink+"'>").append(form),
+        form = $("<form class='ui reply form' action='http://dpayid.io/sign/comment' method='get' target='iframe'>").append(parent_author, parent_permlink, json_metadata, body, button),
+        container = $("<div class='dpayid reply' data-author='"+author+"' data-permlink='"+permlink+"'>").append(form),
         display = $(this).data("display");
-    $("div.steemconnect[data-author="+author+"][data-permlink="+permlink+"]").remove();
+    $("div.dpayid[data-author="+author+"][data-permlink="+permlink+"]").remove();
     if(!display) {
       form.form(settings);
       $(this).parent().parent().after(container);
@@ -364,8 +364,8 @@ $( document ).ready(function() {
         .html("Reply");
     }
 
-    // <div class='steemconnect reply'>
-    //   <form class='ui reply form' action='http://steemjs.com/sign/comment' method='get' target='iframe'>
+    // <div class='dpayid reply'>
+    //   <form class='ui reply form' action='http://dpayid.io/sign/comment' method='get' target='iframe'>
     //     <input type='hidden' name='parent_permlink' value='{{ post.permlink}}'>
     //     <input type='hidden' name='parent_author' value='{{ post.author}}'>
     //     <div class='field'><textarea name='body'></textarea></div>

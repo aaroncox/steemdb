@@ -6,7 +6,7 @@
 <h3 class="ui header">
   Transfers
   <div class="sub header">
-    Transfers to and from @{{ account.name }} of both STEEM and SBD.
+    Transfers to and from @{{ account.name }} of both BEX and BBD.
   </div>
 </h3>
 <table class="ui table">

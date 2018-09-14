@@ -1,7 +1,7 @@
 <div class="ui two tiny statistics">
   <div class="statistic">
     <div class="value">
-      <?php echo number_format($total_payouts, 3, '.', ','); ?> SBD
+      <?php echo number_format($total_payouts, 3, '.', ','); ?> BBD
     </div>
     <div class="label">
       Total Payouts
@@ -9,7 +9,7 @@
   </div>
   <div class="statistic">
     <div class="value">
-      <?php echo number_format($total_pending, 3, '.', ','); ?> SBD
+      <?php echo number_format($total_pending, 3, '.', ','); ?> BBD
     </div>
     <div class="label">
       Pending Payouts

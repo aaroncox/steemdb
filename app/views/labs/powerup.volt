@@ -12,7 +12,7 @@
         <div class="ui large header">
           Biggest Account Power Ups
           <div class="sub header">
-            Largest total steem powered up per account
+            Largest total dPay powered up per account
           </div>
         </div>
         <div class="ui menu">

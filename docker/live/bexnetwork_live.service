@@ -1,0 +1,11 @@
+[Unit]
+Description=BexNetwork.com Live Service
+
+[Service]
+Environment=dpaynode=d.dpays.io
+WorkingDirectory=/var/www/com_bexnetwork/docker/live
+ExecStart=/usr/bin/python3 live.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

@@ -1,5 +1,5 @@
 <?php
-namespace SteemDB\Controllers;
+namespace BexNetwork\Controllers;
 
 class LiveController extends ControllerBase
 {
@@ -13,7 +13,7 @@ class LiveController extends ControllerBase
 
   public function propsAction()
   {
-    echo json_encode($this->steemd->getProps(), JSON_PRETTY_PRINT);
+    echo json_encode($this->dpayd->getProps(), JSON_PRETTY_PRINT);
   }
 
 }

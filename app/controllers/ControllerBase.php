@@ -1,5 +1,5 @@
 <?php
-namespace SteemDB\Controllers;
+namespace BexNetwork\Controllers;
 
 use Phalcon\Mvc\Controller;
 use Phalcon\Mvc\Dispatcher;

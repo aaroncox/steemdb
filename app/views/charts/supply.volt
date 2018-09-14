@@ -21,36 +21,36 @@
       return new Date(dateString);
     };
 
-    var pSBD = function(d) { return +d.sbd; };
-    var pSTEEM = function(d) { return +d.steem; };
-    var pSP = function(d) { return +d.sp; };
+    var pBBD = function(d) { return +d.bbd; };
+    var pDPAY = function(d) { return +d.dpay; };
+    var pBP = function(d) { return +d.sp; };
 
-    // Chart SBD
-    var lSBD = new Plottable.Plots.Line();
-    lSBD.addDataset(dataset);
-    lSBD.x(pDate, xScale)
-         .y(pSBD, yScale)
+    // Chart BBD
+    var lBBD = new Plottable.Plots.Line();
+    lBBD.addDataset(dataset);
+    lBBD.x(pDate, xScale)
+         .y(pBBD, yScale)
          .attr("stroke", "#EF320B")
          ;
 
     // Chart Replies
-    var lSTEEM = new Plottable.Plots.Line();
-    lSTEEM.addDataset(dataset);
-    lSTEEM.x(pDate, xScale)
-             .y(pSTEEM, yScale)
+    var lDPAY = new Plottable.Plots.Line();
+    lDPAY.addDataset(dataset);
+    lDPAY.x(pDate, xScale)
+             .y(pDPAY, yScale)
              .attr("stroke", "#0A46D6")
              ;
 
     // Chart Votes
-    var lSP = new Plottable.Plots.Line();
-    lSP.addDataset(dataset);
-    lSP.x(pDate, xScale)
-             .y(pSP, yScale2)
+    var lBP = new Plottable.Plots.Line();
+    lBP.addDataset(dataset);
+    lBP.x(pDate, xScale)
+             .y(pBP, yScale2)
              .attr("stroke", "#58DC0A");
 
     var cs = new Plottable.Scales.Color();
     cs.range(["#EF320B", "#0A46D6", "#58DC0A", "#58DC0A"]);
-    cs.domain(["SBD","STEEM","STEEM POWER"]);
+    cs.domain(["BBD","BEX","BEX POWER"]);
     var legend = new Plottable.Components.Legend(cs);
     legend.maxEntriesPerRow(3);
 
@@ -67,7 +67,7 @@
     var yLabel = new Plottable.Components.AxisLabel("", "270");
     var xLabel = new Plottable.Components.TitleLabel("Supply History", "0");
 
-    var plots = new Plottable.Components.Group([lSBD, lSTEEM, lSP]);
+    var plots = new Plottable.Components.Group([lBBD, lDPAY, lBP]);
     var table = new Plottable.Components.Table([
       [null, null, xLabel, null, null],
       [null, null, legend, null, null],

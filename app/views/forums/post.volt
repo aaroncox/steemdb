@@ -93,11 +93,11 @@ a.anchor {
               </a>
             </div>
           </div>
-        <div class='steemconnect reply'>
-          <form class='ui reply form' action='http://steemjs.com/sign/comment' method='get' target='iframe'>
+        <div class='dpayid reply'>
+          <form class='ui reply form' action='http://dpayid.io/sign/comment' method='get' target='iframe'>
             <input type='hidden' name='parent_permlink' value='{{ posts[0].permlink}}'>
             <input type='hidden' name='parent_author' value='{{ posts[0].author}}'>
-            <input type="hidden" name='json_metadata' value='{"app": "steemdb/0.1", "format": "markdown"}'>
+            <input type="hidden" name='json_metadata' value='{"app": "bexnetwork/0.1", "format": "markdown"}'>
             <div class='field'><textarea name='body'></textarea></div>
             <div class='ui primary submit labeled icon button'><i class='icon edit'></i> Add Reply</div>
           </form>
@@ -106,7 +106,7 @@ a.anchor {
     </div>
     {% include 'forums/_breadcrumb.volt' %}
     <div class="row"></div>
-    <div class="ui modal steemconnect">
+    <div class="ui modal dpayid">
       <div class="content">
         <div class="ui embed"></div>
       </div>
@@ -138,12 +138,12 @@ $( document ).ready(function() {
         onSuccess: function(e){
           var form = $(this),
               data = form.serialize()
-              embed = $(".ui.modal.steemconnect .ui.embed")
-                .attr("data-url", "https://steemjs.com/sign/comment?" + data);
-          $(".ui.modal.steemconnect")
+              embed = $(".ui.modal.dpayid .ui.embed")
+                .attr("data-url", "https://dpayid.io/sign/comment?" + data);
+          $(".ui.modal.dpayid")
             .modal({
               onShow: function() {
-                $(".ui.modal.steemconnect .ui.embed").embed();
+                $(".ui.modal.dpayid .ui.embed").embed();
               },
             })
             .modal('show');
@@ -157,13 +157,13 @@ $( document ).ready(function() {
         author = $(this).attr("data-author"),
         parent_permlink = $("<input type='hidden' name='parent_permlink'>").attr("value", permlink),
         parent_author = $("<input type='hidden' name='parent_author'>").attr("value", author),
-        json_metadata = $("<input type='hidden' name='json_metadata' value='{\"app\": \"steemdb/0.1\", \"format\": \"markdown\"}'>"),
+        json_metadata = $("<input type='hidden' name='json_metadata' value='{\"app\": \"bexnetwork/0.1\", \"format\": \"markdown\"}'>"),
         body = $("<div class='field'><textarea name='body'></textarea></div>"),
         button = $("<div class='ui primary submit labeled icon button'><i class='icon edit'></i> Add Reply</div>"),
-        form = $("<form class='ui reply form' action='http://steemjs.com/sign/comment' method='get' target='iframe'>").append(parent_author, parent_permlink, json_metadata, body, button),
-        container = $("<div class='steemconnect reply' data-author='"+author+"' data-permlink='"+permlink+"'>").append(form),
+        form = $("<form class='ui reply form' action='http://dpayid.io/sign/comment' method='get' target='iframe'>").append(parent_author, parent_permlink, json_metadata, body, button),
+        container = $("<div class='dpayid reply' data-author='"+author+"' data-permlink='"+permlink+"'>").append(form),
         display = $(this).data("display");
-    $("div.steemconnect[data-author="+author+"][data-permlink="+permlink+"]").remove();
+    $("div.dpayid[data-author="+author+"][data-permlink="+permlink+"]").remove();
     if(!display) {
       form.form(settings);
       $(this).parent().parent().after(container);
@@ -177,8 +177,8 @@ $( document ).ready(function() {
         .html("Reply");
     }
 
-    // <div class='steemconnect reply'>
-    //   <form class='ui reply form' action='http://steemjs.com/sign/comment' method='get' target='iframe'>
+    // <div class='dpayid reply'>
+    //   <form class='ui reply form' action='http://dpayid.io/sign/comment' method='get' target='iframe'>
     //     <input type='hidden' name='parent_permlink' value='{{ post.permlink}}'>
     //     <input type='hidden' name='parent_author' value='{{ post.author}}'>
     //     <div class='field'><textarea name='body'></textarea></div>
