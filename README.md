@@ -1,8 +1,8 @@
-## steemdb
+## bexnetwork
 
-https://steemdb.com
+https://bex.network
 
-open source blockchain explorer for the steem blockchain - build on phalcon + mongodb
+open source blockchain explorer for the dPay blockchain - build on phalcon + mongodb
 
 ### Prerequisites
 
@@ -11,7 +11,7 @@ open source blockchain explorer for the steem blockchain - build on phalcon + mo
 
 ### Components
 
-1. `./app/` steemdb website: phalcon + mongodb application for serving out the website, apis, and MVC structure.
+1. `./app/` bexnetwork website: phalcon + mongodb application for serving out the website, apis, and MVC structure.
 2. `./docker/sync` sync service (python + piston) for keeping the blockchain synchronized and up to date. Runs on a 3 second delay and triggers updates in the database.
 3. `./docker/history` account history service (python + piston) which runs every 6 hours and analyzes every account on the blockchain. Records historical information as well as a current snapshot.
 4. `./docker/witnesses` witness/mining service (python + piston) which runs every minute to pull current witness information as well as the mining queue.
@@ -19,7 +19,7 @@ open source blockchain explorer for the steem blockchain - build on phalcon + mo
 
 ### Getting it running
 
-This explorer syncronizes the entire blockchain into a mongodb database. This takes a LOT of time. **I'd highly recommend you run a local instance of steemd** and modify the `docker-compose.yml` to point to it. It's going to be a lot faster of a sync than trying to read the entire blockchain from a public node.
+This explorer syncronizes the entire blockchain into a mongodb database. This takes a LOT of time. **I'd highly recommend you run a local instance of BexNetwork** and modify the `docker-compose.yml` to point to it. It's going to be a lot faster of a sync than trying to read the entire blockchain from a public node.
 
 `docker-compose up` should be all you need to get the development application running.
 

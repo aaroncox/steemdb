@@ -1,9 +1,9 @@
 <?php
-namespace SteemDB\Controllers;
+namespace BexNetwork\Controllers;
 
-use SteemDB\Models\Account;
-use SteemDB\Models\Block;
-use SteemDB\Models\Comment;
+use BexNetwork\Models\Account;
+use BexNetwork\Models\Block;
+use BexNetwork\Models\Comment;
 
 use MongoDB\BSON\Regex;
 

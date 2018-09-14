@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
-from steemapi.steemnoderpc import SteemNodeRPC
-from piston.steem import Post
+from dpayapi.dpaynoderpc import DPayNodeRPC
+from dpaypy.dpay import Post
 from pymongo import MongoClient
 from pprint import pprint
 import collections
@@ -9,9 +9,9 @@ import time
 import sys
 import os
 
-rpc = SteemNodeRPC("ws://" + os.environ['steemnode'], "", "", apis=["follow", "database"])
+rpc = DPayNodeRPC("ws://" + os.environ['dpaynode'], "", "", apis=["follow", "database"])
 mongo = MongoClient("mongodb://mongo")
-db = mongo.steemdb
+db = mongo.bexnetwork
 
 init = db.status.find_one({'_id': 'height'})
 if(init):
@@ -112,7 +112,7 @@ def save_author_reward(op, block, blockid):
         '_id': _id,
         '_ts': datetime.strptime(block['timestamp'], "%Y-%m-%dT%H:%M:%S")
     })
-    for key in ['sbd_payout', 'steem_payout', 'vesting_payout']:
+    for key in ['bbd_payout', 'dpay_payout', 'vesting_payout']:
         reward[key] = float(reward[key].split()[0])
     db.author_reward.update({'_id': _id}, reward, upsert=True)
     queue_update_account(op['author'])
@@ -333,14 +333,14 @@ def update_account(account_name):
     account['proxy_witness'] = float(account['proxied_vsf_votes'][0]) / 1000000
     for key in ['lifetime_bandwidth', 'reputation', 'to_withdraw']:
         account[key] = float(account[key])
-    for key in ['balance', 'sbd_balance', 'sbd_seconds', 'savings_balance', 'savings_sbd_balance', 'vesting_balance', 'vesting_shares', 'vesting_withdraw_rate']:
+    for key in ['balance', 'bbd_balance', 'bbd_seconds', 'savings_balance', 'savings_bbd_balance', 'vesting_balance', 'vesting_shares', 'vesting_withdraw_rate']:
         account[key] = float(account[key].split()[0])
     # Convert to Date
-    for key in ['created','last_account_recovery','last_account_update','last_active_proved','last_bandwidth_update','last_market_bandwidth_update','last_owner_proved','last_owner_update','last_post','last_root_post','last_vote_time','next_vesting_withdrawal','savings_sbd_last_interest_payment','savings_sbd_seconds_last_update','sbd_last_interest_payment','sbd_seconds_last_update']:
+    for key in ['created','last_account_recovery','last_account_update','last_active_proved','last_bandwidth_update','last_market_bandwidth_update','last_owner_proved','last_owner_update','last_post','last_root_post','last_vote_time','next_vesting_withdrawal','savings_bbd_last_interest_payment','savings_bbd_seconds_last_update','bbd_last_interest_payment','bbd_seconds_last_update']:
         account[key] = datetime.strptime(account[key], "%Y-%m-%dT%H:%M:%S")
     # Combine Savings + Balance
     account['total_balance'] = account['balance'] + account['savings_balance']
-    account['total_sbd_balance'] = account['sbd_balance'] + account['savings_sbd_balance']
+    account['total_bbd_balance'] = account['bbd_balance'] + account['savings_bbd_balance']
     # Update our current info about the account
     mvest_per_account.update({account['name']: account['vesting_shares']})
     # Save current state of account
@@ -352,7 +352,7 @@ def update_account(account_name):
 if __name__ == '__main__':
     # Let's find out how often blocks are generated!
     config = rpc.get_config()
-    block_interval = config["STEEMIT_BLOCK_INTERVAL"]
+    block_interval = config["DPAY_BLOCK_INTERVAL"]
     load_accounts()
     # We are going to loop indefinitely
     while True:

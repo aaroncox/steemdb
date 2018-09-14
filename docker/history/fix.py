@@ -8,7 +8,7 @@ import sys
 import os
 
 mongo = MongoClient("mongodb://mongo")
-db = mongo.steemdb
+db = mongo.bexnetwork
 
 if __name__ == '__main__':
   records = db.account_history.find({"account": {"$exists": False}})

@@ -3,19 +3,19 @@ services:
   # history:
   #   build: ./docker/history
   #   environment:
-  #     steemnode: "node.steem.ws"
+  #     dpaynode: "d.dpays.io"
   #   links:
   #     - mongo
   # sync:
   #   build: ./docker/sync
   #   environment:
-  #     steemnode: "node.steem.ws"
+  #     dpaynode: "d.dpays.io"
   #   links:
   #     - mongo
   # witnesses:
   #   build: ./docker/witnesses
   #   environment:
-  #     steemnode: "node.steem.ws"
+  #     dpaynode: "d.dpays.io"
   #   links:
   #     - mongo
   development:

@@ -1,5 +1,5 @@
 <?php
-namespace SteemDB\Helpers;
+namespace BexNetwork\Helpers;
 
 use Phalcon\Tag;
 
@@ -21,7 +21,7 @@ class OpName extends Tag
     "feed_publish" => "Feed Publish",
     "fill_order" => "Fill Order",
     "fill_vesting_withdraw" => "Power Down",
-    "interest" => "SBD Interest",
+    "interest" => "BBD Interest",
     "limit_order_create" => "Limit Order Create",
     "limit_order_cancel" => "Limit Order Cancel",
     "pow" => "Mining",

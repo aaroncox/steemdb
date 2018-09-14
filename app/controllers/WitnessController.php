@@ -1,13 +1,13 @@
 <?php
-namespace SteemDB\Controllers;
+namespace BexNetwork\Controllers;
 
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\BSON\ObjectID;
 
-use SteemDB\Models\Witness;
-use SteemDB\Models\WitnessMiss;
-use SteemDB\Models\WitnessVote;
-use SteemDB\Models\Statistics;
+use BexNetwork\Models\Witness;
+use BexNetwork\Models\WitnessMiss;
+use BexNetwork\Models\WitnessVote;
+use BexNetwork\Models\Statistics;
 
 class WitnessController extends ControllerBase
 {
@@ -63,13 +63,13 @@ class WitnessController extends ControllerBase
         $witness->row_status = "positive";
       }
       // Highlight Red is no price feed exists
-      if($witness->sbd_exchange_rate->base === "0.000 STEEM") {
+      if($witness->bbd_exchange_rate->base === "0.000 BEX") {
         $witness->row_status = "warning";
       }
       // Highlight Red is price feed older than 24 hrs
-      if((string) $witness->last_sbd_exchange_update <= strtotime("-1 week") * 1000) {
+      if((string) $witness->last_bbd_exchange_update <= strtotime("-1 week") * 1000) {
         $witness->row_status = "warning";
-        $witness->last_sbd_exchange_update_late = true;
+        $witness->last_bbd_exchange_update_late = true;
       }
       // Highlight Red if the signing key is invalid
       if(!$witness->signing_key || $witness->signing_key == "" || $witness->signing_key == "STM1111111111111111111111111111111114T1Anm") {

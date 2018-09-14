@@ -1,5 +1,5 @@
 <?php
-namespace SteemDB\Models\BSON;
+namespace BexNetwork\Models\BSON;
 
 class Array extends MongoDB\Model\BSONArray
 {

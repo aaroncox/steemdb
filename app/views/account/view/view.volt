@@ -52,7 +52,7 @@
   {% else %}
   <tr>
     <td>
-      Unable to connect to steemd for to load recent history.
+      Unable to connect to dpayd for to load recent history.
     </td>
   </tr>
   {% endfor %}

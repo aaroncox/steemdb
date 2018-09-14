@@ -9,7 +9,7 @@
   <div class="ui segment">
     <div class="comment">
       <a class="avatar">
-        <img src="https://steemstats.com/images/avatar.8418a25d.png">
+        <img src="https://dpaystats.com/images/avatar.8418a25d.png">
       </a>
       <div class="content">
         <div class="author">
@@ -33,11 +33,11 @@
           </p>
         </div>
         <div class="actions">
-          <a class="reply" href="https://steemit.com/tag/@{{ comment.author }}/{{ comment.permlink }}" target="_blank">
-            View on Steemit / Reply
+          <a class="reply" href="https://dsite.io/tag/@{{ comment.author }}/{{ comment.permlink }}" target="_blank">
+            View on dPay / Reply
           </a>
-          <a class="reply" href="https://steemdb.com/tag/@{{ comment.author }}/{{ comment.permlink }}" target="_blank">
-            View on SteemDB 
+          <a class="reply" href="https://bex.network/tag/@{{ comment.author }}/{{ comment.permlink }}" target="_blank">
+            View on BexNetwork
           </a>
         </div>
       </div>

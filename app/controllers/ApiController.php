@@ -1,20 +1,20 @@
 <?php
-namespace SteemDB\Controllers;
+namespace BexNetwork\Controllers;
 
 use MongoDB\BSON\Regex;
 use MongoDB\BSON\UTCDateTime;
 
-use SteemDB\Models\Account;
-use SteemDB\Models\AuthorReward;
-use SteemDB\Models\Block;
-use SteemDB\Models\Block30d;
-use SteemDB\Models\Comment;
-use SteemDB\Models\CurationReward;
-use SteemDB\Models\Statistics;
-use SteemDB\Models\Vote;
-use SteemDB\Models\AccountHistory;
-use SteemDB\Models\PropsHistory;
-use SteemDB\Models\Witness;
+use BexNetwork\Models\Account;
+use BexNetwork\Models\AuthorReward;
+use BexNetwork\Models\Block;
+use BexNetwork\Models\Block30d;
+use BexNetwork\Models\Comment;
+use BexNetwork\Models\CurationReward;
+use BexNetwork\Models\Statistics;
+use BexNetwork\Models\Vote;
+use BexNetwork\Models\AccountHistory;
+use BexNetwork\Models\PropsHistory;
+use BexNetwork\Models\Witness;
 use MongoDB\BSON\ObjectID;
 
 class ApiController extends ControllerBase
@@ -299,16 +299,16 @@ class ApiController extends ControllerBase
             'month' => ['$month' => '$date'],
             'day' => ['$dayOfMonth' => '$date'],
           ],
-          'sbd' => [
-            '$sum' => '$sbd_balance'
+          'bbd' => [
+            '$sum' => '$bbd_balance'
           ],
-          'sbd_savings' => [
-            '$sum' => '$savings_sbd_balance'
+          'bbd_savings' => [
+            '$sum' => '$savings_bbd_balance'
           ],
-          'steem' => [
+          'dpay' => [
             '$sum' => '$balance'
           ],
-          'steem_savings' => [
+          'dpay_savings' => [
             '$sum' => '$savings_balance'
           ],
           'vests' => [
@@ -355,7 +355,7 @@ class ApiController extends ControllerBase
     $data = [];
     foreach($results as $doc) {
       $key = $doc->time->toDateTime()->format("U");
-      $data[$key] = $doc->total_vesting_fund_steem / $doc->current_supply;
+      $data[$key] = $doc->total_vesting_fund_dpay / $doc->current_supply;
     }
     echo json_encode($data, JSON_PRETTY_PRINT);
   }
@@ -505,10 +505,10 @@ class ApiController extends ControllerBase
 
     $filter = $this->request->get('sort');
     switch($filter) {
-      case "sbd":
-        $sorting = array('total_sbd_balance' => -1);
+      case "bbd":
+        $sorting = array('total_bbd_balance' => -1);
         break;
-      case "steem":
+      case "dpay":
         $sorting = array('total_balance' => -1);
         break;
       case "vest":
@@ -633,8 +633,8 @@ class ApiController extends ControllerBase
             'day' => ['$dayOfMonth' => '$_ts']
           ],
           'count' => ['$sum' => 1],
-          'sbd' => ['$sum' => '$sbd_payout'],
-          'steem' => ['$sum' => '$steem_payout'],
+          'bbd' => ['$sum' => '$bbd_payout'],
+          'dpay' => ['$sum' => '$dpay_payout'],
           'vest' => ['$sum' => '$vesting_payout']
         ]
       ],

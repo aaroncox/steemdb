@@ -29,10 +29,10 @@
                 <i class="list icon"></i>
                 <div class="content">
                   <a href="/forums">
-                    Steem Forum View
+                    dPay Forum View
                   </a>
                   <div class="sub header">
-                    A prototype viewing the STEEM blockchain as a forum.
+                    A prototype viewing the dPay blockchain as a forum.
                   </div>
                 </div>
               </div>
@@ -139,7 +139,7 @@
                   percentage vesting
                 </a>
                 <div class="sub header">
-                  the percentage of steem as vests
+                  the percentage of dPay as vests
                 </div>
               </div>
             </div>

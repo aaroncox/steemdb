@@ -18,15 +18,15 @@
 <!-- Following Menu -->
 <div class="ui blue inverted top fixed mobile hidden menu">
   <div class="ui container">
-    <span class="header item">SteemDB</span>
+    <span class="header item">BexNetwork</span>
     <a href="/" class="{{ (router.getControllerName() == 'comment') ? 'active' : '' }} item">posts</a>
     <a href="/accounts" class="{{ (router.getControllerName() == 'account' or router.getControllerName() == 'accounts') ? 'active' : '' }} item">accounts</a>
     <a href="/witnesses" class="{{ (router.getControllerName() == 'witness') ? 'active' : '' }} item">witnesses</a>
-    <a href="https://blog.steemdb.com" class="item">updates</a>
+    <a href="https://blog.bex.network" class="item">updates</a>
     <a href="/labs" class="{{ (router.getControllerName() == 'labs') ? 'active' : '' }} item">labs</a>
     <div class="right menu">
       <div class="item">
-        <a href="https://steemit.com/?r=jesta">
+        <a href="https://dsite.io/?r=jared">
           <small>Create Account</small>
         </a>
       </div>
@@ -38,10 +38,10 @@
         <div class="results"></div>
       </div>
       <div class="ui dropdown item">
-        steem <i class="dropdown icon"></i>
+        dPay <i class="dropdown icon"></i>
         <div class="menu">
-          <a class="item" href="https://steemdb.com{{ router.getRewriteUri() }}">steem</a>
-          <a class="item" href="https://golosdb.com{{ router.getRewriteUri() }}">golos</a>
+          <a class="item" href="https://bex.network{{ router.getRewriteUri() }}">dPay</a>
+          <a class="item" href="https://golosdb.com{{ router.getRewriteUri() }}">Arise</a>
         </div>
       </div>
     </div>
@@ -53,6 +53,6 @@
   <a href="/" class="{{ (router.getControllerName() == 'comment') ? 'active' : '' }} item">posts</a>
   <a href="/accounts" class="{{ (router.getControllerName() == 'account' or router.getControllerName() == 'accounts') ? 'active' : '' }} item">accounts</a>
   <a href="/witnesses" class="{{ (router.getControllerName() == 'witness') ? 'active' : '' }} item">witnesses</a>
-  <a href="https://blog.steemdb.com" class="item">updates</a>
+  <a href="https://blog.bex.network" class="item">updates</a>
   <a href="/labs" class="{{ (router.getControllerName() == 'labs') ? 'active' : '' }} item">labs</a>
 </div>

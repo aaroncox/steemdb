@@ -6,7 +6,7 @@
 <h3 class="ui dividing header">
   Power Ups
   <div class="sub header">
-    The STEEM powered up to @{{ account.name }}.
+    The BEX powered up to @{{ account.name }}.
   </div>
 </h3>
 <table class="ui table">
@@ -15,7 +15,7 @@
       <th>When</th>
       <th>From</th>
       <th>To</th>
-      <th class="right aligned">STEEM</th>
+      <th class="right aligned">BEX</th>
     </tr>
   </thead>
   <tbody>
@@ -35,7 +35,7 @@
         </a>
       </td>
       <td class="right aligned">
-        {{ power.amount }} STEEM
+        {{ power.amount }} BEX
       </td>
     </tr>
   </tbody>

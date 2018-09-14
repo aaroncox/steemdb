@@ -1,25 +1,25 @@
 <?php
-namespace SteemDB\Controllers;
+namespace BexNetwork\Controllers;
 
 use MongoDB\BSON\ObjectID;
 use MongoDB\BSON\Regex;
 use MongoDB\BSON\UTCDateTime;
 
-use SteemDB\Models\Account;
-use SteemDB\Models\AccountHistory;
-use SteemDB\Models\AuthorReward;
-use SteemDB\Models\Block30d;
-use SteemDB\Models\Comment;
-use SteemDB\Models\CurationReward;
-use SteemDB\Models\Follow;
-use SteemDB\Models\Pow;
-use SteemDB\Models\Reblog;
-use SteemDB\Models\Statistics;
-use SteemDB\Models\Transfer;
-use SteemDB\Models\Vote;
-use SteemDB\Models\VestingDeposit;
-use SteemDB\Models\VestingWithdraw;
-use SteemDB\Models\WitnessHistory;
+use BexNetwork\Models\Account;
+use BexNetwork\Models\AccountHistory;
+use BexNetwork\Models\AuthorReward;
+use BexNetwork\Models\Block30d;
+use BexNetwork\Models\Comment;
+use BexNetwork\Models\CurationReward;
+use BexNetwork\Models\Follow;
+use BexNetwork\Models\Pow;
+use BexNetwork\Models\Reblog;
+use BexNetwork\Models\Statistics;
+use BexNetwork\Models\Transfer;
+use BexNetwork\Models\Vote;
+use BexNetwork\Models\VestingDeposit;
+use BexNetwork\Models\VestingWithdraw;
+use BexNetwork\Models\WitnessHistory;
 
 class AccountApiController extends ControllerBase
 {
@@ -418,9 +418,9 @@ class AccountApiController extends ControllerBase
             'day' => ['$dayOfMonth' => '$_ts'],
           ],
           'count' => ['$sum' => 1],
-          'steem' => ['$sum' => '$steem_payout'],
+          'dpay' => ['$sum' => '$dpay_payout'],
           'vest' => ['$sum' => '$vesting_payout'],
-          'sbd' => ['$sum' => '$sbd_payout'],
+          'bbd' => ['$sum' => '$bbd_payout'],
         ]
       ],
       [

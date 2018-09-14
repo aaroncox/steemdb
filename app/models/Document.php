@@ -1,6 +1,6 @@
 <?php
 
-namespace SteemDB\Models;
+namespace BexNetwork\Models;
 
 use Phalcon\Mvc\MongoCollection;
 

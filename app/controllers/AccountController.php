@@ -1,25 +1,25 @@
 <?php
-namespace SteemDB\Controllers;
+namespace BexNetwork\Controllers;
 
 use MongoDB\BSON\UTCDateTime;
 
-use SteemDB\Models\Account;
-use SteemDB\Models\AccountHistory;
-use SteemDB\Models\AuthorReward;
-use SteemDB\Models\Block;
-use SteemDB\Models\Comment;
-use SteemDB\Models\CurationReward;
-use SteemDB\Models\Follow;
-use SteemDB\Models\Reblog;
-use SteemDB\Models\Vote;
-use SteemDB\Models\Statistics;
-use SteemDB\Models\Pow;
-use SteemDB\Models\Transfer;
-use SteemDB\Models\VestingDeposit;
-use SteemDB\Models\VestingWithdraw;
-use SteemDB\Models\WitnessMiss;
-use SteemDB\Models\WitnessHistory;
-use SteemDB\Models\WitnessVote;
+use BexNetwork\Models\Account;
+use BexNetwork\Models\AccountHistory;
+use BexNetwork\Models\AuthorReward;
+use BexNetwork\Models\Block;
+use BexNetwork\Models\Comment;
+use BexNetwork\Models\CurationReward;
+use BexNetwork\Models\Follow;
+use BexNetwork\Models\Reblog;
+use BexNetwork\Models\Vote;
+use BexNetwork\Models\Statistics;
+use BexNetwork\Models\Pow;
+use BexNetwork\Models\Transfer;
+use BexNetwork\Models\VestingDeposit;
+use BexNetwork\Models\VestingWithdraw;
+use BexNetwork\Models\WitnessMiss;
+use BexNetwork\Models\WitnessHistory;
+use BexNetwork\Models\WitnessVote;
 
 class AccountController extends ControllerBase
 {
@@ -38,7 +38,7 @@ class AccountController extends ControllerBase
     $cached = $this->memcached->get($cacheKey);
     // No cache, let's load
     if($cached === null) {
-      $this->view->live = $this->steemd->getAccount($account);
+      $this->view->live = $this->dpayd->getAccount($account);
       $this->memcached->save($cacheKey, $this->view->live, 60);
     } else {
       // Use cache
@@ -50,9 +50,9 @@ class AccountController extends ControllerBase
   public function viewAction()
   {
     $account = $this->getAccount();
-    $this->view->props = $this->steemd->getProps();
+    $this->view->props = $this->dpayd->getProps();
     try {
-      $this->view->activity = array_reverse($this->steemd->getAccountHistory($account));
+      $this->view->activity = array_reverse($this->dpayd->getAccountHistory($account));
     } catch (Exception $e) {
       $this->view->activity = false;
     }

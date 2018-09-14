@@ -1,5 +1,5 @@
 <?php
-namespace SteemDB\Controllers;
+namespace BexNetwork\Controllers;
 
 class ChartsController extends ControllerBase
 {

@@ -41,9 +41,9 @@
               <tr>
                 <th class="collapsing">#</th>
                 <th>Account</th>
-                <th class="collapsing">VESTS/SP</th>
-                <th class="collapsing">STEEM</th>
-                <th class="collapsing">SBD</th>
+                <th class="collapsing">VESTS/BP</th>
+                <th class="collapsing">BEX</th>
+                <th class="collapsing">BBD</th>
                 <th class="collapsing">Posts</th>
               </tr>
             </thead>
@@ -64,14 +64,14 @@
                 </div>
                 <br>
                 <small>
-                  ~<?php echo $this->convert::vest2sp($account->vest, ""); ?> SP*
+                  ~<?php echo $this->convert::vest2sp($account->vest, ""); ?> BP*
                 </small>
               </td>
               <td>
-                {{ account.steem }}
+                {{ account.dpay }}
               </td>
               <td>
-                {{ account.sbd }}
+                {{ account.bbd }}
               </td>
               <td>
                 {{ account.count }}

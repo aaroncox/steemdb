@@ -1,6 +1,6 @@
 from datetime import datetime
-from steemapi.steemnoderpc import SteemNodeRPC
-from piston.steem import Post
+from dpayapi.dpaynoderpc import DPayNodeRPC
+from dpaypy.dpay import Post
 from pymongo import MongoClient
 from pprint import pprint
 from time import gmtime, strftime
@@ -10,9 +10,9 @@ import time
 import sys
 import os
 
-rpc = SteemNodeRPC("ws://" + os.environ['steemnode'], "", "", apis=["follow", "database"])
+rpc = DPayNodeRPC("ws://" + os.environ['dpaynode'], "", "", apis=["follow", "database"])
 mongo = MongoClient("mongodb://mongo")
-db = mongo.steemdb
+db = mongo.bexnetwork
 
 misses = {}
 
@@ -44,7 +44,7 @@ def check_misses():
 def update_witnesses():
     now = datetime.now().date()
 
-    pprint("SteemDB - Update Miner Queue")
+    pprint("BexNetwork - Update Miner Queue")
     miners = rpc.get_miner_queue()
     db.statistics.update({
       '_id': 'miner_queue'
@@ -55,14 +55,14 @@ def update_witnesses():
     }, upsert=True)
     scantime = datetime.now()
     users = rpc.get_witnesses_by_vote('', 100)
-    pprint("SteemDB - Update Witnesses (" + str(len(users)) + " accounts)")
+    pprint("BexNetwork - Update Witnesses (" + str(len(users)) + " accounts)")
     db.witness.remove({})
     for user in users:
         # Convert to Numbers
         for key in ['virtual_last_update', 'virtual_position', 'virtual_scheduled_time', 'votes']:
             user[key] = float(user[key])
         # Convert to Date
-        for key in ['last_sbd_exchange_update']:
+        for key in ['last_bbd_exchange_update']:
             user[key] = datetime.strptime(user[key], "%Y-%m-%dT%H:%M:%S")
         # Save current state of account
         db.witness.update({'_id': user['owner']}, user, upsert=True)

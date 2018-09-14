@@ -20,15 +20,15 @@
       var dateString = d._id.year + "/" + d._id.month + "/" + d._id.day;
       return new Date(dateString);
     };
-    var pSteem = function(d) { return +d.steem; };
+    var pDPay = function(d) { return +d.dpay; };
     var pVest = function(d) { return +d.vest; };
-    var pSbd = function(d) { return +d.sbd; };
+    var pBbd = function(d) { return +d.bbd; };
 
     // Chart Posts
-    var lSteem = new Plottable.Plots.StackedBar();
-    lSteem.addDataset(dataset);
-    lSteem.x(pDate, xScale)
-          .y(pSteem, yScale)
+    var lDPay = new Plottable.Plots.StackedBar();
+    lDPay.addDataset(dataset);
+    lDPay.x(pDate, xScale)
+          .y(pDPay, yScale)
           .attr("fill", "#A333C8");
 
     var lVest = new Plottable.Plots.Line();
@@ -37,15 +37,15 @@
             .y(pVest, yScale2)
             .attr("fill", "#2185D0");
 
-    var lSbd = new Plottable.Plots.ClusteredBar();
-    lSbd.addDataset(dataset);
-    lSbd.x(pDate, xScale)
-            .y(pSbd, yScale)
+    var lBbd = new Plottable.Plots.ClusteredBar();
+    lBbd.addDataset(dataset);
+    lBbd.x(pDate, xScale)
+            .y(pBbd, yScale)
             .attr("fill", "#21BA45");
 
     var cs = new Plottable.Scales.Color();
     cs.range(["#A333C8", "#2185D0", "#21BA45"]);
-    cs.domain(["Steem", "VESTS", "SBD"]);
+    cs.domain(["BEX", "VESTS", "BBD"]);
     var legend = new Plottable.Components.Legend(cs);
 
     var squareFactory = Plottable.SymbolFactories.square();
@@ -58,12 +58,12 @@
 
     legend.maxEntriesPerRow(5)
 
-    var yLabelValue = new Plottable.Components.AxisLabel("SBD/STEEM", "90");
+    var yLabelValue = new Plottable.Components.AxisLabel("BBD/BEX", "90");
     var xLabelTitle = new Plottable.Components.TitleLabel("90-day Author Rewards", "0");
     var yLabelVest = new Plottable.Components.AxisLabel("VESTS", "270");
 
 
-    var plots = new Plottable.Components.Group([lSteem, lVest, lSbd]);
+    var plots = new Plottable.Components.Group([lDPay, lVest, lBbd]);
     var table = new Plottable.Components.Table([
       [null, null, xLabelTitle, null, null],
       [null, null, legend, null, null],

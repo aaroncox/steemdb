@@ -1,5 +1,5 @@
 <?php
-namespace SteemDB\Helpers;
+namespace BexNetwork\Helpers;
 
 use Phalcon\Tag;
 
@@ -11,7 +11,7 @@ class Convert extends Tag
   }
 
   static private function getProps() {
-    return static::getDI()->getShared('steemd')->getProps();
+    return static::getDI()->getShared('dpayd')->getProps();
   }
 
   static public function getConversionRate($key) {
@@ -21,7 +21,7 @@ class Convert extends Tag
       $props = static::getProps();
       $values = array(
         'total_vests' => (float) $props['total_vesting_shares'],
-        'total_vest_steem' => (float) $props['total_vesting_fund_steem'],
+        'total_vest_dpay' => (float) $props['total_vesting_fund_dpay'],
       );
       $cache->save($key, $values);
       return $values;
@@ -29,10 +29,10 @@ class Convert extends Tag
     return $cached;
   }
 
-  static public function vest2sp($value, $label = ' SP', $round = 3)
+  static public function vest2sp($value, $label = ' BP', $round = 3)
   {
     $values = static::getConversionRate('convert_vest2sp');
-    $return = $values['total_vest_steem'] * ($value / $values['total_vests']);
+    $return = $values['total_vest_dpay'] * ($value / $values['total_vests']);
     if($label === false) {
       return round($return, $round);
     }
@@ -42,6 +42,6 @@ class Convert extends Tag
   static public function sp2vest($value, $label = ' VEST')
   {
     $values = static::getConversionRate('convert_vest2sp');
-    return number_format((($value * 1000) / $values['total_vest_steem']) * $values['total_vests'], 3, '.', ',') . $label;
+    return number_format((($value * 1000) / $values['total_vest_dpay']) * $values['total_vests'], 3, '.', ',') . $label;
   }
 }

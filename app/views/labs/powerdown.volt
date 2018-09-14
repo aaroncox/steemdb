@@ -18,7 +18,7 @@
         <div class="ui small three statistics">
           <div class="statistic">
             <div class="label">
-              Liquid Steem
+              Liquid BEX
             </div>
             <div class="value">
               <?php echo number_format($props['liquid'], 0, ".", ",") ?>
@@ -57,7 +57,7 @@
             <tr>
               <th>Total (Weekly)</th>
               <th class="right aligned"><?php echo number_format($upcoming_total, 0, ".", ",") ?> VESTS</th>
-              <th class="right aligned">~<?php echo $this->convert::vest2sp($upcoming_total, " STEEM", 0); ?></th>
+              <th class="right aligned">~<?php echo $this->convert::vest2sp($upcoming_total, " BEX", 0); ?></th>
             </tr>
           </thead>
           <tbody>
@@ -72,7 +72,7 @@
                 {% endif %}
               </td>
               <td class="right aligned"><?php echo number_format($day->withdrawn, 0, ".", ",") ?> VESTS</td>
-              <td class="right aligned">~<?php echo $this->convert::vest2sp($day->withdrawn, " STEEM", 0); ?></td>
+              <td class="right aligned">~<?php echo $this->convert::vest2sp($day->withdrawn, " BEX", 0); ?></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -139,7 +139,7 @@
             <tr>
               <th>Total</th>
               <th class="right aligned"><?php echo number_format($previous_total, 0, ".", ",") ?> VESTS</th>
-              <th class="right aligned">~<?php echo $this->convert::vest2sp($previous_total, " STEEM", 0); ?></th>
+              <th class="right aligned">~<?php echo $this->convert::vest2sp($previous_total, " BEX", 0); ?></th>
             </tr>
           </thead>
           <tbody>
@@ -151,7 +151,7 @@
                 {{ day['_id']['month'] }}-{{ day['_id']['day'] }}
               </td>
               <td class="right aligned"><?php echo number_format($day->withdrawn, 0, ".", ",") ?> VESTS</td>
-              <td class="right aligned">~<?php echo $this->convert::vest2sp($day->withdrawn, " STEEM", 0); ?></td>
+              <td class="right aligned">~<?php echo $this->convert::vest2sp($day->withdrawn, " BEX", 0); ?></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -171,7 +171,7 @@
           <thead>
             <tr>
               <th></th>
-              <th class="right aligned">Steem Deposited</th>
+              <th class="right aligned">BEX Deposited</th>
               <th class="right aligned">Vests Withdrawn</th>
               <th>Vests Remaining</th>
               <th>Account Withdrawing</th>
@@ -185,7 +185,7 @@
               <td class="collapsing">{{ loop.index }}</td>
               <td class="collapsing right aligned">
                 <div class="ui header">
-                  +<?php echo $this->largeNumber::format($powerdown->deposited, '', " STEEM", 0); ?>
+                  +<?php echo $this->largeNumber::format($powerdown->deposited, '', " BEX", 0); ?>
                   <div class="sub header">
                     {{ powerdown.count }}x Power Downs
                   </div>

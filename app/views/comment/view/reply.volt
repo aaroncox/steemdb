@@ -1,6 +1,6 @@
 <div class="comment">
   <a class="avatar">
-    <img src="https://steemstats.com/images/avatar.8418a25d.png">
+    <img src="https://dpaystats.com/images/avatar.8418a25d.png">
   </a>
   <div class="content">
     <a class="author" href="/@{{ reply.author }}">
@@ -15,11 +15,11 @@
       {{ markdown(reply.body) }}
     </div>
     <div class="actions">
-      <a class="reply" href="https://steemit.com/tag/@{{ reply.author }}/{{ reply.permlink }}" target="_blank">
-        View on Steemit / Reply
+      <a class="reply" href="https://dsite.io/tag/@{{ reply.author }}/{{ reply.permlink }}" target="_blank">
+        View on dSite / Reply
       </a>
-      <a class="reply" href="https://steemdb.com/tag/@{{ reply.author }}/{{ reply.permlink }}" target="_blank">
-        View on SteemDB
+      <a class="reply" href="https://bex.network/tag/@{{ reply.author }}/{{ reply.permlink }}" target="_blank">
+        View on BexNetwork
       </a>
     </div>
   </div>
