@@ -2,7 +2,7 @@ from autobahn.twisted.websocket import WebSocketServerFactory, \
     WebSocketServerProtocol, \
     listenWS
 from datetime import datetime, timedelta
-from dpayapi.dpaynoderpc import DPayNodeRPC
+from dpaypyapi.dpaynoderpc import DPayNodeRPC
 from dpaypy.dpay import Post
 from pprint import pprint
 from twisted.internet import reactor
@@ -15,7 +15,7 @@ import sys
 import os
 import re
 
-rpc = DPayNodeRPC("ws://" + os.environ['dpaynode'], "", "", apis=["follow", "database"])
+rpc = DPayNodeRPC("wss://" + os.environ['dpaynode'], "", "", apis=["follow", "database"])
 
 class BroadcastServerProtocol(WebSocketServerProtocol):
 

@@ -1,5 +1,5 @@
 from datetime import datetime
-from dpayapi.dpaynoderpc import DPayNodeRPC
+from dpaypyapi.dpaynoderpc import DPayNodeRPC
 from dpaypy.dpay import Post
 from pymongo import MongoClient
 from pprint import pprint
@@ -10,7 +10,7 @@ import time
 import sys
 import os
 
-rpc = DPayNodeRPC("ws://" + os.environ['dpaynode'], "", "", apis=["follow", "database"])
+rpc = DPayNodeRPC("wss://" + os.environ['dpaynode'], "", "", apis=["follow", "database"])
 mongo = MongoClient("mongodb://mongo")
 db = mongo.bexnetwork
 

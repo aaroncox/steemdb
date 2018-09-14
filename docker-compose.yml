@@ -1,23 +1,23 @@
 version: '2'
 services:
-  # history:
-  #   build: ./docker/history
-  #   environment:
-  #     dpaynode: "d.dpays.io"
-  #   links:
-  #     - mongo
-  # sync:
-  #   build: ./docker/sync
-  #   environment:
-  #     dpaynode: "d.dpays.io"
-  #   links:
-  #     - mongo
-  # witnesses:
-  #   build: ./docker/witnesses
-  #   environment:
-  #     dpaynode: "d.dpays.io"
-  #   links:
-  #     - mongo
+  history:
+    build: ./docker/history
+    environment:
+      dpaynode: "ddpay.dpays.io"
+    links:
+      - mongo
+  sync:
+    build: ./docker/sync
+    environment:
+      dpaynode: "ddpay.dpays.io"
+    links:
+      - mongo
+  witnesses:
+    build: ./docker/witnesses
+    environment:
+      dpaynode: "ddpay.dpays.io"
+    links:
+      - mongo
   development:
     build: ./docker/development
     links:
