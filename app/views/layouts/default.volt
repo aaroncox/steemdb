@@ -8,6 +8,8 @@
     <!-- Page Contents -->
     <div class="pusher" style="padding-top: 3em">
 
+      {% include "_elements/warning.volt" %}
+
       {% block header %}{% endblock %}
 
       {% if this.flashSession.has() %}

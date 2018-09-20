@@ -1,12 +1,14 @@
 <?php
 namespace SteemDB\Controllers;
 
+use MongoDB\BSON\Regex;
 use MongoDB\BSON\UTCDateTime;
 
 use SteemDB\Models\Account;
 use SteemDB\Models\AccountHistory;
 use SteemDB\Models\AuthorReward;
-use SteemDB\Models\Block;
+use SteemDB\Models\BenefactorReward;
+use SteemDB\Models\Block30d;
 use SteemDB\Models\Comment;
 use SteemDB\Models\CurationReward;
 use SteemDB\Models\Follow;
@@ -156,8 +158,9 @@ class AccountController extends ControllerBase
   public function followersWhalesAction()
   {
     $account = $this->getAccount();
+    $followers = $this->view->account->followers;
     $this->view->followers = Account::find([
-      ['name' => ['$in' => $this->view->account->followers]],
+      ['name' => ['$in' => $followers]],
       'sort' => ['vesting_shares' => -1],
     ]);
     $this->view->pick("account/view");
@@ -211,13 +214,15 @@ class AccountController extends ControllerBase
   public function blocksAction()
   {
     $account = $this->getAccount();
-    $this->view->mining = Pow::find(array(
+    $query = array(
       array(
-        'work.1.input.worker_account' => $account,
+        'witness' => $account,
       ),
       'sort' => array('_ts' => -1),
       'limit' => 100
-    ));
+    );
+    // var_dump($query); exit;
+    $this->view->mining = Block30d::find($query);
     $this->view->chart = true;
     $this->view->pick("account/view");
   }
@@ -364,23 +369,215 @@ class AccountController extends ControllerBase
     $this->view->pick("account/view");
   }
 
-  public function authoringAction()
+  public function beneficiariesAction()
   {
     $account = $this->getAccount();
-    $this->view->page = $page = (int) $this->request->get("page") ?: 1;
-    $limit = 50;
-    $this->view->authoring = AuthorReward::find(array(
+    $this->view->beneficiaries = BenefactorReward::agg(array(
+      ['$match' => [
+        'benefactor' => $account,
+        ]],
+      ['$group' => [
+        '_id' => [
+          'doy' => ['$dayOfYear' => '$_ts'],
+          'year' => ['$year' => '$_ts'],
+          'month' => ['$month' => '$_ts'],
+          'week' => ['$week' => '$_ts'],
+          'day' => ['$dayOfMonth' => '$_ts']
+        ],
+        '_ts' => ['$first' => '$_ts'],
+        'reward' => ['$sum' => '$reward'],
+        'posts' => ['$sum' => 1],
+        ]],
+      ['$sort' => [
+        '_ts' => -1,
+        ]],
+    ));
+    $this->view->stats = BenefactorReward::agg([
+      [
+        '$match' => [
+          'benefactor' => $account,
+          '_ts' => [
+            '$gte' => new UTCDateTime(strtotime("-30 days") * 1000),
+          ],
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => '$benefactor',
+          'day' => ['$sum' => ['$cond' => [
+            [
+              '$gte' => [
+                '$_ts',
+                new UTCDateTime(strtotime("-1 days") * 1000)
+              ]
+            ],
+            '$reward',
+            0
+          ]]],
+          'week' => ['$sum' => ['$cond' => [
+            [
+              '$gte' => [
+                '$_ts',
+                new UTCDateTime(strtotime("-7 days") * 1000)
+              ]
+            ],
+            '$reward',
+            0
+          ]]],
+          'month' => ['$sum' => ['$cond' => [
+            [
+              '$gte' => [
+                '$_ts',
+                new UTCDateTime(strtotime("-30 days") * 1000)
+              ]
+            ],
+            '$reward',
+            0
+          ]]],
+        ]
+      ]
+    ])->toArray();
+    $this->view->chart = true;
+    $this->view->pick("account/view");
+  }
+
+  public function beneficiariesDateAction() {
+    $account = $this->getAccount();
+    $this->view->date = $this->dispatcher->getParam("date");
+    $this->view->beneficiaries = BenefactorReward::find(array(
       array(
-        'author' => $account
+        'benefactor' => $account,
+        '_ts' => [
+          '$gte' => new UTCDateTime(strtotime($this->view->date) * 1000),
+          '$lte' => new UTCDateTime((strtotime($this->view->date) + 86400) * 1000),
+        ]
       ),
       'sort' => array('_ts' => -1),
       'skip' => $limit * ($page - 1),
       'limit' => $limit,
     ));
-    $this->view->pages = ceil(AuthorReward::count(array(
-      array('curator' => $account)
-    )) / $limit);
+    $this->view->pick("account/view");
+  }
+
+
+  public function authoringAction()
+  {
+    $account = $this->getAccount();
+    $this->view->filter = $filter = $this->request->get('filter', 'string') ?: null;
+    // Define our default match against rewards
+    $match = [
+      'author' => $account,
+    ];
+    switch($filter) {
+      case "comments":
+        $match['permlink'] = ['$regex' => new Regex('^re-', 'i')];
+        break;
+      case "posts":
+        $match['permlink'] = ['$regex' => new Regex('^(?!re-)', 'i')];
+        break;
+    }
+    $this->view->authoring = AuthorReward::agg(array(
+      ['$match' => $match],
+      ['$group' => [
+        '_id' => [
+          'doy' => ['$dayOfYear' => '$_ts'],
+          'year' => ['$year' => '$_ts'],
+          'month' => ['$month' => '$_ts'],
+          'week' => ['$week' => '$_ts'],
+          'day' => ['$dayOfMonth' => '$_ts']
+        ],
+        '_ts' => ['$first' => '$_ts'],
+        'sbd_payout' => ['$sum' => '$sbd_payout'],
+        'steem_payout' => ['$sum' => '$steem_payout'],
+        'vesting_payout' => ['$sum' => '$vesting_payout'],
+        'posts' => ['$sum' => 1],
+      ]],
+      ['$sort' => [
+        '_ts' => -1,
+      ]],
+    ));
+    $this->view->stats = AuthorReward::agg([
+      [
+        '$match' => [
+          'author' => $account,
+          '_ts' => [
+            '$gte' => new UTCDateTime(strtotime("-30 days") * 1000),
+          ],
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => '$author',
+          'day' => ['$sum' => ['$cond' => [
+            [
+              '$gte' => [
+                '$_ts',
+                new UTCDateTime(strtotime("-1 days") * 1000)
+              ]
+            ],
+            '$vesting_payout',
+            0
+          ]]],
+          'week' => ['$sum' => ['$cond' => [
+            [
+              '$gte' => [
+                '$_ts',
+                new UTCDateTime(strtotime("-7 days") * 1000)
+              ]
+            ],
+            '$vesting_payout',
+            0
+          ]]],
+          'month' => ['$sum' => ['$cond' => [
+            [
+              '$gte' => [
+                '$_ts',
+                new UTCDateTime(strtotime("-30 days") * 1000)
+              ]
+            ],
+            '$vesting_payout',
+            0
+          ]]],
+        ]
+      ]
+    ])->toArray();
     $this->view->chart = true;
+    $this->view->pick("account/view");
+  }
+
+
+  public function authoringDateAction()
+  {
+    $account = $this->getAccount();
+    $this->view->page = $page = (int) $this->request->get("page") ?: 1;
+    $this->view->date = $this->dispatcher->getParam("date");
+    $limit = 50;
+    $this->view->filter = $filter = $this->request->get('filter', 'string') ?: null;
+    // Define our default match against rewards
+    $match = [
+      'author' => $account,
+      '_ts' => [
+        '$gte' => new UTCDateTime(strtotime($this->view->date) * 1000),
+        '$lte' => new UTCDateTime((strtotime($this->view->date) + 86400) * 1000),
+      ]
+    ];
+    switch($filter) {
+      case "comments":
+        $match['permlink'] = ['$regex' => new Regex('^re-', 'i')];
+        break;
+      case "posts":
+        $match['permlink'] = ['$regex' => new Regex('^(?!re-)', 'i')];
+        break;
+    }
+    $this->view->authoring = AuthorReward::find(array(
+      $match,
+      'sort' => array('_ts' => -1),
+      'skip' => $limit * ($page - 1),
+      'limit' => $limit,
+    ));
+    $this->view->pages = ceil(AuthorReward::count(array(
+      array('author' => $account)
+    )) / $limit);
     $this->view->pick("account/view");
   }
 
@@ -410,7 +607,7 @@ class AccountController extends ControllerBase
   {
     $account = $this->getAccount();
     $this->view->page = $page = (int) $this->request->get("page") ?: 1;
-    $limit = 50;
+    $limit = 500;
     $this->view->transfers = Transfer::find(array(
       array(
         '$or' => array(

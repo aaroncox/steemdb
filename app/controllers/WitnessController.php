@@ -59,7 +59,7 @@ class WitnessController extends ControllerBase
     }
     foreach($witnesses as $index => $witness) {
       // Highlight Green for top 19
-      if($index < 19) {
+      if($index < 20) {
         $witness->row_status = "positive";
       }
       // Highlight Red is no price feed exists
@@ -112,6 +112,33 @@ class WitnessController extends ControllerBase
       ]
     ])->toArray();
     // var_dump($votes[2]->_account[0]->proxied_vsf_votes); exit;
+    $this->view->misses = $misses = WitnessMiss::agg([
+      [
+        '$match' => [
+          'date' => [
+            '$gte' => new UTCDateTime(strtotime("-7 days") * 1000)
+          ]
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => '$witness',
+          'total' => [
+            '$sum' => '$increase'
+          ]
+        ]
+      ],
+      [
+        '$sort' => ['total' => -1]
+      ]
+    ])->toArray();
+  }
+  public function missesAction() {
+    $this->view->history = WitnessMiss::find([
+      [],
+      "sort" => array("date" => -1),
+      "limit" => 500,
+    ]);
     $this->view->misses = $misses = WitnessMiss::agg([
       [
         '$match' => [

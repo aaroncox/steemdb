@@ -1,3 +1,9 @@
+<style>
+  .plottable .axis text,
+  .plottable .label text {
+    fill: #efefef;
+  }
+</style>
 <script>
   d3.json("/api/activity").get(function(error, rows) {
     var data = rows;
@@ -28,28 +34,30 @@
 
     // Chart Highest Payouts
     var lPayouts = new Plottable.Plots.Area();
-    lPayouts.addDataset(dataset);
-    lPayouts.x(pDate, xScale)
-            .y0(pAvg, yScale)
-            .y(pMax, yScale)
-            .attr("fill", "#999999")
-            .attr("stroke-width", 0);
 
-    // Chart Totals
-    var lTotal = new Plottable.Plots.Area();
+
+    var lTotal = new Plottable.Plots.Bar();
     lTotal.addDataset(dataset);
     lTotal.x(pDate, xScale)
-            .y0(pAvg, yScale)
-            .y(pTotal, yScale)
-            .attr("fill", "#bbbbbb")
-            .attr("stroke-width", 0);
+           .y(pTotal, yScale)
+           .attr("fill", "#fff");
 
+    // Chart Totals
+    // var lTotal = new Plottable.Plots.Area();
+    // lTotal.addDataset(dataset);
+    // lTotal.x(pDate, xScale)
+    //         .y0(pAvg, yScale)
+    //         .y(pTotal, yScale)
+    //         .attr("fill", "#fff")
+    //         .attr("stroke", "#fff")
+    //         .attr("stroke-width", 2);
+    //
     // Chart Posts
     var lPosts = new Plottable.Plots.Line();
     lPosts.addDataset(dataset);
     lPosts.x(pDate, xScale)
            .y(pPosts, yScale2)
-           .attr("stroke", "#EF320B")
+           .attr("stroke", "#fff")
            ;
 
     // // Chart Replies
@@ -65,10 +73,10 @@
     lVotes.addDataset(dataset);
     lVotes.x(pDate, xScale)
              .y(pVotes, yScale)
-             .attr("stroke", "#58DC0A");
+             .attr("stroke", "#fff");
 
     var cs = new Plottable.Scales.Color();
-    cs.range(["#999999", "#bbbbbb", "#EF320B", "#58DC0A"]);
+    cs.range(["#fff", "#fff", "#fff", "#fff"]);
     cs.domain(["Highest Payout", "Total Payouts", "Root Posts", "Root Votes"]);
     var legend = new Plottable.Components.Legend(cs);
     legend.maxEntriesPerRow(3);

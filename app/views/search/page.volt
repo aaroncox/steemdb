@@ -20,12 +20,28 @@
     </div>
     <div class="row">
       <div class="column">
-        {% for result in results %}
-          <div class="ui segment">
-            <p>{{ result.title }}</p>
-            <?php echo $this->timeAgo::mongo($result->created); ?>
+        <div class="ui segment">
+          <div class="ui divided very relaxed list">
+            {% for result in results %}
+              <div class="item">
+                <div class="ui header">
+                  <a href="{{ result.url }}">
+                    {{ (result.title) ? result.title : result.root_title }}
+                  </a>
+                  <div class="sub header">
+                    by
+                    <a href="/@{{ result.author}}">
+                      {{ result.author}}
+                    </a>
+                    &mdash;
+                    <?php echo $this->timeAgo::mongo($result->created); ?>
+                  </div>
+                </div>
+              </div>
+
+            {% endfor %}
           </div>
-        {% endfor %}
+        </div>
       </div>
     </div>
   </div>

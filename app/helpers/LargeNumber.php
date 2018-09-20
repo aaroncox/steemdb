@@ -16,7 +16,7 @@ class LargeNumber extends Tag
   static public function format($n, $unit = "V")
   {
     $dec = 3;
-         if($n>1000000000000000)
+    if($n>1000000000000000)
       return number_format(($n/1000000000000000),$dec,".",",").'&nbsp;<strong>P'.$unit.'</strong>';
     else if($n>1000000000000)
       return number_format(($n/1000000000000),$dec,".",",").'&nbsp;<strong>T'.$unit.'</strong>';

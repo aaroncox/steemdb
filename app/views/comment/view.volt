@@ -20,6 +20,7 @@
           {{ link_to(["for": "comment-view-section", "category": comment.category, "author": comment.author, "permlink": comment.permlink, "action": "replies"], "Replies", "class": "item" ~ (router.getActionName() == "replies" ? " active" : "")) }}
           {{ link_to(["for": "comment-view-section", "category": comment.category, "author": comment.author, "permlink": comment.permlink, "action": "reblogs"], "Reblogs", "class": "item" ~ (router.getActionName() == "reblogs" ? " active" : "")) }}
           {{ link_to(["for": "comment-view-section", "category": comment.category, "author": comment.author, "permlink": comment.permlink, "action": "votes"], "Votes", "class": "item" ~ (router.getActionName() == "votes" ? " active" : "")) }}
+          {{ link_to(["for": "comment-view-section", "category": comment.category, "author": comment.author, "permlink": comment.permlink, "action": "edits"], "Edit History (" ~ (edits | length) ~ ")", "class": "item" ~ (router.getActionName() == "edits" ? " active" : "")) }}
           {{ link_to(["for": "comment-view-section", "category": comment.category, "author": comment.author, "permlink": comment.permlink, "action": "data"], "Data", "class": "item" ~ (router.getActionName() == "data" ? " active" : "")) }}
         </div>
         <div class="ui bottom attached padded segment">

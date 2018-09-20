@@ -40,6 +40,13 @@ class OpName extends Tag
       $name = static::$index[$op[0]];
     }
     // This should be more robust logic as more situations occur
+    if($op[0] === "vote" && $account) {
+      if($op[1]['voter'] === $account->name) {
+        $name = "Outgoing Vote";
+      } else {
+        $name = "Incoming Vote";
+      }
+    }
     if($op[0] === "comment" && is_array($op[1]) && $op[1]['author'] !== $account->name) {
       $name = "Reply";
     }

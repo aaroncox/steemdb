@@ -15,11 +15,17 @@
   <div class="ui middle aligned stackable grid container">
     <div class="row">
       <div class="column">
+        <div class="ui huge header">
+          SteemDB Labs
+          <div class="sub header">
+            Experimental projects and testing grounds for various concepts.
+          </div>
+        </div>
         <div class="ui segment">
           <div class="ui header">
-            Current Experiments
+            Active Experiments
             <div class="sub header">
-              A list of the current experimental pages that really don't have a home.
+              A list of the current experimental pages that really don't have a home on the site yet.
             </div>
           </div>
           <div class="ui divider"></div>
@@ -28,11 +34,11 @@
               <div class="ui header">
                 <i class="list icon"></i>
                 <div class="content">
-                  <a href="/forums">
-                    Steem Forum View
+                  <a href="/labs/pending">
+                    Pending Payout Review
                   </a>
                   <div class="sub header">
-                    A prototype viewing the STEEM blockchain as a forum.
+                    Posts within their last 12hrslo where they can only receive downvotes.
                   </div>
                 </div>
               </div>
@@ -106,11 +112,37 @@
               <div class="ui header">
                 <i class="list icon"></i>
                 <div class="content">
-                  <a href="/labs/powerdown">
+                  <a href="/labs/flags">
                     Account List by Flags Received
                   </a>
                   <div class="sub header">
                     Displays the top 200 most-flagged accounts
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="item">
+              <div class="ui header">
+                <i class="list icon"></i>
+                <div class="content">
+                  <a href="/labs/conversions">
+                    SBD Conversion History
+                  </a>
+                  <div class="sub header">
+                    Most recent SBD -> STEEM Conversions
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="item">
+              <div class="ui header">
+                <i class="list icon"></i>
+                <div class="content">
+                  <a href="/labs/clients">
+                    Steem Client Usage
+                  </a>
+                  <div class="sub header">
+                    Which steem clients are being used
                   </div>
                 </div>
               </div>
@@ -183,6 +215,37 @@
                 </a>
                 <div class="sub header">
                   a list of the top 50 witnesses, each with details on the accounts voting for them
+                </div>
+              </div>
+            </div>
+
+            <div class="item">
+              <div class="ui header">
+                <a href="/api/rewards">
+                  Daily Author Rewards (90-day)
+                </a>
+                <div class="sub header">
+                  Daily totals of author rewards paid out over the last 90 days
+                </div>
+              </div>
+            </div>
+            <div class="item">
+              <div class="ui header">
+                <a href="/api/curation">
+                  Daily Curation Rewards (90-day)
+                </a>
+                <div class="sub header">
+                  Daily totals of curation rewards paid out over the last 90 days
+                </div>
+              </div>
+            </div>
+            <div class="item">
+              <div class="ui header">
+                <a href="/api/topwitnesses">
+                  STEEM -> VESTS per Day
+                </a>
+                <div class="sub header">
+                  Total amount of STEEM powered up per day over the last 30 days
                 </div>
               </div>
             </div>

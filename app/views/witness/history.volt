@@ -8,7 +8,8 @@
         <div style="overflow-x:auto;">
           <div class="ui top attached tabular menu">
             <a class="item" href="/witnesses">Witnesses</a>
-            <a class="active item" href="/witnesses/history">History</a>
+            <a class="active item" href="/witness/history">History</a>
+            <a class="item" href="/witness/misses">Misses</a>
           </div>
           <div class="ui bottom attached segment">
             <div class="ui active tab">

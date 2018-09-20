@@ -28,6 +28,20 @@ $router->add('/@([-a-zA-Z0-9.]+)/curation/([-0-9]+)', [
   'action' => 'curationDate'
 ])->setName("account-view-curation-date");
 
+$router->add('/@([-a-zA-Z0-9.]+)/beneficiaries/([-0-9]+)', [
+  'controller' => 'account',
+  'account' => 1,
+  'date' => 2,
+  'action' => 'beneficiariesDate'
+])->setName("account-view-beneficiaries-date");
+
+$router->add('/@([-a-zA-Z0-9.]+)/authoring/([-0-9]+)', [
+  'controller' => 'account',
+  'account' => 1,
+  'date' => 2,
+  'action' => 'authoringDate'
+])->setName("account-view-authoring-date");
+
 $router->add('/@([-a-zA-Z0-9.]+)/followers/whales', [
   'controller' => 'account',
   'account' => 1,
@@ -44,6 +58,22 @@ $router->add('/accounts[/]?{filter}?', [
 ]);
 
 /*
+  app views
+*/
+
+$router->add('/app/([-a-zA-Z0-9.]+)', [
+  'controller' => 'app',
+  'action' => 'view',
+  'app' => 1
+])->setName("app-view");
+
+$router->add('/app/([-a-zA-Z0-9.]+)/([-a-zA-Z0-9]+)', [
+  'controller' => 'app',
+  'app' => 1,
+  'action' => 2
+])->setName("app-view-section");
+
+/*
   block routes
 */
 
@@ -52,6 +82,12 @@ $router->add('/block/([a-zA-Z0-9]+)', [
   'action' => 'view',
   'height' => 1
 ])->setName("block-view");
+
+$router->add('/tx/([a-zA-Z0-9]+)', [
+  'controller' => 'tx',
+  'action' => 'view',
+  'id' => 1
+])->setName("tx-view");
 
 /*
   comment viewing routes
@@ -97,8 +133,8 @@ $router->add('/posts', [
 ]);
 
 $router->add('/', [
-  'controller' => 'comments',
-  'action' => 'daily'
+  'controller' => 'index',
+  'action' => 'homepage'
 ]);
 
 $router->add('/posts/{tag}/{sort}/{date}', [
@@ -113,11 +149,6 @@ $router->add('/posts/{tag}/{sort}/{date}', [
 $router->add('/witnesses', [
   'controller' => 'witness',
   'action' => 'list'
-]);
-
-$router->add('/witnesses/history', [
-  'controller' => 'witness',
-  'action' => 'history'
 ]);
 
 /*

@@ -20,7 +20,7 @@
         </a>
       </td>
       <td class="mobile hidden">
-        <?php echo $voter->time->toDateTime()->format('Y/m/d H:i:s') ?>
+        {{ date("Y-m-d H:i:s", voter.time / 1000) }}
       </td>
       <td class="mobile hidden right aligned">
         {% include "_elements/voter_weight.volt" %}
@@ -29,6 +29,6 @@
         {% include "_elements/voter_rshares.volt" %}
       </td>
     </tr>
+    {% endfor %}
   </tbody>
-  {% endfor %}
 </table>

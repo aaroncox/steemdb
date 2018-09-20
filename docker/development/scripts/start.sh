@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sed -i -e "s/memory_limit = 128M/memory_limit = 512M/" /etc/php/7.0/fpm/php.ini
+sed -i -e "s/memory_limit = 128M/memory_limit = 512M/" /etc/php/7.0/fpm/conf.d/php.ini
 echo '* Working around permission errors locally by making sure that "nginx" uses the same uid and gid as the host volume'
 TARGET_UID=$(stat -c "%u" /var/lib/nginx)
 echo '-- Setting nginx user to use uid '$TARGET_UID

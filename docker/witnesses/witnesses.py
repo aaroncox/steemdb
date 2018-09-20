@@ -1,7 +1,6 @@
 from datetime import datetime
-from steemapi.steemnoderpc import SteemNodeRPC
-from piston.steem import Post
 from pymongo import MongoClient
+from steem import Steem
 from pprint import pprint
 from time import gmtime, strftime
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -10,8 +9,12 @@ import time
 import sys
 import os
 
-rpc = SteemNodeRPC("wss://" + os.environ['steemnode'], "", "", apis=["follow", "database"])
-mongo = MongoClient("mongodb://mongo")
+fullnodes = [
+    'https://api.steemit.com',
+]
+rpc = Steem(fullnodes)
+
+mongo = MongoClient("mongodb://192.168.0.1")
 db = mongo.steemdb
 
 misses = {}
@@ -43,18 +46,18 @@ def check_misses():
 
 def update_witnesses():
     now = datetime.now().date()
-
-    pprint("[STEEM] - Update Miner Queue")
-    miners = rpc.get_miner_queue()
-    db.statistics.update({
-      '_id': 'miner_queue'
-    }, {
-      'key': 'miner_queue',
-      'updated': datetime.combine(now, datetime.min.time()),
-      'value': miners
-    }, upsert=True)
+    # pprint("[STEEM] - Update Miner Queue")
+    # miners = rpc.get_miner_queue()
+    # db.statistics.update({
+    #   '_id': 'miner_queue'
+    # }, {
+    #   'key': 'miner_queue',
+    #   'updated': datetime.combine(now, datetime.min.time()),
+    #   'value': miners
+    # }, upsert=True)
     scantime = datetime.now()
     users = rpc.get_witnesses_by_vote('', 100)
+    pprint(users)
     pprint("[STEEM] - Update Witnesses (" + str(len(users)) + " accounts)")
     db.witness.remove({})
     for user in users:
@@ -76,13 +79,16 @@ def update_witnesses():
         # Save Snapshot in Database
         db.witness_history.update({'_id': _id}, snapshot, upsert=True)
 
+def run():
+    update_witnesses()
+    check_misses()
+
 if __name__ == '__main__':
     # Start job immediately
-    update_witnesses()
+    run()
     # Schedule it to run every 1 minute
     scheduler = BackgroundScheduler()
-    scheduler.add_job(update_witnesses, 'interval', minutes=1, id='update_witnesses')
-    scheduler.add_job(check_misses, 'interval', minutes=1, id='check_misses')
+    scheduler.add_job(run, 'interval', seconds=30, id='run')
     scheduler.start()
     # Loop
     try:

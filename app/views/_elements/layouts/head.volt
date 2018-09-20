@@ -1,6 +1,6 @@
 <head>
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no,minimal-ui' />
-  <title>steemdb</title>
+  <title>SteemDB - STEEM Blockchain Explorer</title>
   {% if post is defined %}
   <link rel="canonical" href="https://steemit.com/{{ post.category }}/@{{ post.author }}/{{ post.permlink }}"/>
   {% endif %}

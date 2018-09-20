@@ -5,15 +5,16 @@ use MongoDB\BSON\Regex;
 use MongoDB\BSON\UTCDateTime;
 
 use SteemDB\Models\Account;
+use SteemDB\Models\AccountHistory;
 use SteemDB\Models\AuthorReward;
-use SteemDB\Models\Block;
 use SteemDB\Models\Block30d;
 use SteemDB\Models\Comment;
 use SteemDB\Models\CurationReward;
+use SteemDB\Models\FeedPublish;
+use SteemDB\Models\FundsHistory;
+use SteemDB\Models\PropsHistory;
 use SteemDB\Models\Statistics;
 use SteemDB\Models\Vote;
-use SteemDB\Models\AccountHistory;
-use SteemDB\Models\PropsHistory;
 use SteemDB\Models\Witness;
 use MongoDB\BSON\ObjectID;
 
@@ -25,6 +26,45 @@ class ApiController extends ControllerBase
     header('Content-type:application/json');
     $this->view->disable();
     ini_set('precision', 20);
+  }
+
+  public function priceAction()
+  {
+    $pipeline = [
+      [
+        '$match' => [
+          '_ts' => [
+            '$gte' => new UTCDateTime(strtotime("-90 days") * 1000),
+          ]
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => [
+            'doy' => ['$dayOfYear' => '$_ts'],
+            'year' => ['$year' => '$_ts'],
+            'month' => ['$month' => '$_ts'],
+            'week' => ['$week' => '$_ts'],
+            'day' => ['$dayOfMonth' => '$_ts']
+          ],
+          'count' => ['$sum' => 1],
+          'price' => ['$avg' => [
+            '$divide' => [
+              '$exchange_rate.base',
+              '$exchange_rate.quote'
+            ]
+          ]]
+        ]
+      ],
+      [
+        '$sort' => [
+          '_id.year' => 1,
+          '_id.doy' => 1
+        ]
+      ]
+    ];
+    $data = FeedPublish::agg($pipeline)->toArray();
+    echo json_encode($data, JSON_PRETTY_PRINT);
   }
 
   public function voteAction()
@@ -226,6 +266,11 @@ class ApiController extends ControllerBase
       // [
       //   '$limit' => 10
       // ]
+    ], [
+      'allowDiskUse' => true,
+      'cursor' => [
+        'batchSize' => 0
+      ]
     ])->toArray();
     $gpd = array();
     foreach($users as $day) {
@@ -332,15 +377,84 @@ class ApiController extends ControllerBase
     echo json_encode($data, JSON_PRETTY_PRINT);
   }
 
+  public function steemAction()
+  {
+    $data = AccountHistory::agg([
+      [
+        '$match' => [
+          'date' => [
+            '$gte' => new UTCDateTime(strtotime("-60 days") * 1000),
+            '$lte' => new UTCDateTime(strtotime("midnight") * 1000),
+          ]
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => [
+            'doy' => ['$dayOfYear' => '$date'],
+            'year' => ['$year' => '$date'],
+            'month' => ['$month' => '$date'],
+            'day' => ['$dayOfMonth' => '$date'],
+          ],
+          'sbd' => [
+            '$sum' => '$sbd_balance'
+          ],
+          'sbd_savings' => [
+            '$sum' => '$savings_sbd_balance'
+          ],
+          'steem' => [
+            '$sum' => '$balance'
+          ],
+          'steem_savings' => [
+            '$sum' => '$savings_balance'
+          ],
+          'vests' => [
+            '$sum' => '$vesting_shares'
+          ]
+        ],
+      ],
+      [
+        '$sort' => [
+          '_id.year' => 1,
+          '_id.doy' => 1
+        ]
+      ],
+      [
+        '$limit' => 60
+      ],
+    ], [
+      'allowDiskUse' => true,
+      'cursor' => [
+        'batchSize' => 0
+      ]
+    ])->toArray();
+    echo json_encode($data, JSON_PRETTY_PRINT);
+  }
+
   public function propsAction()
   {
     $data = PropsHistory::find([
+      [],
+      'sort' => array('time' => -1),
+      'limit' => 500
+    ]);
+    foreach($data as $idx => $document) {
+      $data[$idx] = $document->toArray();
+    }
+    echo json_encode($data, JSON_PRETTY_PRINT);
+  }
+
+  public function fundsAction()
+  {
+    $data = FundsHistory::find([
       [],
       'sort' => array('date' => -1),
       'limit' => 500
     ]);
     foreach($data as $idx => $document) {
       $data[$idx] = $document->toArray();
+      $data[$idx]['last_update'] = date('Y-m-d', (int) ((string) $data[$idx]['last_update']) / 1000);
+
     }
     echo json_encode($data, JSON_PRETTY_PRINT);
   }
@@ -645,6 +759,9 @@ class ApiController extends ControllerBase
         ]
       ]
     ])->toArray();
+    foreach($rewards as $index => $reward) {
+      $rewards[$index]['sp'] = (float) $this->convert->vest2sp($reward['vest'], false);
+    }
     echo json_encode($rewards, JSON_PRETTY_PRINT);
   }
 
@@ -678,8 +795,92 @@ class ApiController extends ControllerBase
         ]
       ]
     ])->toArray();
+    $sp = [];
+    foreach($rewards as $index => $reward) {
+      $rewards[$index]['sp'] = (float) $this->convert->vest2sp($reward['vest'], false);
+      $sp[] = $rewards[$index]['sp'];
+    }
     echo json_encode($rewards, JSON_PRETTY_PRINT);
   }
+
+  public function curation90dAction() {
+    $rewards = CurationReward::agg([
+      [
+        '$match' => [
+          '_ts' => [
+            '$gte' => new UTCDateTime(strtotime("-90 days") * 1000),
+            '$lte' => new UTCDateTime(strtotime("midnight") * 1000),
+          ]
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => [
+            'doy' => ['$dayOfYear' => '$_ts'],
+            'year' => ['$year' => '$_ts'],
+            'month' => ['$month' => '$_ts'],
+            'week' => ['$week' => '$_ts'],
+            'day' => ['$dayOfMonth' => '$_ts']
+          ],
+          'count' => ['$sum' => 1],
+          'vest' => ['$sum' => '$reward'],
+        ]
+      ],
+      [
+        '$sort' => [
+          '_id.year' => 1,
+          '_id.doy' => 1
+        ]
+      ]
+    ])->toArray();
+    $sp = [];
+    foreach($rewards as $index => $reward) {
+      $rewards[$index]['sp'] = (float) $this->convert->vest2sp($reward['vest'], false);
+      $sp[] = $rewards[$index]['sp'];
+    }
+    var_dump(array_sum($sp) / sizeof($sp)); exit;
+    echo json_encode($rewards, JSON_PRETTY_PRINT);
+  }
+
+  public function curatorAction() {
+    $rewards = CurationReward::agg([
+      [
+        '$match' => [
+          '_ts' => [
+            '$gte' => new UTCDateTime(strtotime("-90 days") * 1000),
+            '$lte' => new UTCDateTime(strtotime("midnight") * 1000),
+          ]
+        ]
+      ],
+      [
+        '$group' => [
+          '_id' => [
+            'doy' => ['$dayOfYear' => '$_ts'],
+            'year' => ['$year' => '$_ts'],
+            'month' => ['$month' => '$_ts'],
+            'week' => ['$week' => '$_ts'],
+            'day' => ['$dayOfMonth' => '$_ts']
+          ],
+          'count' => ['$sum' => 1],
+          'vest' => ['$sum' => '$reward'],
+        ]
+      ],
+      [
+        '$sort' => [
+          '_id.year' => 1,
+          '_id.doy' => 1
+        ]
+      ]
+    ])->toArray();
+    $sp = [];
+    foreach($rewards as $index => $reward) {
+      $rewards[$index]['sp'] = (float) $this->convert->vest2sp($reward['vest'], false);
+      $sp[] = $rewards[$index]['sp'];
+    }
+    // var_dump(array_sum($sp) / sizeof($sp)); exit;
+    echo json_encode($rewards, JSON_PRETTY_PRINT);
+  }
+
 
   public function powerdown1000Action() {
     $accounts = Account::agg([
@@ -696,5 +897,37 @@ class ApiController extends ControllerBase
     }
     echo $count . " / 1000"; exit;
   }
+
+
+  public function platformleaderboardAction() {
+    $accounts = AuthorReward::agg([
+      ['$match' => [
+        '_ts' => [
+          '$gte' => new UTCDateTime(strtotime("-30 days") * 1000),
+          '$lte' => new UTCDateTime(strtotime("midnight") * 1000),
+        ],
+        'app_name' => 'chainbb'
+      ]],
+      ['$group' => [
+        '_id' => '$author',
+        'value' => [
+          '$sum' => ['$cond' => [
+            ['$and' => [
+              ['$eq' => ['$sbd_payout', 0]],
+              ['$eq' => ['$steem_payout', 0]],
+            ]],
+            '$vesting_payout',
+            ['$multiply' => ['$vesting_payout', 2]],
+          ]],
+        ],
+      ]],
+      ['$sort' => [
+        'value' => -1
+      ]],
+      ['$limit' => 100]
+    ])->toArray();
+    echo json_encode($accounts, JSON_PRETTY_PRINT);
+  }
+
 
 }

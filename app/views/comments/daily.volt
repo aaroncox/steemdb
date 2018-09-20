@@ -16,7 +16,7 @@
     <div class="row">
       <div class="column">
         <div class="ui huge header">
-          Posts from {{ date('Y-m-d', date)}}
+          Posts from {{ date('Y-m-d', date) | striptags }}
           <div class="sub header">
             Sorted to show the
             <strong>
@@ -30,15 +30,15 @@
             tagged with
             <span class='ui icon label'>
               {{ tag }}
-              <a href="/posts/all/{{ sort ? sort : 'earnings' }}/{{ date('Y-m-d', date)}}">
+              <a href="/posts/all/{{ sort ? sort : 'earnings' }}/{{ date('Y-m-d', date) | striptags }}">
                 <i class="close icon" style="margin-right: 0"></i>
               </a>
             </span>
             {% endif %}
-            posts created on {{ date('Y-m-d', date)}}.
+            posts created on {{ date('Y-m-d', date) | striptags }}.
           </div>
         </div>
-        <input type="hidden" id="selectedDate" value="{{ date('Y-m-d', date)}}">
+        <input type="hidden" id="selectedDate" value="{{ date('Y-m-d', date) | striptags }}">
         <input type="hidden" id="selectedSort" value="{{ sort ? sort : 'earnings' }}">
         <div class="ui menu">
           <a href="/posts/{{ tag ? tag : 'all' }}/{{ sort ? sort : 'earnings' }}/{{ date('Y-m-d', date - 86400)}}" class="item">
@@ -48,10 +48,10 @@
           <div class="ui dropdown item">
             Sorting <i class="dropdown icon"></i>
             <div class="menu">
-              <a href="/posts/{{ tag ? tag : 'all' }}/earnings/{{ date('Y-m-d', date)}}" class="item">
+              <a href="/posts/{{ tag ? tag : 'all' }}/earnings/{{ date('Y-m-d', date) | striptags }}" class="item">
                 Top Earning
               </a>
-              <a href="/posts/{{ tag ? tag : 'all' }}/votes/{{ date('Y-m-d', date)}}" class="item">
+              <a href="/posts/{{ tag ? tag : 'all' }}/votes/{{ date('Y-m-d', date) | striptags }}" class="item">
                 Most Votes
               </a>
             </div>

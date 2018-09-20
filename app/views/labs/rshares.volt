@@ -29,10 +29,10 @@
             <?php endif ?>
           </div>
         </div>
-        {% for day in data %}
+        {% if data %}
         <div class="ui segment">
           <div class="ui large header">
-            Day of {{ day['_id']['year'] }}-{{ day['_id']['month'] }}-{{ day['_id']['day'] }}
+            Day of {{ data[0]['_id']['year'] }}-{{ data[0]['_id']['month'] }}-{{ data[0]['_id']['day'] }}
             <div class="sub header">
 
             </div>
@@ -40,15 +40,27 @@
           <div class="ui small statistics">
             <div class="statistic">
               <div class="value">
-                {{ day.total_rshares }}
+                {{ data[0].total_rshares }}
               </div>
               <div class="label">Total Reward Shares</div>
             </div>
             <div class="statistic">
               <div class="value">
-                {{ day.total_voters }}
+                {{ data[0].total_voters }}
               </div>
               <div class="label">Voters</div>
+            </div>
+            <div class="statistic">
+              <div class="value">
+                <?php echo number_format(($rshares / $data[0]->total_rshares) * 100, 3, ".", "") ?>%
+              </div>
+              <div class="label">Top 100 Percent of Total</div>
+            </div>
+            <div class="statistic">
+              <div class="value">
+                <?php echo $this->largeNumber::format($median); ?>
+              </div>
+              <div class="label">Median Account Size</div>
             </div>
           </div>
           <table class="ui table">
@@ -59,27 +71,31 @@
                 <th class="collapsing">Total Reward Shares</th>
                 <th class="collapsing">Total Votes</th>
                 <th>Account</th>
+                <th>Vesting Shares</th>
               </tr>
             </thead>
             <tbody></tbody>
-          {% for idx, voter in day['voters'] %}
+          {% for idx, voter in data %}
             <tr>
               <td>
                 #{{ idx + 1 }}
               </td>
               <td>
-                <?php echo number_format(($voter['rshares'] / $day['total_rshares']) * 100, 2) ?>%
+                <?php echo number_format(($voter['voters']['rshares'] / $data[0]['total_rshares']) * 100, 2) ?>%
               </td>
               <td class="right aligned">
-                {{ voter.rshares }}
+                {{ voter['voters'].rshares }}
               </td>
               <td>
-                {{ voter.votes }}
+                {{ voter['voters'].votes }}
               </td>
               <td>
-                <a href="/@{{ voter.voter }}">
-                  {{ voter.voter }}
+                <a href="/@{{ voter['voters'].voter }}">
+                  {{ voter['voters'].voter }}
                 </a>
+              </td>
+              <td>
+                {{ partial("_elements/vesting_shares", ['current': voter.account[0]]) }}
               </td>
             </tr>
           {% endfor %}
@@ -89,7 +105,7 @@
         <div class="ui message">
           No data for this date
         </div>
-        {% endfor %}
+        {% endif %}
       </div>
     </div>
   </div>

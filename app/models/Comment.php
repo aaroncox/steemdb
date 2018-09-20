@@ -55,7 +55,7 @@ class Comment extends Document
         '$lte' => new UTCDateTime(strtotime("midnight") * 1000),
       ];
     }
-    return Comment::agg([
+    $results = Comment::agg([
       [
         '$match' => [
           'created' => $dates
@@ -134,6 +134,17 @@ class Comment extends Document
         ]
       ],
       [
+        '$unwind' => '$voters'
+      ],
+      [
+        '$lookup' => [
+          'from' => 'account',
+          'localField' => 'voters.voter',
+          'foreignField' => 'name',
+          'as' => 'account'
+        ]
+      ],
+      [
         '$sort' => [
           '_id.year' => 1,
           '_id.doy' => 1
@@ -148,5 +159,7 @@ class Comment extends Document
         'batchSize' => 0
       ]
     ]);
+    // var_dump($results->toArray()[0]['account'][0]); exit;
+    return $results;
   }
 }

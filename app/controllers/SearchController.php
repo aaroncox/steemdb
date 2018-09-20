@@ -2,7 +2,6 @@
 namespace SteemDB\Controllers;
 
 use SteemDB\Models\Account;
-use SteemDB\Models\Block;
 use SteemDB\Models\Comment;
 
 use MongoDB\BSON\Regex;

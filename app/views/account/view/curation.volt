@@ -1,6 +1,7 @@
-<div class="ui two item inverted menu">
+<div class="ui three item inverted menu">
   <a href="/@{{ account.name }}/authoring" class="{{ router.getActionName() == 'authoring' ? "active" : ""}} blue item">Author Rewards</a>
   <a href="/@{{ account.name }}/curation" class="{{ router.getActionName() == 'curation' ? "active" : "" }} blue item">Curation Rewards</a>
+  <a href="/@{{ account.name }}/beneficiaries" class="{{ router.getActionName() == 'beneficiaries' ? "active" : "" }} blue item">Beneficiary Rewards</a>
 </div>
 <div class="ui stackable grid">
   <div class="row">
@@ -46,6 +47,7 @@
       <th class="right aligned">VESTS Gained</th>
       <th>Estimated SP</th>
       <th class="right aligned">Acct % Increase</th>
+      <th class="center aligned">Avg. SP/Vote</th>
     </tr>
   </thead>
   <tbody>
@@ -82,6 +84,9 @@
                 }
               ?></span>%
             </span>
+          </td>
+          <td class="right aligned">
+            ~<?php echo round($this->convert::vest2sp($reward->reward, false) / $reward->votes, 3); ?>
           </td>
         </tr>
     {% else %}

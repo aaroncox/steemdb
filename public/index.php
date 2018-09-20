@@ -3,7 +3,8 @@
 use Phalcon\DI\FactoryDefault;
 use Phalcon\Mvc\Application;
 
-error_reporting(E_ALL);
+// error_reporting(E_ALL);
+error_reporting(E_ERROR | E_PARSE);
 
 /**
  * Define some useful constants

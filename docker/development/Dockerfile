@@ -2,7 +2,7 @@ FROM ubuntu:16.04
 
 ENV php_conf /etc/php/7.0/fpm/php.ini
 ENV fpm_conf /etc/php/7.0/fpm/php-fpm.conf
-ENV composer_hash 55d6ead61b29c7bdee5cccfb50076874187bd9f21f65d8991d46ec5cc90518f447387fb9f76ebae1fbbacf329e583e30
+ENV composer_hash 544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061
 
 RUN apt-get update && apt-get install -y software-properties-common python-software-properties
 
@@ -54,6 +54,13 @@ RUN mkdir -p /etc/nginx/sites-available/ && \
     rm -Rf /var/www/*
 RUN ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/default.conf
 
+RUN apt-get update && apt-get install -y php-pear libcurl4-openssl-dev pkg-config libssl-dev libsslcommon2-dev && \
+    pecl install mongodb && \
+    echo "extension=mongodb.so" > /etc/php/7.0/fpm/conf.d/30-mongo.ini && \
+    echo "extension=mongodb.so" > /etc/php/7.0/cli/conf.d/30-mongo.ini
+
+RUN apt-get install -y memcached php-memcached
+
 # tweak php-fpm config
 RUN mkdir -p /run/php &&\
     sed -i -e "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g" ${php_conf} && \
@@ -72,19 +79,14 @@ RUN mkdir -p /run/php &&\
     sed -i -e "s/;listen.mode = 0660/listen.mode = 0666/g" /etc/php/7.0/fpm/pool.d/www.conf && \
     sed -i -e "s/;listen.owner = nobody/listen.owner = nginx/g" /etc/php/7.0/fpm/pool.d/www.conf && \
     sed -i -e "s/;listen.group = nobody/listen.group = nginx/g" /etc/php/7.0/fpm/pool.d/www.conf && \
-    sed -i -e "s/listen = 127.0.0.1:9000/listen = \/run\/php\/php7.0-fpm.sock/g" /etc/php/7.0/fpm/pool.d/www.conf && \
+    sed -i -e "s/;php_admin_value[memory_limit] = 32M/php_admin_value[memory_limit] = 512M/g" /etc/php/7.0/fpm/pool.d/www.conf && \
     sed -i -e "s/^;clear_env = no$/clear_env = no/" /etc/php/7.0/fpm/pool.d/www.conf &&\
+    sed -i -e "s/memory_limit = 128M/memory_limit = 512M/" /etc/php/7.0/fpm/php.ini &&\
     ln -s /etc/php/7.0/fpm/php.ini /etc/php/7.0/fpm/conf.d/php.ini && \
     find /etc/php/7.0/fpm/conf.d/ -name "*.ini" -exec sed -i -re 's/^(\s*)#(.*)/\1;\2/g' {} \; && \
+    sed -i -e "s/memory_limit = 128M/memory_limit = 512M/" /etc/php/7.0/fpm/conf.d/php.ini &&\
     echo "extension=phalcon.so" > /etc/php/7.0/fpm/conf.d/30-phalcon.ini && \
     echo "extension=phalcon.so" > /etc/php/7.0/cli/conf.d/30-phalcon.ini
-
-RUN apt-get update && apt-get install -y php-pear libcurl4-openssl-dev pkg-config libssl-dev libsslcommon2-dev && \
-    pecl install mongodb && \
-    echo "extension=mongodb.so" > /etc/php/7.0/fpm/conf.d/30-mongo.ini && \
-    echo "extension=mongodb.so" > /etc/php/7.0/cli/conf.d/30-mongo.ini
-
-RUN apt-get install -y memcached php-memcached
 
 # Add Scripts
 ADD scripts/start.sh /start.sh

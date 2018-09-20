@@ -1,19 +1,20 @@
-from datetime import datetime
-from steemapi.steemnoderpc import SteemNodeRPC
-from piston.steem import Post
+from datetime import datetime, timedelta
+from steem import Steem
 from pymongo import MongoClient
 from pprint import pprint
 import collections
 import time
 import sys
 import os
+import re
 
 from apscheduler.schedulers.background import BackgroundScheduler
 
-# rpc = SteemNodeRPC(host, "", "", ['follow_api'])
-
-rpc = SteemNodeRPC("wss://" + os.environ['steemnode'], "", "", apis=["follow", "database"])
-mongo = MongoClient("mongodb://mongo")
+fullnodes = [
+    'https://api.steemit.com',
+]
+rpc = Steem(fullnodes)
+mongo = MongoClient("mongodb://192.168.0.1")
 db = mongo.steemdb
 
 mvest_per_account = {}
@@ -23,6 +24,19 @@ def load_accounts():
     for account in db.account.find():
         if "name" in account.keys():
             mvest_per_account.update({account['name']: account['vesting_shares']})
+
+def update_fund_history():
+    pprint("[STEEM] - Update Fund History")
+
+    fund = rpc.get_reward_fund('post')
+    for key in ['recent_claims', 'content_constant']:
+        fund[key] = float(fund[key])
+    for key in ['reward_balance']:
+        fund[key] = float(fund[key].split()[0])
+    for key in ['last_update']:
+        fund[key] = datetime.strptime(fund[key], "%Y-%m-%dT%H:%M:%S")
+
+    db.funds_history.insert(fund)
 
 def update_props_history():
     pprint("[STEEM] - Update Global Properties")
@@ -36,17 +50,71 @@ def update_props_history():
     for key in ['time']:
         props[key] = datetime.strptime(props[key], "%Y-%m-%dT%H:%M:%S")
 
+    #floor($return['total_vesting_fund_steem'] / $return['total_vesting_shares'] * 1000000 * 1000) / 1000;
+
+    props['steem_per_mvests'] = props['total_vesting_fund_steem'] / props['total_vesting_shares'] * 1000000
+
+    db.status.update({
+      '_id': 'steem_per_mvests'
+    }, {
+      '$set': {
+        '_id': 'steem_per_mvests',
+        'value': props['steem_per_mvests']
+      }
+    }, upsert=True)
+
+    db.status.update({
+      '_id': 'props'
+    }, {
+      '$set': {
+        '_id': 'props',
+        'props': props
+      }
+    }, upsert=True)
+
     db.props_history.insert(props)
 
+def update_tx_history():
+    pprint("[STEEM] - Update Transaction History")
+    now = datetime.now().date()
+
+    today = datetime.combine(now, datetime.min.time())
+    yesterday = today - timedelta(1)
+
+    # Determine tx per day
+    query = {
+      '_ts': {
+        '$gte': today,
+        '$lte': today + timedelta(1)
+      }
+    }
+    count = db.block_30d.count(query)
+
+    pprint(count)
+
+    pprint(now)
+    pprint(today)
+    pprint(yesterday)
+
+
+
+def update_history():
+
+    update_fund_history()
+    update_props_history()
+    # update_tx_history()
+    # sys.stdout.flush()
+
+    # Load all accounts
     users = rpc.lookup_accounts(-1, 1000)
     more = True
-    # more = False
     while more:
         newUsers = rpc.lookup_accounts(users[-1], 1000)
         if len(newUsers) < 1000:
             more = False
         users = users + newUsers
 
+    # Set dates
     now = datetime.now().date()
     today = datetime.combine(now, datetime.min.time())
 
@@ -62,6 +130,7 @@ def update_props_history():
     }, upsert=True)
     sys.stdout.flush()
 
+    # Update history on accounts
     for user in users:
         # Load State
         state = rpc.get_accounts([user])
@@ -126,14 +195,234 @@ def update_props_history():
           'date': today
         }, snapshot, upsert=True)
 
+def update_stats():
+  pprint("updating stats");
+  # Calculate Transactions
+  results = db.block_30d.aggregate([
+    {
+      '$sort': {
+        '_id': -1
+      }
+    },
+    {
+      '$limit': 28800 * 1
+    },
+    {
+      '$unwind': '$transactions'
+    },
+    {
+      '$group': {
+        '_id': '24h',
+        'tx': {
+          '$sum': 1
+        }
+      }
+    }
+  ])
+  data = list(results)[0]['tx']
+  db.status.update({'_id': 'transactions-24h'}, {'$set': {'data' : data}}, upsert=True)
+  now = datetime.now().date()
+  today = datetime.combine(now, datetime.min.time())
+  db.tx_history.update({
+    'timeframe': '24h',
+    'date': today
+  }, {'$set': {'data': data}}, upsert=True)
+
+  results = db.block_30d.aggregate([
+    {
+      '$sort': {
+        '_id': -1
+      }
+    },
+    {
+      '$limit': 1200 * 1
+    },
+    {
+      '$unwind': '$transactions'
+    },
+    {
+      '$group': {
+        '_id': '1h',
+        'tx': {
+          '$sum': 1
+        }
+      }
+    }
+  ])
+  db.status.update({'_id': 'transactions-1h'}, {'$set': {'data' : list(results)[0]['tx']}}, upsert=True)
+
+  # Calculate Operations
+  results = db.block_30d.aggregate([
+    {
+      '$sort': {
+        '_id': -1
+      }
+    },
+    {
+      '$limit': 28800 * 1
+    },
+    {
+      '$unwind': '$transactions'
+    },
+    {
+      '$group': {
+        '_id': '24h',
+        'tx': {
+          '$sum': {
+            '$size': '$transactions.operations'
+          }
+        }
+      }
+    }
+  ])
+  data = list(results)[0]['tx']
+  db.status.update({'_id': 'operations-24h'}, {'$set': {'data' : data}}, upsert=True)
+  now = datetime.now().date()
+  today = datetime.combine(now, datetime.min.time())
+  db.op_history.update({
+    'timeframe': '24h',
+    'date': today
+  }, {'$set': {'data': data}}, upsert=True)
+
+  results = db.block_30d.aggregate([
+    {
+      '$sort': {
+        '_id': -1
+      }
+    },
+    {
+      '$limit': 1200 * 1
+    },
+    {
+      '$unwind': '$transactions'
+    },
+    {
+      '$group': {
+        '_id': '1h',
+        'tx': {
+          '$sum': {
+            '$size': '$transactions.operations'
+          }
+        }
+      }
+    }
+  ])
+  db.status.update({'_id': 'operations-1h'}, {'$set': {'data' : list(results)[0]['tx']}}, upsert=True)
+
+
+def update_clients():
+  try:
+    pprint("updating clients");
+    start = datetime.today() - timedelta(days=90)
+    end = datetime.today()
+    regx = re.compile("([\w-]+\/[\w.]+)", re.IGNORECASE)
+    results = db.comment.aggregate([
+      {
+        '$match': {
+          'created': {
+            '$gte': start,
+            '$lte': end,
+          },
+          'json_metadata.app': {
+            '$type': 'string',
+            '$regex': regx,
+          }
+        }
+      },
+      {
+        '$project': {
+          'created': '$created',
+          'parts': {
+            '$split': ['$json_metadata.app', '/']
+          },
+          'reward': {
+            '$add': ['$total_payout_value', '$pending_payout_value', '$total_pending_payout_value']
+          }
+        }
+      },
+      {
+        '$group': {
+          '_id': {
+            'client': {'$arrayElemAt': ['$parts', 0]},
+            'doy': {'$dayOfYear': '$created'},
+            'year': {'$year': '$created'},
+            'month': {'$month': '$created'},
+            'day': {'$dayOfMonth': '$created'},
+            'dow': {'$dayOfWeek': '$created'},
+          },
+          'reward': {'$sum': '$reward'},
+          'value': {'$sum': 1}
+        }
+      },
+      {
+        '$sort': {
+          '_id.year': 1,
+          '_id.doy': 1,
+          'value': -1,
+        }
+      },
+      {
+        '$group': {
+          '_id': {
+            'doy': '$_id.doy',
+            'year': '$_id.year',
+            'month': '$_id.month',
+            'day': '$_id.day',
+            'dow': '$_id.dow',
+          },
+          'clients': {
+            '$push': {
+              'client': '$_id.client',
+              'count': '$value',
+              'reward': '$reward'
+            }
+          },
+          'reward' : {
+            '$sum': '$reward'
+          },
+          'total': {
+            '$sum': '$value'
+          }
+        }
+      },
+      {
+        '$sort': {
+          '_id.year': -1,
+          '_id.doy': -1
+        }
+      },
+    ])
+    pprint("complete")
+    sys.stdout.flush()
+    data = list(results)
+    db.status.update({'_id': 'clients-snapshot'}, {'$set': {'data' : data}}, upsert=True)
+    now = datetime.now().date()
+    today = datetime.combine(now, datetime.min.time())
+    db.clients_history.update({
+      'date': today
+    }, {'$set': {'data': data}}, upsert=True)
+    pass
+  except Exception as e:
+    pass
+
+
 if __name__ == '__main__':
+    pprint("starting");
     # Load all account data into memory
-    load_accounts()
+
     # Start job immediately
-    update_history()
+    update_clients()
+    update_props_history()
+    load_accounts()
+    update_stats()
+    # update_history()
+    sys.stdout.flush()
+
     # Schedule it to run every 6 hours
     scheduler = BackgroundScheduler()
     scheduler.add_job(update_history, 'interval', hours=24, id='update_history')
+    scheduler.add_job(update_clients, 'interval', hours=1, id='update_clients')
+    scheduler.add_job(update_stats, 'interval', minutes=5, id='update_stats')
     scheduler.start()
     # Loop
     try:

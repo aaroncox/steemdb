@@ -6,7 +6,7 @@
     var today = new Date();
     var xScale = new Plottable.Scales.Time()
         .domain([
-          new Date(today.getTime() - dayOffset * 90),
+          new Date(today.getTime() - dayOffset * 365),
           new Date(today.getTime() + dayOffset)
         ]);
 

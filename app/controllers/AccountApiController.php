@@ -72,7 +72,15 @@ class AccountApiController extends ControllerBase
     $data = AccountHistory::agg([
       [
         '$match' => [
-          'name' => $account
+          'name' => $account,
+          'date' => [
+            '$gte' => new UTCDateTime(strtotime("-30 days") * 1000),
+          ]
+        ]
+      ],
+      [
+        '$sort' => [
+          'date' => -1
         ]
       ],
       [
@@ -90,11 +98,6 @@ class AccountApiController extends ControllerBase
           'vests' => '$vesting_shares',
         ]
       ],
-      [
-        '$sort' => [
-          'date' => -1
-        ]
-      ]
     ])->toArray();
     echo json_encode($data, JSON_PRETTY_PRINT);
   }
@@ -547,7 +550,7 @@ class AccountApiController extends ControllerBase
             ['to' => $account],
           ],
           '_ts' => [
-            '$gte' => new UTCDateTime(strtotime("-90 days") * 1000),
+            '$gte' => new UTCDateTime(strtotime("-365 days") * 1000),
           ],
         ]
       ],

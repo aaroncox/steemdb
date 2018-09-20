@@ -9,6 +9,12 @@
   <div class="ui middle aligned stackable grid container">
     <div class="row">
       <div class="column">
+        <div class="ui huge header">
+          Accounts
+          <div class="sub header">
+            Accounts sorted by various metrics (richlist by default)
+          </div>
+        </div>
         <div class="ui top attached menu">
           <div class="ui dropdown item">
             Richlist

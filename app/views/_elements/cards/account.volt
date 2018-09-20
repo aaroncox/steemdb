@@ -1,7 +1,7 @@
 <div class="ui card">
   <div class="content">
     {% if live[0] is defined and live[0] is defined and live[0]['profile'] is defined and live[0]['profile']['profile_image'] is defined %}
-    <img class="right floated avatar image" src="{{ live[0]['profile']['profile_image'] }}">
+    <img class="right floated avatar image" src="{{ live[0]['profile']['profile_image'] | e }}">
     {% endif %}
     <div class="header">
       <span class="ui circular blue tiny label" style="margin-left: 0; vertical-align: top;">
@@ -16,14 +16,14 @@
     </div>
     {% if live[0] is defined and live[0] is defined and live[0]['profile'] is defined and live[0]['profile']['about'] is defined %}
     <div class="description">
-      {{ live[0]['profile']['about'] }}
+      {{ live[0]['profile']['about'] | e }}
     </div>
     {% endif %}
     {% if live[0] is defined and live[0] is defined and live[0]['profile'] is defined and live[0]['profile']['website'] is defined %}
       <div class="description">
         <br><i class="linkify icon"></i>
-        <a rel="nofollow noopener" href="{{ live[0]['profile']['website'] }}">
-          {{ live[0]['profile']['website'] }}
+        <a rel="nofollow noopener" href="{{ live[0]['profile']['website'] | e }}">
+          {{ live[0]['profile']['website'] | e }}
         </a>
       </div>
     {% endif %}
@@ -33,7 +33,7 @@
     <span class="right floated">
       {% if live[0] is defined and live[0] is defined and live[0]['profile'] is defined and live[0]['profile']['location'] is defined %}
         <i class="marker icon"></i>
-        {{ live[0]['profile']['location'] }}
+        {{ live[0]['profile']['location'] | e }}
       {% endif %}
     </span>
     <span>

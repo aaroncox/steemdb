@@ -2,8 +2,7 @@ from autobahn.twisted.websocket import WebSocketServerFactory, \
     WebSocketServerProtocol, \
     listenWS
 from datetime import datetime, timedelta
-from steemapi.steemnoderpc import SteemNodeRPC
-from piston.steem import Post
+from steem import Steem
 from pprint import pprint
 from twisted.internet import reactor
 from twisted.python import log
@@ -15,7 +14,10 @@ import sys
 import os
 import re
 
-rpc = SteemNodeRPC("ws://" + os.environ['steemnode'], "", "", apis=["follow", "database"])
+fullnodes = [
+    'https://api.steemit.com',
+]
+rpc = Steem(fullnodes)
 
 class BroadcastServerProtocol(WebSocketServerProtocol):
 
@@ -51,12 +53,14 @@ class BroadcastServerFactory(WebSocketServerFactory):
 
     def tick(self):
         props = rpc.get_dynamic_global_properties()
+        state = rpc.get_state('@jesta')
         irreversible = props['last_irreversible_block_num']
 
         if props['head_block_number'] != self.last_block:
             self.last_block = props['head_block_number']
             # print("new block {}".format(self.last_block))
             self.publishProps(props)
+            self.publishState(state)
 
         while (irreversible - self.last_block_processed) > 0:
             self.last_block_processed += 1
@@ -73,6 +77,13 @@ class BroadcastServerFactory(WebSocketServerFactory):
         props['steem_per_mvests'] = math.floor(total_vesting_fund_steem / total_vesting_shares * 1000000 * 1000) / 1000
         props['reversible_blocks'] = props['head_block_number'] - props['last_irreversible_block_num']
         self.publish("props", "props", props)
+
+    def publishState(self, state):
+        partial = {
+          'witness_schedule': state['witness_schedule'],
+          'feed_price': state['feed_price']
+        }
+        self.publish("state", "state", partial)
 
     def publishBlock(self, height):
         block = rpc.get_block(height)
@@ -155,6 +166,10 @@ class BroadcastServerFactory(WebSocketServerFactory):
             # print("registered client [{}]".format(client.peer))
             self.subscribe(client, "blocks")
             self.subscribe(client, "props")
+            self.subscribe(client, "state")
+            for x in range(1, 11):
+              previous = self.last_block_processed - 10 + x
+              self.publishBlock(previous)
             self.clients.append(client)
 
     def unregister(self, client):

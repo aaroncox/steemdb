@@ -3,6 +3,8 @@
 use JsonRPC\Client;
 use JsonRPC\HttpClient;
 
+use SteemDB\Models\Status;
+
 class steemd
 {
 
@@ -21,6 +23,24 @@ class steemd
   {
     try {
       return $this->client->call(0, 'get_state', [$path]);
+    } catch (Exception $e) {
+      return array();
+    }
+  }
+
+  public function getBlock($height)
+  {
+    try {
+      return $this->client->call(0, 'get_block', [$height]);
+    } catch (Exception $e) {
+      return array();
+    }
+  }
+
+  public function getTx($txid)
+  {
+    try {
+      return $this->client->call(0, 'get_transaction', [$txid]);
     } catch (Exception $e) {
       return array();
     }
@@ -54,8 +74,9 @@ class steemd
   public function getProps()
   {
     try {
+      return Status::findFirst([['_id' => 'props']])->toArray()['props'];
       $return = $this->client->call(0, 'get_dynamic_global_properties', []);
-      $return['steem_per_mvests'] = floor($return['total_vesting_fund_steem'] / $return['total_vesting_shares'] * 1000000 * 1000) / 1000;
+      $return['steem_per_mvests'] = Status::findFirst([['_id' => 'steem_per_mvests']])->value;
       return $return;
     } catch (Exception $e) {
       return array();

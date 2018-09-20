@@ -15,10 +15,6 @@ class ForumsController extends ControllerBase
       'name' => 'General Discussions',
       'description' => '',
       'boards' => [
-        'general' => [
-          'name' => 'Everything',
-          'description' => 'All posts ordered by the most recently active.',
-        ],
         'introductions' => [
           'name' => 'Introductions',
           'description' => '',
@@ -61,6 +57,26 @@ class ForumsController extends ControllerBase
           ]
         ],
       ],
+    ],
+    'chinese' => [
+      'name' => 'CN',
+      'description' => '',
+      'boards' => [
+        'cn-general' => [
+          'name' => 'General',
+          'description' => '',
+          'tags' => [
+            'cn'
+          ]
+        ],
+        'cn-programming' => [
+          'name' => 'Programming',
+          'description' => '',
+          'tags' => [
+            'cn-programming'
+          ]
+        ],
+      ]
     ],
     'creative' => [
       'name' => 'Creative',

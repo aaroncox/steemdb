@@ -25,11 +25,11 @@
     var pSbd = function(d) { return +d.sbd; };
 
     // Chart Posts
-    var lSteem = new Plottable.Plots.StackedBar();
+    var lSteem = new Plottable.Plots.ClusteredBar();
     lSteem.addDataset(dataset);
     lSteem.x(pDate, xScale)
           .y(pSteem, yScale)
-          .attr("fill", "#A333C8");
+          .attr("fill", "#21BA45");
 
     var lVest = new Plottable.Plots.Line();
     lVest.addDataset(dataset);
@@ -41,10 +41,10 @@
     lSbd.addDataset(dataset);
     lSbd.x(pDate, xScale)
             .y(pSbd, yScale)
-            .attr("fill", "#21BA45");
+            .attr("fill", "#c83333");
 
     var cs = new Plottable.Scales.Color();
-    cs.range(["#A333C8", "#2185D0", "#21BA45"]);
+    cs.range(["#21BA45", "#2185D0", "#c83333"]);
     cs.domain(["Steem", "VESTS", "SBD"]);
     var legend = new Plottable.Components.Legend(cs);
 

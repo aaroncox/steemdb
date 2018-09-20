@@ -1,40 +1,57 @@
 version: '2'
 services:
-  # history:
-  #   build: ./docker/history
+  history:
+    build: ./docker/history
+    restart: on-failure
+    volumes:
+      - ./docker/history:/src
+    # links:
+    #   - mongo
+  live:
+    build: ./docker/live
+    restart: on-failure
+    # links:
+    #   - mongo
+    ports:
+      - "8888:8888"
+  sync:
+    build: ./docker/sync
+    restart: on-failure
+    # external_links:
+    #   - mongo:steemdb_mongo_1
+    volumes:
+      - ./docker/sync:/src
+  witnesses:
+    build: ./docker/witnesses
+    # links:
+    #   - mongo
+  # lucky:
+  #   build: ./docker/lucky
   #   environment:
-  #     steemnode: "node.steem.ws"
-  #   links:
-  #     - mongo
-  # sync:
-  #   build: ./docker/sync
-  #   environment:
-  #     steemnode: "node.steem.ws"
-  #   links:
-  #     - mongo
-  # witnesses:
-  #   build: ./docker/witnesses
-  #   environment:
-  #     steemnode: "node.steem.ws"
-  #   links:
-  #     - mongo
+  #     steemnode: "steemd.steemit.com"
   development:
     build: ./docker/development
-    links:
-      - mongo
+    # links:
+    #   - mongo
+    external_links:
+      - mongo:steemdb_mongo_1
     volumes:
       - .:/var/www/html
     ports:
-      - "80:80"
-  mongodata:
-    image: mongo:3.3.10
-    volumes:
-      - /data/db
-    command: --break-mongo
-  mongo:
-    image: mongo:3.3.10
-    volumes_from:
-      - mongodata
-    ports:
-      - "27017:27017"
-    command: --smallfiles --rest
+      - "8880:80"
+  # mongodata:
+  #   image: mongo:3.3.10
+  #   volumes:
+  #     - /data/db
+  #   command: --break-mongo
+  # mongo:
+  #   image: mongo:3.3.10
+  #   volumes_from:
+  #     - mongodata
+  #   # ports:
+  #   #   - "27017:27017"
+  #   command: --smallfiles --rest
+
+networks:
+    dockernet:
+        external: true

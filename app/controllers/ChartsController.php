@@ -9,6 +9,11 @@ class ChartsController extends ControllerBase
 
   }
 
+  public function steemAction()
+  {
+
+  }
+
   public function rewardsAction()
   {
 

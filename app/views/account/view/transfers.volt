@@ -16,14 +16,15 @@
       <th>From</th>
       <th>To</th>
       <th class="right aligned">Amount</th>
-      <th>Type</th>
+      <th class="left aligned">Type</th>
+      <th>Memo</th>
     </tr>
   </thead>
   <tbody>
     {% for transfer in transfers %}
     <tr>
-      <td>
-        <?php echo $this->timeAgo::mongo($transfer->_ts); ?>
+      <td class="collapsing">
+        <?php echo gmdate("Y-m-d H:i:s e", (string) $transfer->_ts / 1000) ?>
       </td>
       <td>
         <a href="/@{{ transfer.from }}">
@@ -40,10 +41,15 @@
           <?php echo number_format($transfer->amount, 3, ".", ",") ?>
         </div>
       </td>
-      <td class="right aligned">
-        <div class="ui small header">
-          {{ transfer.type }}
+      <td class="left aligned">
+        {{ transfer.type }}
+      </td>
+      <td class="collapsing">
+        {% if transfer.memo %}
+        <div class="ui icon mini button" data-popup data-content="{{ transfer.memo }}">
+          <i class="sticky note outline icon"></i>
         </div>
+        {% endif %}
       </td>
     </tr>
   </tbody>

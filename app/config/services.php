@@ -180,6 +180,11 @@ $di->set('memcached', function() {
   return $cache;
 });
 
+$di->set('util', function() {
+  require_once(APP_PATH . '/libs/utilities.php');
+  return new Utilities($this);
+});
+
 $di->set('convert', function () { return new SteemDB\Helpers\Convert(); });
 $di->set('largeNumber', function () { return new SteemDB\Helpers\LargeNumber(); });
 $di->set('reputation', function () { return new SteemDB\Helpers\Reputation(); });
