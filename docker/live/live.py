@@ -197,7 +197,7 @@ class BroadcastServerFactory(WebSocketServerFactory):
 
     def publish(self, channel, opType, opData):
         if channel in self.channels:
-            clients = self.channels[channel][:]
+            clients = self.channels[channel].copy()
             for c in clients:
                 try:
                     data = json.dumps({opType: opData})
