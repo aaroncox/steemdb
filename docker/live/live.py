@@ -197,10 +197,16 @@ class BroadcastServerFactory(WebSocketServerFactory):
 
     def publish(self, channel, opType, opData):
         if channel in self.channels:
-            for c in self.channels[channel]:
-                data = json.dumps({opType: opData})
-                # print("publishing op '{}' [{}] to subscriber [{}] based on channel subscription [{}]".format(opType, data, c.peer, channel))
-                c.sendMessage(data.encode('utf8'))
+            clients = self.channels[channel][:]
+            for c in clients:
+                try:
+                    data = json.dumps({opType: opData})
+                    # print("publishing op '{}' [{}] to subscriber [{}] based on channel subscription [{}]".format(opType, data, c.peer, channel))
+                    c.sendMessage(data.encode('utf8'))
+                except Exception as e:
+                    print('error:', e)
+                    self.channels[channel].remove(c)
+                    
 
 if __name__ == '__main__':
 
