@@ -28,7 +28,7 @@ services:
   # lucky:
   #   build: ./docker/lucky
   #   environment:
-  #     steemnode: "steemd.steemit.com"
+  #     steemnode: "api.steemit.com:443"
   development:
     build: ./docker/development
     # links:
