@@ -163,15 +163,18 @@ class BroadcastServerFactory(WebSocketServerFactory):
 
     def register(self, client):
         if client not in self.clients:
-            # print("registered client [{}]".format(client.peer))
-            self.subscribe(client, "blocks")
-            self.subscribe(client, "props")
-            self.subscribe(client, "state")
-            for x in range(1, 11):
-              previous = self.last_block_processed - 10 + x
-              self.publishBlock(previous)
-            self.clients.append(client)
-
+                       try:
+                # print("registered client [{}]".format(client.peer))
+                self.subscribe(client, "blocks")
+                self.subscribe(client, "props")
+                self.subscribe(client, "state")
+                for x in range(1, 11):
+                  previous = self.last_block_processed - 10 + x
+                  self.publishBlock(previous)
+                self.clients.append(client)
+            except Exception as e:
+                print('error', e)
+                pass
     def unregister(self, client):
         if client in self.clients:
             # print("unregistered client [{}]".format(client.peer))
